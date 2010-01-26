@@ -1,0 +1,111 @@
+h1. An Introduction to Enlive
+
+Enlive has been around now for sometime. However I feel that the
+Clojure community has been somewhat slow to embrace. But I believe
+this is due to a single glaring reason - the lack of good
+documentation. This is no slam against Christophe Grand. He's a busy
+man, and I rather he write up more sweet tutorials on how to make
+Clojure code blazing fast.
+
+h2. What You need to Know
+
+Not much. This tutorial is intended even for developers who've never
+messed around with Clojure. At the very least you'll need to have a
+Java Virtual Machine installed.
+
+h2. What We'll Cover
+
+There are 5 examples. 
+
+The first one covers grabbing the headlines and
+points from hackers news. The next one shows how make the code less
+redundant. And the third give you an idea of how Enlive goes beyond
+allowed CSS selectors to scrape content.
+
+The 4th example shows how to use Compojure and Enlive together. The
+5th example shows Enlive can do all of the fancy template inheritance
+magic you might be used to coming from Django or some other slick
+webframework.
+
+h2. Install Leiningen
+
+If you're just getting into Clojure or even if you're a veteran I
+recommend going through this tutorial with Leiningen. Leiningen is the
+easy_install and gems of the Clojure world.  Phil Hagelberg has done a
+lot work to make it dead simple.
+
+Once you have Leiningen installed. Switch into this repository's
+source directory. From there run the following command:
+
+<pre class="console">
+lein repl
+</pre>
+
+This will launch a Clojure REPL (Read-Eval-Print-Loop) that has the
+classpath set properly. Be very thankful if you're not even sure what
+the last sentence means.  Leiningen removes one of the most tedious
+things about dealing with the JVM - maintaining the class path.
+
+h2. Your First Scrape with Enlive
+
+Enlive isn't just good for websites, it's also fantastic for scraping
+the content of webpages. It's particular cool in that it allows you
+to scrape content by using a syntax very similar to CSS3 (plus some
+even cooler goodies).
+
+In the REPL type the following lines (note that => is the prompt):
+
+<pre class="console">
+=> (use 'tutorial.scrape1)
+nil
+=> *base-url*
+"http://news.ycombinator.com/"
+</pre>
+
+We just loaded the first tutorial into the REPL. Let's see what in
+that file. Open up scrape1.clj (you can find it in
+repo/src/tutorial/). You'll see it's a fairly short program.
+
+At the top of this file is the namespace declaration. This keeps your
+code from clashing with other people when they try to use your
+library. The namespace declaration also includes another library,
+Enlive, via require. In this case generating an alias so we don't have
+to type the very long namespace for Enlive.
+
+The function *fetch-url* grabs the contexts of a url
+synchronously. *fetch-url* uses *html-resource* another handy function
+defined in the Enlive library. It takes raw HTML and converts into a
+nested data structure. 
+
+Note that the function *hn-headlines* uses this *fetch-url*. But it's
+also surrounded by a lot of funny stuff.
+
+Note the Enlive function *select* (*html/select* in our case because
+we imported *net.cgrand.enlive-html* as *html*). *select* takes parsed
+html content and select the nodes specified by a Clojure Vector that
+looks very similar to a CSS3 selector.
+
+<pre>
+[:td.title a]
+</pre>
+
+Now that looks kind of weird. But if you squint a little bit it might
+remind you a little bit of this:
+
+<pre>
+td.title a
+</pre>
+
+This is a CSS selector for matching all links inside of table elements
+that have the CSS class "title".
+
+Believe it or not, these 10 lines of code are enough to extract all of
+the headline title from the Hacker News front page. Let's try it out
+at the REPL now.
+
+<pre>
+=> (hn-headlines)
+("A 'lorem ipsum' for images." "Google Reader Can Now Track Changes to Any Website - Even Without a Feed" "jQuery 1.4.1 Released" "Why 30.1% of numbers start with 1" "Caponia - an in memory, full text search system in clojure" "A gentle introduction to Lisp" "Andrew Warner's latest interview with Seth Godin" "Adobe, Apple, and Flash" "Why Flash is doomed" "Jason Calacanis responds to Aaron from SEO Book" "Sergey Brin's awesome webpage." "Replacing GNU assembler with Factor code" "Tell HN: Why you should submit your stuff as a blog posting" "Ask HN: Review my app again? Short domain name search" "Status and Signals: Why Hardcore Gamers Are Afraid Of Easy Mode" "Better Off Deadbeat: Getting Bill Collectors Off His Back. He Sues Them." "[Wolfire] Organic Indie Preorder Pack Postmortem" "Teacher anxieties may subtract from girls?Äô math scores " "Google grants patent priveleges to the Go language" "Apple Now A $50+ Billion Company ?Äî Major New Product This Week" "Ask HN: My nephew wants to learn programming. What should I recommend?" "Follow changes to sites without RSS feeds with GReader" "How the brain encodes memories at a cellular level" "CSS Minification on the Fly" "Anybots Telepresence Robots Go into Mass Production" "In praise of git?Äôs index" "NASA?Äôs Puffin Is Way Cooler Than a Jetpack" "Ask HN: A competitor stole my iPhone app content ?Äî what should I do?" "Tell HN: The HN submission race made visual" "Bill Gates: Chinese censorship is \"very limited\"" "More")
+</pre>
+
+Nice. After this the next function *hn-scores* should make a lot more sense.
