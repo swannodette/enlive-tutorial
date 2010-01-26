@@ -19,16 +19,18 @@
         (set-attr :href href)))
 
 (deftemplate index* (file *webdir* "template2.html")
- [ctxt] 
- [:ul#links] (content (map link-model (:links ctxt)))) 
+  [ctxt] 
+  [:ul#widget] (content (map link-model (:links ctxt))))
 
 (defn index
   ([] (index* {}))
   ([ctxt] (index* ctxt)))
 
 (defroutes example-routes
-  (GET "/"
-    (apply str (index)))
+  (GET "/static/"
+    (serve-file *webdir* "template2.html"))
+  (GET "/links/"
+    (apply str (index dummy-context)))
   (ANY "*"
     [404 "Page Not Found"]))
 
