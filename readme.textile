@@ -4,7 +4,7 @@ If somehow you happen to stumble upon this tutorail, please note that it not eve
 
 h1. An Introduction to Enlive
 
-Enlive has been around for sometime now, yet the Clojure community has been slow to embrace this useful library. I believe this is due simply to the lack of good introductory documentation. This is no slam against Christophe Grand. He's a busy man and I rather he write up more excellent tutorials on how to optimize Clojure code to blazing fast speed than create introductory tutorials. In anycase that's what open source communities are all about, right? Contribution!
+Enlive has been around for sometime now, yet the Clojure community has been slow to embrace this useful library. I believe this is due simply to the lack of good introductory documentation. This is no slam against Christophe Grand. He's a busy man and I rather he write up more excellent tutorials on how to optimize Clojure code to blazingly fast speed than create introductory tutorials about Enlive. In anycase that's what open source communities are all about, right? Contribution!
 
 h2. What You need to Know
 
@@ -25,9 +25,9 @@ h2. What We'll Cover
 
 There are 5 examples. 
 
-The first one covers grabbing the headlines and points from hackers news. The next one shows how to make the code less redundant. And the third give you an idea of how Enlive offers options beyond allowed CSS3 selectors to scrape content. 
+The first one covers grabbing the headlines and points from Hackers News. The next one shows how to make the code less redundant. And the third scrapes the New York Times front page since that presents far more challenges than Hacker News.
 
-The 4th example shows how to use Compojure and Enlive together. The 5th example shows that Enlive can do much of the fancy template inheritance magic you might be used to coming from Django or some other slick webframework.
+The 4th example shows how to use Compojure and Enlive together. The 5th example shows that Enlive can do much of the fancy template inheritance magic you might be used to coming from Django or some other popular modern webframework.
 
 h2. Clone This Repo
 
@@ -141,9 +141,7 @@ The results are interleaved, so we can use Clojure's partition function to pair 
 
 h2. Your Third Scrape
 
-By now you should feel like a pro. The third one, scrape3.clj, is not that much different. But is really just there to give a sense that Enlive really allows a lot of the things you come do expect from CSS for navigating the DOM. Web Developers should be particularly comfortabe about thinking about the DOM in this way.
-
-Here we use *but* to grab all the nodes except for the ones that do not match a particular selector.
+By now you should feel like a pro. The third one, scrape3.clj tackles something considerably more difficult. Now to be clear this not that useful since the New York Times provides a fairly comprehensive list of RSS feeds. But the structure of the New Yorks Times page forces us to think about how to best leverage Enlive's abilities.
 
 h2. You First Template
 
