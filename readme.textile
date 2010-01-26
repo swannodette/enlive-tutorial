@@ -1,3 +1,7 @@
+h1. Under Construction
+
+If somehow you happen to stumble upon this tutorail, please note that it not even close to being complete. Proceed at your own peril.
+
 h1. An Introduction to Enlive
 
 Enlive has been around for sometime now, yet the Clojure community has been slow to embrace this useful library. I believe this is due simply to the lack of good introductory documentation. This is no slam against Christophe Grand. He's a busy man and I rather he write up more excellent tutorials on how to optimize Clojure code to blazing fast speed than create introductory tutorials. In anycase that's what open source communities are all about, right? Contribution!
@@ -35,13 +39,15 @@ git clone git://github.com/swannodette/enlive-tutorial.git
 
 h2. Install Leiningen
 
-If you're just getting into Clojure or even if you're a veteran I recommend going through this tutorial with Leiningen. Leiningen is the easy_install (Python) and gems (Ruby) of the Clojure world.  Phil Hagelberg has done a lot of excellent work to make it dead simple. Once you have Leiningen installed, switch into this repository's source directory. From there run the following command:
+In order to start playing around as fast possible you should use Leiningen. Leiningen is the easy_install (Python) and gems (Ruby) of the Clojure world. Phil Hagelberg and Co. have done a considerable amount of excellent work to make dependency management simple. And I truly envy the new Clojurians who don't know the times before *lien repl* and *lein swank* :)
+
+Once you have Leiningen installed, switch into this repository's source directory. From there run the following command:
 
 <pre class="console">
 lein repl
 </pre>
 
-This will launch a Clojure REPL (Read-Eval-Print-Loop) that has the classpath set properly. Be very thankful if you're not even sure what the last sentence means.  Leiningen removes one of the most tedious things about dealing with the JVM - maintaining the class path.
+This will launch a Clojure REPL (Read-Eval-Print-Loop) that has the classpath set properly. Be very thankful if you're not even sure what the last sentence means.  Leiningen removes one of the most tedious things about dealing with the JVM - maintaining the classpath.
 
 h2. Your First Scrape with Enlive
 
@@ -58,11 +64,11 @@ We just loaded the first tutorial into the REPL. Let's see what in that file. Op
 
 At the top of this file is the namespace declaration. This keeps your code from clashing with other people when they try to use your library. The namespace declaration also includes another library, Enlive, via require. In this case generating an alias so we don't have to type the very long namespace for Enlive.
 
-The function *fetch-url* grabs the contexts of a url synchronously. *fetch-url* uses *html-resource* another handy function defined in the Enlive library. It takes raw HTML and converts into anested data structure. 
+The function *fetch-url* grabs the contexts of a url synchronously. *fetch-url* uses *html/html-resource* (remember we alias *net.cgrand.enlive-html* to html for convenience) another handy function defined in the Enlive library. It takes raw HTML and converts into anested data structure. 
 
 Note that the function *hn-headlines* uses this *fetch-url*. But it's also surrounded by a lot of funny stuff.
 
-Note the Enlive function *select* (*html/select* in our case because we imported *net.cgrand.enlive-html* as *html*). *select* takes parsed html content and select the nodes specified by a Clojure Vector that looks very similar to a CSS3 selector. 
+Note the Enlive function *html/select*. *html/select* takes parsed html content and select the nodes specified by a Clojure Vector that looks very similar to a CSS3 selector. 
 
 <pre>
 [:td.title a]
@@ -83,7 +89,7 @@ Believe it or not, these 10 lines of code are enough to extract all of the headl
 ("A 'lorem ipsum' for images." "Google Reader Can Now Track Changes to Any Website - Even Without a Feed" "jQuery 1.4.1 Released" ... "More")
 </pre>
 
-Nice. After this the next function *hn-scores* should make a lot more sense. It does the same thing but we grab the score from a different place in the markup. Try to run this function as well.
+Nice. After this the next function *hn-points* should make a lot more sense. It does the same thing but we grab the score from a different place in the markup. Try to run this function as well.
 
 <pre>
 => (hn-points)
