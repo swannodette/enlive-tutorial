@@ -4,7 +4,13 @@
 
 (def *base-url* "http://nytimes.com/")
 
-(def *nytimes-selector*
+(def *story-selector*
+     (html/selector [[:div.story
+                      (but :.advertisement)
+                      (but :.autosStory)
+                      (but :.adCreative)]]))
+
+(def *extract-selector*
      (html/selector #{[:h2 :a],
                       [:h3 :a],
                       [:ul.headlinesOnly :h5 :a],
@@ -16,12 +22,25 @@
   (html-resource (java.net.URL. url)))
 
 (defn stories []
-  (html/select (fetch-url *base-url*) [:div.story]))
+  (html/select (fetch-url *base-url*) *story-selector*))
 
 (defn extract [node]
-  (let [result (map html/text (html/select [node] *nytimes-selector*))]
+  (let [result (map html/text (html/select [node] *extract-selector*))]
     (zipmap [:title :byline :summary] result)))
 
-(defn empty-indices [v]
-  (filter (fn [[i s]] (nil? (seq s))) (indexed v)))
+(defn print-story [story]
+  (println "--------------------------------------------------")
+  (println (:title story))
+  (println "\t" (or (:byline story) "No byline"))
+  (println "\t" (or (:summary story) "No summary")))
+
+(defn print-stories []
+  (doseq [story (map extract (stories))]
+    (print-story story)))
+
+(comment
+  (defn empty-indices [v]
+    (filter (fn [[i s]] (nil? (seq s))) (indexed v)))
+  )
+
 
