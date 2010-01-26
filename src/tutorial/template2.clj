@@ -4,10 +4,14 @@
   (:use compojure))
 
 (def dummy-context 
-     {:links [["Clojure" "http://www.clojure.org"]
+     {:links  [["Clojure" "http://www.clojure.org"]
               ["Compojure" "http://www.compojure.org"]
               ["Clojars" "http://www.clojars.org"]
               ["Enlive" "http://github.com/cgrand/enlive"]]})
+
+(comment
+  (map link-model (:links dummy-context))
+  )
 
 ;; change this line to reflect your setup
 (def *webdir* "/Users/davidnolen/development/clojure/enlive-tutorial/src/tutorial/")
