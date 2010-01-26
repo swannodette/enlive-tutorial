@@ -124,7 +124,7 @@ td.title a, td.subtext:first-child
 
 Let try out the functions. Start up the repl with *lein repl* if you've shut it down and run the following.
 
-<pre>
+<pre class="console">
 => (use 'tutorial.scrape2)
 nil
 => (hn-headliens-and-points)
