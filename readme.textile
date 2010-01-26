@@ -1,59 +1,30 @@
 h1. An Introduction to Enlive
 
-Enlive has been around now for sometime. However I feel that the
-Clojure community has been somewhat slow to embrace. But I believe
-this is due to a single glaring reason - the lack of good
-documentation. This is no slam against Christophe Grand. He's a busy
-man, and I rather he write up more sweet tutorials on how to make
-Clojure code blazing fast.
+Enlive has been around now for sometime. However I feel that the Clojure community has been somewhat slow to embrace. But I believe is due to a single glaring reason - the lack of good documentation. This is no slam against Christophe Grand. He's a busy man, and I rather he write up more sweet tutorials on how to make Clojure code blazing fast.
 
 h2. What You need to Know
 
-Not much. This tutorial is intended even for developers who've never
-messed around with Clojure. At the very least you'll need to have a
-Java Virtual Machine installed.
+Not much. This tutorial is intended even for developers who've never messed around with Clojure. At the very least you'll need to have a Java Virtual Machine installed.
 
 h2. What We'll Cover
 
 There are 5 examples. 
 
-The first one covers grabbing the headlines and
-points from hackers news. The next one shows how make the code less
-redundant. And the third give you an idea of how Enlive goes beyond
-allowed CSS selectors to scrape content.
-
-The 4th example shows how to use Compojure and Enlive together. The
-5th example shows Enlive can do all of the fancy template inheritance
-magic you might be used to coming from Django or some other slick
-webframework.
+The first one covers grabbing the headlines and points from hackers news. The next one shows how make the code less redundant. And the third give you an idea of how Enlive goes beyond allowed CSS selectors to scrape content. The 4th example shows how to use Compojure and Enlive together. The 5th example shows Enlive can do all of the fancy template inheritance magic you might be used to coming from Django or some other slick webframework.
 
 h2. Install Leiningen
 
-If you're just getting into Clojure or even if you're a veteran I
-recommend going through this tutorial with Leiningen. Leiningen is the
-easy_install and gems of the Clojure world.  Phil Hagelberg has done a
-lot work to make it dead simple.
-
-Once you have Leiningen installed. Switch into this repository's
-source directory. From there run the following command:
+If you're just getting into Clojure or even if you're a veteran I recommend going through this tutorial with Leiningen. Leiningen is the easy_install and gems of the Clojure world.  Phil Hagelberg has done a lot work to make it dead simple. Once you have Leiningen installed. Switch into this repository's source directory. From there run the following command:
 
 <pre class="console">
 lein repl
 </pre>
 
-This will launch a Clojure REPL (Read-Eval-Print-Loop) that has the
-classpath set properly. Be very thankful if you're not even sure what
-the last sentence means.  Leiningen removes one of the most tedious
-things about dealing with the JVM - maintaining the class path.
+This will launch a Clojure REPL (Read-Eval-Print-Loop) that has the classpath set properly. Be very thankful if you're not even sure what the last sentence means.  Leiningen removes one of the most tedious things about dealing with the JVM - maintaining the class path.
 
 h2. Your First Scrape with Enlive
 
-Enlive isn't just good for websites, it's also fantastic for scraping
-the content of webpages. It's particular cool in that it allows you
-to scrape content by using a syntax very similar to CSS3 (plus some
-even cooler goodies).
-
-In the REPL type the following lines (note that => is the prompt):
+Enlive isn't just good for websites, it's also fantastic for scraping the content of webpages. It's particular cool in that it allows you to scrape content by using a syntax very similar to CSS3 (plus some even cooler goodies). In the REPL type the following lines (note that => is the prompt):
 
 <pre class="console">
 => (use 'tutorial.scrape1)
@@ -62,46 +33,29 @@ nil
 "http://news.ycombinator.com/"
 </pre>
 
-We just loaded the first tutorial into the REPL. Let's see what in
-that file. Open up scrape1.clj (you can find it in
-repo/src/tutorial/). You'll see it's a fairly short program.
+We just loaded the first tutorial into the REPL. Let's see what in that file. Open up scrape1.clj (you can find it in repo/src/tutorial/). You'll see it's a fairly short program. 
 
-At the top of this file is the namespace declaration. This keeps your
-code from clashing with other people when they try to use your
-library. The namespace declaration also includes another library,
-Enlive, via require. In this case generating an alias so we don't have
-to type the very long namespace for Enlive.
+At the top of this file is the namespace declaration. This keeps your code from clashing with other people when they try to use your library. The namespace declaration also includes another library, Enlive, via require. In this case generating an alias so we don't have to type the very long namespace for Enlive.
 
-The function *fetch-url* grabs the contexts of a url
-synchronously. *fetch-url* uses *html-resource* another handy function
-defined in the Enlive library. It takes raw HTML and converts into a
-nested data structure. 
+The function *fetch-url* grabs the contexts of a url synchronously. *fetch-url* uses *html-resource* another handy function defined in the Enlive library. It takes raw HTML and converts into anested data structure. 
 
-Note that the function *hn-headlines* uses this *fetch-url*. But it's
-also surrounded by a lot of funny stuff.
+Note that the function *hn-headlines* uses this *fetch-url*. But it's also surrounded by a lot of funny stuff.
 
-Note the Enlive function *select* (*html/select* in our case because
-we imported *net.cgrand.enlive-html* as *html*). *select* takes parsed
-html content and select the nodes specified by a Clojure Vector that
-looks very similar to a CSS3 selector.
+Note the Enlive function *select* (*html/select* in our case because we imported *net.cgrand.enlive-html* as *html*). *select* takes parsed html content and select the nodes specified by a Clojure Vector that looks very similar to a CSS3 selector. 
 
 <pre>
 [:td.title a]
 </pre>
 
-Now that looks kind of weird. But if you squint a little bit it might
-remind you a little bit of this:
+Now that looks kind of weird. But if you squint a little bit it might remind you a little bit of this:
 
 <pre>
 td.title a
 </pre>
 
-This is a CSS selector for matching all links inside of table elements
-that have the CSS class "title".
+This is a CSS selector for matching all links inside of table elements that have the CSS class "title".
 
-Believe it or not, these 10 lines of code are enough to extract all of
-the headline title from the Hacker News front page. Let's try it out
-at the REPL now.
+Believe it or not, these 10 lines of code are enough to extract all of the headline title from the Hacker News front page. Let's try it out at the REPL now.
 
 <pre>
 => (hn-headlines)
