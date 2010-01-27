@@ -1,6 +1,6 @@
 (ns tutorial.template1
+  (:use [tutorial.utils :only [render]])
   (:use [net.cgrand.enlive-html :as html])
-  (:use [clojure.contrib.java-utils :only [file]])
   (:use compojure))
 
 (html/deftemplate index* "tutorial/template1.html"
@@ -13,9 +13,9 @@
 
 (defroutes example-routes
   (GET "/"
-    (apply str (index)))
+    (render (index)))
   (GET "/change/"
-    (apply str (index {:message "We changed the message!"})))
+    (render (index {:message "We changed the message!"})))
   (ANY "*"
     [404 "Page Not Found"]))
 

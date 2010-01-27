@@ -1,6 +1,6 @@
 (ns tutorial.template2
+  (:use [tutorial.utils :only [render]])
   (:require [net.cgrand.enlive-html :as html])
-  (:use [clojure.contrib.java-utils :only [file]])
   (:use compojure))
 
 (def dummy-context 
@@ -21,7 +21,7 @@
 
 (defroutes example-routes
   (GET "/"
-    (apply str (index dummy-context)))
+    (render (index dummy-context)))
   (ANY "*"
     [404 "Page Not Found"]))
 
