@@ -9,26 +9,18 @@
              ["Clojars" "http://www.clojars.org"]
              ["Enlive" "http://github.com/cgrand/enlive"]]})
 
-(comment
-  (map link-model (:links dummy-context))
-  )
-
 ;; change this line to reflect your setup
 (def *webdir* "/Users/davidnolen/development/clojure/enlive-tutorial/src/tutorial/")
 
-(defsnippet link-model (file *webdir* "template2.html")  [:ul#widget :> first-child]
+(defsnippet link-model (file *webdir* "template2.html")  [:ul#links :> first-child]
   [[text href]] 
   [:a] (do-> 
         (content text) 
         (set-attr :href href)))
 
-(deftemplate index* (file *webdir* "template2.html")
+(deftemplate index (file *webdir* "template2.html")
   [ctxt] 
   [:ul#widget] (content (map link-model (:links ctxt))))
-
-(defn index
-  ([] (index* {}))
-  ([ctxt] (index* ctxt)))
 
 (defroutes example-routes
   (GET "/static/"
