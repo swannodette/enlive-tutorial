@@ -2,7 +2,10 @@
   (:require [net.cgrand.enlive-html :as html])
   (:use [clojure.contrib.duck-streams :only [slurp*]])
   (:use [clojure.contrib.seq-utils :only [flatten]])
+  (:use [clojure.contrib.java-utils :only [file]])
   (:import [java.io ByteArrayInputStream]))
+
+(def *webdir* "/Users/davidnolen/development/clojure/enlive-tutorial/src/tutorial/")
 
 (defn to-in-s [str] (ByteArrayInputStream. (.getBytes str "UTF-8")))
 
@@ -11,28 +14,24 @@
 
 (defn sel-for-node [{tag :tag, attrs :attrs}]
   (let [css-id (:id attrs)]
-    `([~(keyword (str (name tag) "#" css-id))] (html/content ~(symbol css-id)))))
+    `([~(keyword (str (name tag) "#" css-id))] (html/content (~(keyword css-id) ~'ctxt)))))
 
 (defmacro templ [name rsrc]
-  (let [nodes (select (html-resource (eval rsrc)) *class-or-id-selector*)]
-    `(deftemplate ~name (html-resource ~rsrc)
+  (let [nodes (select (html/html-resource (eval rsrc)) *nodes-with-id*)]
+    `(deftemplate ~name ~rsrc
        [~'ctxt]
        ~@(reduce concat (map sel-for-node nodes)))))
 
-(defmacro templ-str [rsrc])
+(defmacro templ-str [name rsrc-str]
+  (let [nodes (select (html/html-resource (to-in-s (eval rsrc-str))) *nodes-with-id*)]
+    `(deftemplate ~name (to-in-s ~rsrc-str)
+       [~'ctxt]
+       ~@(reduce concat (map sel-for-node nodes)))))
 
 (comment
-  (deftemplate foo (to-in-stream "<span id='foo'></span>")
-    [ctxt]
-    [:#foo] (content (:foo ctxt)))
+  (templ-str foo *markup*)
+  (apply str (foo {:foo "cool" :bar "awesome"}))
 
-  (templ foo *rsrc*)
-
-  (def *markup* "<span id='foo'></span><div class='bar'><p id='bar'></p></div>")
-  (def *rsrc* (to-in-s *markup*))
-  (def *foo* (select (html-resource *rsrc*) *nodes-with-id*))
-  (reduce concat (map sel-for-node *foo*))
-
-  ; works
-  (map sel-for-node *foo*)
+  (templ bar (file *webdir* "introspect.html"))
+  (apply str (bar {:foo "cool" :bar "awesome"}))
   )
