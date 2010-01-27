@@ -155,16 +155,6 @@ h2. You First Template
 
 This is where things begin to get really interesting. We're going to use Compojure, and ultralight http framework. If you're familiar with Rack or CherryPy you will feel right at home.
 
-h2. Common Mistakes
-
-When outputting numbers you need to convert them with *str*.
-
-<pre>
-[:div.foobar] (content (str 1))
-</pre>
-
-Since snippets take a selector sometimes you might not have set this value correctly. This is usually the case if you're not seeing any output at all from a snippet. It's really easy to test a snippet - remember they're just functions.
-
 h2. Macroology
 
 Now that you understand how to template with Enlive there's something to consider. Enlive does not work by manipulating text, it actually manipuates structure. While this comes back in spades when you're actually constructing pages this does unfortunately make the simple case unweildy.
@@ -210,4 +200,14 @@ Can we have our cake and eat it to.
 
 The following is somewhat advanced and most likely make the most if you have at least some passing familiarity with macros.
 
-Macro allow to you create templates for your code. The main difference between 
+Macro allow to you create templates for your code.
+
+h2. Common Mistakes
+
+When outputting numbers you need to convert them with *str*.
+
+<pre>
+[:div.foobar] (content (str 1))
+</pre>
+
+Since snippets take a selector sometimes you might not have set this value correctly. This is usually the case if you're not seeing any output at all from a snippet. It's really easy to test a snippet - remember they're just functions.
