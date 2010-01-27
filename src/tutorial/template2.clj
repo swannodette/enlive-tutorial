@@ -21,9 +21,9 @@
 
 (defroutes example-routes
   (GET "/"
-    (render (index dummy-context)))
+       (render (index dummy-context)))
   (ANY "*"
-    [404 "Page Not Found"]))
+       [404 "Page Not Found"]))
 
 ;; ========================================
 ;; The App

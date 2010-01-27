@@ -13,11 +13,11 @@
 
 (defroutes example-routes
   (GET "/"
-    (render (index)))
+       (render (index)))
   (GET "/change/"
-    (render (index {:message "We changed the message!"})))
+       (render (index {:message "We changed the message!"})))
   (ANY "*"
-    [404 "Page Not Found"]))
+       [404 "Page Not Found"]))
 
 ;; ========================================
 ;; The App

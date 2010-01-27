@@ -1,4 +1,5 @@
 (ns tutorial.template3
+  (:use [tutorial.utils :only [render]])
   (:require [net.cgrand.enlive-html :as html])
   (:use compojure))
 
@@ -48,9 +49,8 @@
 ;; Pages
 ;; =============================================================================
 
-(defn pagea [{title :title :as ctxt}]
-     (base {:title title
-            :main  (main ctxt)}))
+(defn pagea [ctxt]
+  (base (assoc ctxt :main (main ctxt))))
 
 (def pageb-context
      {:time "Funner Time"
@@ -72,11 +72,11 @@
 
 (defroutes example-routes
   (GET "/"
-       (apply str (index)))
+       (render (index)))
   (GET "/a/"
-       (apply str (pagea {:title "Page A"})))
+       (render (pagea {:title "Page A"})))
   (GET "/b/"
-       (apply str (pagea pageb-context)))
+       (render (pagea pageb-context)))
   (GET "/main.css"
        (serve-file *webdir* "main.css"))
   (ANY "*"
