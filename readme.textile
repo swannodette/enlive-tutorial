@@ -187,7 +187,7 @@ But really that is kind of annoying. The simple case is just a lot worse then wh
 
 Well this is Lisp after all!
 
-One of the most powerful tools you have at your disposal are macros. Now these are something you should attempt to use anywhere, but they can be quite useful when you just know that the code could better.
+One of the most powerful tools you have at your disposal are macros. Now these are *not* you should use just anywhere, but they can be quite helpful when you are finding some unbearably verbose.
 
 In a ideal for the simplest case we would like something like the following:
 
