@@ -44,8 +44,14 @@ In order to start playing around as fast possible you should use Leiningen. Lein
 Once you have Leiningen installed, switch into this repository's source directory. From there run the following command:
 
 <pre class="console">
-lein repl
+lein deps
 </pre>
+
+This will install all of the dependencies. This make take a second and will probably generate a lot of ouptut. Once the the dependencies are installed enter the following command into your terminal:
+
+<pre class="console">
+lein repl
+</per>
 
 This will launch a Clojure REPL (Read-Eval-Print-Loop) that has the classpath set properly. Be very thankful if you're not even sure what the last sentence means.  Leiningen removes one of the most tedious things about dealing with the JVM - maintaining the classpath.
 
@@ -156,3 +162,31 @@ When outputting numbers you need to convert them with *str*.
 </pre>
 
 Since snippets take a selector sometimes you might not have set this value correctly. This is usually the case if you're not seeing any output at all from a snippet. It's really easy to test a snippet - remember they're just functions.
+
+h2. Macrology
+
+Now that you understand how to template with Enlive there's something to consider. Enlive does not work by manipulating text, it actually manipuates structure. While this comes back in spades when you're actually constructing pages this does unfortunately make the simple case unweildy.
+
+Enlive for example doesn't really let you create templates from a string of markup. The following is invalid:
+
+<pre>
+(deftemplate foo "<span id='foo'></span>"
+  [ctxt]
+  [:#foo] (content (:foo ctxt)))
+</pre>
+
+In order to do that you need to hand an the string as an InputStream to *deftemplate*. You can do that like so:
+
+<pre>
+(use 'net.cgrand.enlive-html)
+(import '[java.io ByteArrayInputStream])
+(defn to-in-stream [str] (ByteArrayInputStream. (.getBytes str "UTF-8")))
+</pre>
+
+Now you have a nice function to convert strings into InputStreams. You can now define the template like this:
+
+<pre>
+(deftemplate foo (to-in-stream "<span id='foo'></span>")
+  [ctxt]
+  [:#foo] (content (:foo ctxt)))
+</pre>
