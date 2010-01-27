@@ -1,10 +1,15 @@
 (ns tutorial.template2
   (:use [tutorial.utils :only [render]])
   (:require [net.cgrand.enlive-html :as html])
+  (:import [java.util Calendar])
   (:use compojure))
 
+(defn now-str []
+  (str (.getTime (Calendar/getInstance))))
+
 (def dummy-context 
-     {:links [["Clojure" "http://www.clojure.org"]
+     {:title "Enlive Template2 Tutorial"
+      :links [["Clojure" "http://www.clojure.org"]
               ["Compojure" "http://www.compojure.org"]
               ["Clojars" "http://www.clojars.org"]
               ["Enlive" "http://github.com/cgrand/enlive"]]})
@@ -16,12 +21,14 @@
         (html/set-attr :href href)))
 
 (html/deftemplate index "tutorial/template2.html"
-  [ctxt] 
+  [ctxt]
+  [:#date]    (html/content (:date ctxt))
+  [:#title]   (html/content (:title ctxt))
   [:ul#links] (html/content (map link-model (:links ctxt))))
 
 (defroutes example-routes
   (GET "/"
-       (render (index dummy-context)))
+       (render (index (assoc dummy-context :date (now-str)))))
   (ANY "*"
        [404 "Page Not Found"]))
 
