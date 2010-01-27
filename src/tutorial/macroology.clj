@@ -1,12 +1,7 @@
 (ns tutorial.macroology
+  (:use [tutorial.utils :only [render]])
   (:require [net.cgrand.enlive-html :as html])
-  (:use [clojure.contrib.duck-streams :only [slurp*]])
-  (:use [clojure.contrib.seq-utils :only [flatten]])
-  (:use [clojure.contrib.java-utils :only [file]])
   (:import [java.io ByteArrayInputStream]))
-
-;; change this line to match your environment
-(def *webdir* "/Users/davidnolen/development/clojure/enlive-tutorial/src/tutorial/")
 
 (defn to-in-s [str] (ByteArrayInputStream. (.getBytes str "UTF-8")))
 
@@ -32,8 +27,8 @@
 (comment
   (def *markup* "<span id='foo'></span><div class='bar'><p id='bar'></p></div>")
   (templ-str foo *markup*)
-  (apply str (foo {:foo "cool" :bar "awesome"}))
+  (render (foo {:foo "cool" :bar "awesome"}))
 
-  (templ bar (file *webdir* "introspect.html"))
-  (apply str (bar {:foo "cool" :bar "awesome"}))
+  (templ bar "tutorial/introspect.html")
+  (render (bar {:foo "cool" :bar "awesome"}))
   )
