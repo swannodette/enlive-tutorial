@@ -29,7 +29,7 @@ The first one covers grabbing the headlines and points from Hackers News. The ne
 
 The 4th example shows how to use Compojure and Enlive together. The 5th example shows that Enlive can do much of the fancy template inheritance magic you might be used to coming from Django or some other popular modern webframework.
 
-The final tutorial is fairly advanced. It illustrates how Clojure, being a Lisp, can in fact template itself! I use this ability to illustrate how a downside to Enlive can be overcome. For example, you'll often have a widget whose elements you might just want reply by CSS id (or class). Enlive syntax makes this somehwat tedious for the simple case. With macros you can achieve the same level of simplicity even though it is not a feature that ships with Enlive!
+The final tutorial is fairly advanced. It illustrates how Clojure, being a Lisp, can in fact template itself! I use this ability to illustrate how a downside to Enlive can be overcome. For example, you'll often have a widget whose elements you might just want replace by CSS id (or class). Enlive syntax makes this somehwat tedious for this simple, though common, case. With macros you can achieve the same level of simplicity even though it is not a feature that ships with Enlive!
 
 h2. Clone This Repo
 
