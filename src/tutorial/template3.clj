@@ -13,19 +13,23 @@
 (def *hits* (atom 0))
 
 (defmacro block [sym]
-  `(fn [n#] (if (nil? ~sym) n# ((substitute ~sym) n#))))
+  `(fn [n#] (if (nil? ~sym) n# ((html/substitute ~sym) n#))))
+
+(defmacro maybe-content [sym]
+  `(fn [n#] (if (nil? ~sym) n# ((html/content ~sym) n#))))
 
 ;; =============================================================================
 ;; The Templates Ma!
 ;; =============================================================================
 
 (html/deftemplate base (file *webdir* "base.html")
-  [{header :header, body :body, footer :footer :as ctxt}] 
-  [:#header] (block header)
-  [:#left]   (block left)
-  [:#footer] (block footer))
+  [{title :title, header :header, body :body, footer :footer :as ctxt}]
+  [:#title]      (maybe-content title)
+  [:#header]     (block header)
+  [:#body]       (block body)
+  [:#footer]     (block footer))
 
-(html/defsnippet link-model (file *webdir* "3col.html")  [:ol#links :> first-child]
+(html/defsnippet link-model (file *webdir* "3col.html")  [:ol#links :> html/first-child]
   [[text href]] 
   [:a] (html/do->
         (html/content text) 
@@ -41,18 +45,9 @@
 ;; Pages
 ;; =============================================================================
 
-(def pagea-context
-     {:name "Page A"
-      :time "Fun Time"
-      :links [["Clojure" "http://www.clojure.org"]
-              ["Compojure" "http://www.compojure.org"]
-              ["Clojars" "http://www.clojars.org"]
-              ["Enlive" "http://github.com/cgrand/enlive"]]})
-
-(defn pagea [ctxt]
-     (base {:header (header ctxt)
-            :body (body ctxt)
-            :footer (footer ctxt)}))
+(defn pagea [{title :title :as ctxt}]
+     (base {:title title
+            :body  (body ctxt)}))
 
 (def pageb-context
      {:time "Funner Time"
@@ -65,18 +60,18 @@
      (base {:body (body ctxt)}))
 
 (defn index
-  ([] (index* {}))
-  ([ctxt] (index* ctxt)))
+  ([] (base {}))
+  ([ctxt] (base ctxt)))
 
 ;; =============================================================================
 ;; Routes
 ;; =============================================================================
 
 (defroutes example-routes
-  (GET "/static/"
-    (serve-file *webdir* "template3.html"))
+  (GET "/"
+    (apply str (index)))
   (GET "/a/"
-    (apply str (pagea pagea-context)))
+    (apply str (pagea {:title "Page A"})))
   (GET "/b/"
     (apply str (pagea pageb-context)))
   (ANY "*"

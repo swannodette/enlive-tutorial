@@ -1,5 +1,5 @@
 (ns tutorial.template2
-  (:use [net.cgrand.enlive-html :as html])
+  (:require [net.cgrand.enlive-html :as html])
   (:use [clojure.contrib.java-utils :only [file]])
   (:use compojure))
 
@@ -12,15 +12,15 @@
 ;; change this line to reflect your setup
 (def *webdir* "/Users/davidnolen/development/clojure/enlive-tutorial/src/tutorial/")
 
-(defsnippet link-model (file *webdir* "template2.html")  [:ul#links :> first-child]
+(html/defsnippet link-model (file *webdir* "template2.html")  [:ul#links :> html/first-child]
   [[text href]] 
-  [:a] (do-> 
-        (content text) 
-        (set-attr :href href)))
+  [:a] (html/do-> 
+        (html/content text) 
+        (html/set-attr :href href)))
 
-(deftemplate index (file *webdir* "template2.html")
+(html/deftemplate index (file *webdir* "template2.html")
   [ctxt] 
-  [:ul#widget] (content (map link-model (:links ctxt))))
+  [:ul#widget] (html/content (map link-model (:links ctxt))))
 
 (defroutes example-routes
   (GET "/static/"
