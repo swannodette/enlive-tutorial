@@ -1,6 +1,5 @@
 (ns tutorial.template3
   (:require [net.cgrand.enlive-html :as html])
-  (:use [clojure.contrib.java-utils :only [file]])
   (:use compojure))
 
 ;; =============================================================================
@@ -22,20 +21,20 @@
 ;; The Templates Ma!
 ;; =============================================================================
 
-(html/deftemplate base (file *webdir* "base.html")
+(html/deftemplate base "tutorial/base.html"
   [{title :title, header :header, main :main, footer :footer :as ctxt}]
   [:#title]      (maybe-content title)
   [:#header]     (block header)
   [:#main]       (block main)
   [:#footer]     (block footer))
 
-(html/defsnippet link-model (file *webdir* "3col.html")  [:ol#links :> html/first-child]
+(html/defsnippet link-model "tutorial/3col.html"  [:ol#links :> html/first-child]
   [[text href]] 
   [:a] (html/do->
         (html/content text) 
         (html/set-attr :href href)))
 
-(html/defsnippet main (file *webdir* "3col.html") [:div#main]
+(html/defsnippet main "tutorial/3col.html" [:div#main]
   [{left :left, middle :middle, right :right :as ctxt}]
   [:div#left]   (block left)
   [:div#middle] (block middle)
