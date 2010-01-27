@@ -53,7 +53,7 @@ This will install all of the dependencies. This make take a second and will prob
 
 <pre class="console">
 lein repl
-</per>
+</pre>
 
 This will launch a Clojure REPL (Read-Eval-Print-Loop) that has the classpath set properly. Be very thankful if you're not even sure what the last sentence means.  Leiningen removes one of the most tedious things about dealing with the JVM - maintaining the classpath.
 
