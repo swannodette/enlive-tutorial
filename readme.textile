@@ -4,32 +4,40 @@ If somehow you happen to stumble upon this tutorail, please note that it not eve
 
 h1. An Introduction to Enlive
 
-Enlive has been around for sometime now, yet the Clojure community has been slow to embrace this useful library. I believe this is due simply to the lack of good introductory documentation. This is no slam against Christophe Grand. He's a busy man and I rather he write up more excellent tutorials on how to optimize Clojure code to blazingly fast speed than create introductory tutorials about Enlive. In anycase that's what open source communities are all about, right? Contribution!
+Enlive has been around for sometime now, yet the Clojure community has been slow to embrace this useful library. I believe this is due simply to the lack of good introductory documentation. This is no slam against Christophe Grand. He's a busy man and I'd rather he write up more excellent tutorials on how to optimize Clojure code to blazingly fast speed than create introductory tutorials about Enlive. In anycase this is what open source communities are all about, right? Contribution!
+
+But really my reasons for creating this tutorial are not entirely altruistic. I've been playing with Enlive off and on for sometime now and I realize that I keep coming back to it having half-forgotten what I learned the last time. So I'm now writing this tutorial - for myself and all the Lispers and Lispers To Be.
 
 h2. What You need to Know
 
-Not much. This tutorial is intended even for developers who have little or no exposure to Clojure. At the very least you'll need to have the Java Virtual Machine (JVM) installed. If you do know Clojure the tutorials are fairly amenable to skimming.
+Not much. This tutorial is intended even for developers who have little or no exposure to Clojure. At the very least you'll need to have the Java Virtual Machine (JVM) installed. Don't expect a full blow discussion of Lisp but I've tried to keep the code small at least from the start.
+
+As the tutorials progress they will be more useful to you if you have some experience with modern webframeworks that ship with fancy templating libraries.
+
+If you do know Clojure the tutorials are fairly amenable to skimming.
+
+My only real assumption is that you have some experience at the command line.
 
 h2. Why Enlive?
 
 Enlive presents a dramatically different approach to generating HTML then what's out there.
 
-** It entirely eliminates the need to mix code/markup.
-** Use CSS like syntax to manipulate HTML.
+** Code and markup are completely separate (the implications are enormous)
+** You get to use CSS like syntax to manipulate HTML.
 ** Template inheritance isn't some fancy trick, it just plain old function composition.
-** You access to the full power of Clojure to manipulate your templates (macros!).
+** You have access to the full power of Clojure to manipulate your templates (yes, macros!).
 
 One good analogy might be "XSLT that doesn't suck".
 
 h2. What We'll Cover
 
-There are 6 examples. 
+There are 7 examples in total.
 
-The first one covers grabbing the headlines and points from Hackers News. The next one shows how to make the code less redundant. And the third scrapes the New York Times front page since that presents far more challenges than Hacker News.
+The first one covers grabbing the headlines and points from Hackers News. The next one shows how to make the code less redundant. The third scrapes the New York Times front page since that presents more challenges than Hacker News.
 
-The 4th example shows how to use Compojure and Enlive together. The 5th example shows that Enlive can do much of the fancy template inheritance magic you might be used to coming from Django or some other popular modern webframework.
+The fourth example shows how to use Compojure and Enlive together. The fifth example shows how things like looping are achieved without writing any code into the markup. The sixth example shows that Enlive can do all the fancy template inheritance magic you might be used to if you're coming from Django or some other popular modern webframework.
 
-The final tutorial is fairly advanced. It illustrates how Clojure, being a Lisp, can in fact template itself! I use this ability to illustrate how a downside to Enlive can be overcome. For example, you'll often have a widget whose elements you might just want replace by CSS id (or class). Enlive syntax makes this somehwat tedious for this simple, though common, case. With macros you can achieve the same level of simplicity even though it is not a feature that ships with Enlive!
+The final tutorial is fairly advanced. It illustrates how Clojure, being a Lisp, can in fact template itself! I use this ability to illustrate how some downsides to Enlive can be overcome. In fact I think the seventh section begins to touch upon how Enlive could be the foundation for a truly incredible templating framework that would put most others to shame (and with a lot less code to boot).
 
 h2. Clone This Repo
 
@@ -41,9 +49,9 @@ git clone git://github.com/swannodette/enlive-tutorial.git
 
 h2. Install Leiningen
 
-In order to start playing around as fast possible you should use Leiningen. Leiningen is the easy_install (Python) and gems (Ruby) of the Clojure world. Phil Hagelberg and Co. have done a considerable amount of excellent work to make dependency management simple. And I truly envy the new Clojurians who don't know the times before *lien repl* and *lein swank* :)
+In order to start playing around as fast possible you should use Leiningen. Leiningen is the easy_install (Python) and gems (Ruby) of the Clojure world. Phil Hagelberg and Co. have done a considerable amount of excellent work to make dependency management simple. I truly envy the new Clojurians who don not know the times before *lien repl* and *lein swank* :)
 
-Once you have Leiningen installed, switch into this repository's source directory. From there run the following command:
+Once you have Leiningen installed, switch into this repository's directory. From there run the following command:
 
 <pre class="console">
 lein deps
@@ -59,63 +67,95 @@ This will launch a Clojure REPL (Read-Eval-Print-Loop) that has the classpath se
 
 h2. Your First Scrape with Enlive
 
-Enlive isn't just good for websites, it's also fantastic for scraping the content of webpages. It allows you to scrape content by using a syntax very similar to CSS3 (plus some even cooler goodies). In the REPL type the following lines (note that => is the prompt):
+Enlive isn't just good for websites, it's also fantastic for scraping the content of webpages. It allows you to scrape content by using a syntax very similar to CSS selectors (plus some even cooler goodies). In the REPL type the following lines (note that *user=>* is the REPL prompt, not something you type in):
 
 <pre class="console">
-=> (use 'tutorial.scrape1)
+user=> (ns tutorial.scrape1)
 nil
-=> *base-url*
+user=> (load "scrape1")
+nil
+user=> *base-url*
 "http://news.ycombinator.com/"
 </pre>
 
-We just loaded the first tutorial into the REPL. Let's see what in that file. Open up scrape1.clj (you can find it in repo/src/tutorial/). You'll see it's a fairly short program. 
+The first line puts us into a namespace. This allows use to use functions without having to qualify them with their namespace. It also makes switching between the different tutorials much simpler.
 
-At the top of this file is the namespace declaration. This keeps your code from clashing with other people when they try to use your library. The namespace declaration also includes another library, Enlive, via require. In this case generating an alias so we don't have to type the very long namespace for Enlive.
+We just loaded the first tutorial into the REPL. Let's see what's in that file. Open up *scrape1.clj* with you favorite text editor (you can find it in repo/src/tutorial/). You'll see it's a fairly short program. 
 
-The function *fetch-url* grabs the contexts of a url synchronously. *fetch-url* uses *html/html-resource* (remember we alias *net.cgrand.enlive-html* to html for convenience) another handy function defined in the Enlive library. It takes raw HTML and converts into anested data structure. 
+At the top of this file is the namespace declaration. This keeps your code from clashing with other people's code when they try to use your library. The namespace declaration also includes another library, Enlive, via *:require*. In this case we are generating an alias so we don't have to type the very long namespace for Enlive.
 
-Note that the function *hn-headlines* uses this *fetch-url*. But it's also surrounded by a lot of funny stuff.
+The function *fetch-url* grabs the contexts of a url synchronously. *fetch-url* uses *html/html-resource* (remember we aliased *net.cgrand.enlive-html* to *html* for convenience) another handy function defined in the Enlive library. It takes raw HTML and converts it into a nested data structure (think DOM minus tediousness).
 
-Note the Enlive function *html/select*. *html/select* takes parsed html content and select the nodes specified by a Clojure Vector that looks very similar to a CSS3 selector. 
+Note that the function *hn-headlines* uses *fetch-url*. But it's also surrounded by a lot of funny stuff.
+
+Note the Enlive function *html/select*. *html/select* takes parsed html content and selects the nodes specified by a Clojure vector that looks very similar to a CSS selector. 
 
 <pre>
 [:td.title a]
 </pre>
 
-Now that looks kind of weird. But if you squint a little bit it might remind you a little bit of this:
+Now that looks kind of weird. But if you squint a little bit it might remind you of this:
 
 <pre>
 td.title a
 </pre>
 
-This is a CSS selector for matching all links inside of table elements that have the CSS class "title".
+This is a CSS selector for matching all links inside of table elements that have the CSS class "title". If you're a Javascript hacker you should know this stuff by heart.
+
+So let's break this down. *fetch-url* grabs the contents of the url and parses it into a data structure. *html/select* takes it and extracts only those nodes that match the selector - it always returns a vector of nodes. We then use *map* to loop over the vector's elements applying a function to extract each nodes' text-node (*html/text*).
 
 Believe it or not, these 10 lines of code are enough to extract all of the headline title from the Hacker News front page. Let's try it out at the REPL now.
 
 <pre>
-=> (hn-headlines)
+user=> (hn-headlines)
 ("A 'lorem ipsum' for images." "Google Reader Can Now Track Changes to Any Website - Even Without a Feed" "jQuery 1.4.1 Released" ... "More")
 </pre>
 
 Nice. After this the next function *hn-points* should make a lot more sense. It does the same thing but we grab the score from a different place in the markup. Try to run this function as well.
 
 <pre>
-=> (hn-points)
+user=> (hn-points)
 ... output ..
 </pre>
 
 The last function takes the output of the two different functions and prints out the headline and score for each item on Hackers News. 
 
 <pre>
-=> (hn-headlines-and-points)
-... output ..
+user=> (print-hn-headlines-and-points)
+... output ...
 </pre>
 
-Not bad for 17 lines of code. One obvious problem here is that we make two requests for the Hacker News front page. Let's fix this now.
+*print-hn-headlines-and-points* looks like a doozy doesn't it?
+
+<pre>
+(defn print-headlines-and-points []
+  (doseq [line (map #(str %1 " (" %2 ")") (hn-headlines) (hn-points))]
+    (println line)))
+</pre>
+
+Let's break it down. Again we have *map*. We know that it maps a function over a vector to return a new vector of elemenets with that fuction applied.
+
+<pre>
+#(str %1 " (" %2 ")") ; is just shorthand for
+(fn [arg1 arg2] (str arg1 " (" arg2 ")")
+</pre>
+
+This is an anonymous function. I'm not going to explain that here, they're pretty popular these days. *str* is built in function for doing string concatenation.
+
+Oddly this *map* is accepting not one list of things, but two! Check this out:
+
+<pre>
+user=> (map + [1 2 3] [4 5 6])
+(5 7 9)
+</pre>
+
+Wow you can map two different vectors into one! Finally we have *doseq*. *doseq* is just a convenient way to work with lists when you're dealing with *side effects* like printing to the REPL. I'm not going to get into that here. All it does is say take list of things, assign each thing one at time to a variable, and then execute the following expression (hopefully you're actually doing something with that variable!
+
+Not bad for 17 lines of code. One obvious problem here is that we make two separate requests for the Hacker News front page. Let's fix this now.
 
 h2. Your Second Scrape
 
-Take a look at scrape2.clj. It looks pretty much the same except that we not longer have one function to grab headlines and another for article points.
+Take a look at scrape2.clj. It's also about 17 lines of code and it looks pretty much the same except that we not longer have one function to grab headlines and another for article points.
 
 <pre>
 (defn hn-headlines-and-points []
@@ -130,7 +170,7 @@ This select grabs what we're interested at the same time.
 #{[:td.title :a] [:td.subtext first-child]}
 </pre>
 
-Is pretty much the same as
+Is pretty much the same as:
 
 <pre>
 td.title a, td.subtext:first-child
@@ -139,27 +179,74 @@ td.title a, td.subtext:first-child
 Let try out the functions. Start up the repl with *lein repl* if you've shut it down and run the following.
 
 <pre class="console">
-=> (use 'tutorial.scrape2)
+user=> (ns tutorial.scrape2)
 nil
-=> (hn-headliens-and-points)
+user=> (load "scrape2")
+nil
+user=> (hn-headlines-and-points)
 ... output ...
 </pre>
 
-The results are interleaved, so we can use Clojure's partition function to pair them up and output them just like we did in the previous scrape.
+The results are interleaved, so we can use Clojure's partition function to pair them up and output them just like we did in the previous scrape. The map looks a little bit different:
+
+<pre>
+(defn print-headlines-and-points []
+  (doseq [line (map (fn [[h s]] (str h " (" s ")"))
+                    (partition 2 (hn-headlines-and-points)))]
+    (println line)))
+</pre>
+
+To get a sense of what partition does let's use the REPL again:
+
+<pre>
+user=> (partition 2 [1 2 3 4 5 6 7 8 9 0])
+((1 2) (3 4) (5 6) (7 8) (9 0))
+</pre>
+
+Neat it lets us pair things together. Exactly what we need.
+
+Man, but what's up with the *fn* this time?
+
+<pre>
+(fn [[h s]] (str h " (" s ")"))
+</pre>
+
+Say hello to destructuring. A lot of popular languages allow you to destructure but probably not as ubiquitously as Clojure does. Here we know that we are going to receive a two element vector for each item in the vector we're mapping over. So we're just saying we to assign the first element of that pair to the local variable h and the other to v.
+
+The rest of the function should be clear from the last tutorial.
 
 h2. Your Third Scrape
 
 By now you should feel like a pro. The third one, scrape3.clj tackles something considerably more difficult. Now to be clear this not that useful since the New York Times provides a fairly comprehensive list of RSS feeds. But the structure of the New Yorks Times page forces us to think about how to best leverage Enlive's abilities.
 
-h2. You First Template
+Take a look at *scrape3.clj*. This is considerable longer.
+
+h2. Your First Template
 
 This is where things begin to get really interesting. We're going to use Compojure, and ultralight http framework. If you're familiar with Rack or CherryPy you will feel right at home.
 
 h2. Macroology
 
-Now that you understand how to template with Enlive there's something to consider. Enlive does not work by manipulating text, it actually manipuates structure. While this comes back in spades when you're actually constructing pages this does unfortunately make the simple case unweildy.
+Now that you understand how to template with Enlive there's something to consider. Enlive does not work by manipulating text, it actually manipuates structure. While this comes back in spades when you're actually constructing pages this does unfortunately make the simple cases unweildy.
 
-Enlive for example doesn't really let you create templates from a string of markup. The following is invalid:
+Let's try something out before we dive into a lengthy explanation, type the following in the top level of the repo:
+
+<pre class="console">
+user=> (use 'tutorial.macroology)
+nil
+user=> (templ-str foo "<span id='bar'></span>")
+#'user/foo
+user=> (foo {:bar "Cool!"})
+("<html>" "<body>" "<span id=\"bar\">" "Cool!" "</span>" "</body>" "</html>")
+</pre>
+
+Wowzers! That was way simpler than what we've been doing this whole time. Why didn't we just use something like this from the beginning?
+
+Well that's because this isn't actually Enlive code. As I was putting together this tutorial I realized that the for the simple cases Enlive really gets whooped by the other templating engine out there. But Lisp has the answer for just this sort of problem.
+
+Since we've been singing Enlive praises most of this time, let's look at what there is to dislike about it.
+
+One problem is that Enlive doesn't really let you create templates from a string of markup. The following is invalid:
 
 <pre>
 (deftemplate foo "<span id='foo'></span>"
@@ -202,7 +289,9 @@ The following is somewhat advanced and most likely make the most if you have at 
 
 Macro allow to you create templates for your code.
 
-h2. Common Mistakes
+h2. Common Mistakes & Caveats
+
+h3. Converting Numbers
 
 When outputting numbers you need to convert them with *str*.
 
@@ -211,3 +300,13 @@ When outputting numbers you need to convert them with *str*.
 </pre>
 
 Since snippets take a selector sometimes you might not have set this value correctly. This is usually the case if you're not seeing any output at all from a snippet. It's really easy to test a snippet - remember they're just functions.
+
+h3. Template out of date
+
+Your template do not automatically reload. When you make edits to your html or you template I recommend running the following at the REPL:
+
+<pre>
+(load "your-library-name")
+</pre>
+
+Be careful, *do not include the .clj extension*. Also *do not use -'s in your file name*. If you want dashes you need to name with actual file using underscores.

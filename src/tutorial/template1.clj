@@ -3,10 +3,7 @@
   (:use [clojure.contrib.java-utils :only [file]])
   (:use compojure))
 
-;; change this line to reflect your setup
-(def *webdir* "/Users/davidnolen/development/clojure/enlive-tutorial/src/tutorial/")
-
-(html/deftemplate index* (file *webdir* "template1.html")
+(html/deftemplate index* "tutorial/template1.html"
   [ctxt]
   [:p#message] #(if-let [msg (:message ctxt)] msg %))
 

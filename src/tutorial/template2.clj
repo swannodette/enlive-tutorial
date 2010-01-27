@@ -5,27 +5,22 @@
 
 (def dummy-context 
      {:links [["Clojure" "http://www.clojure.org"]
-             ["Compojure" "http://www.compojure.org"]
-             ["Clojars" "http://www.clojars.org"]
-             ["Enlive" "http://github.com/cgrand/enlive"]]})
+              ["Compojure" "http://www.compojure.org"]
+              ["Clojars" "http://www.clojars.org"]
+              ["Enlive" "http://github.com/cgrand/enlive"]]})
 
-;; change this line to reflect your setup
-(def *webdir* "/Users/davidnolen/development/clojure/enlive-tutorial/src/tutorial/")
-
-(html/defsnippet link-model (file *webdir* "template2.html")  [:ul#links :> html/first-child]
+(html/defsnippet link-model "tutorial/template2.html"  [:ul#links :> html/first-child]
   [[text href]] 
   [:a] (html/do-> 
         (html/content text) 
         (html/set-attr :href href)))
 
-(html/deftemplate index (file *webdir* "template2.html")
+(html/deftemplate index "tutorial/template2.html"
   [ctxt] 
-  [:ul#widget] (html/content (map link-model (:links ctxt))))
+  [:ul#links] (html/content (map link-model (:links ctxt))))
 
 (defroutes example-routes
-  (GET "/static/"
-    (serve-file *webdir* "template2.html"))
-  (GET "/links/"
+  (GET "/"
     (apply str (index dummy-context)))
   (ANY "*"
     [404 "Page Not Found"]))

@@ -1,0 +1,53 @@
+body
+{
+  width: 800px;
+}
+
+div#header
+{
+  height: 100px;
+  width: 100%;
+  background-color: #ccc;
+}
+
+div#footer
+{
+  height: 100px;
+  width: 100%;
+  background-color: #ccc;
+}
+
+div#main
+{
+  width: 100%;
+  height: 400px;
+}
+
+div.column
+{
+  width: 33%;
+  height: 100%;
+}
+
+div.column:last-child
+{
+  width: 34%;
+}
+
+div#left
+{
+  float: left;
+  background-color: #fcc;
+}
+
+div#middle
+{
+  float: left;
+  background-color: #cfc;
+}
+
+div#right
+{
+  float: left;
+  background-color: #ccf;
+}

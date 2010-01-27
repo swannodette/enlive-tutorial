@@ -36,7 +36,7 @@
         (html/set-attr :href href)))
 
 (html/defsnippet main (file *webdir* "3col.html") [:div#main]
-  [{left :left, middle :middle, right :right :as context}]
+  [{left :left, middle :middle, right :right :as ctxt}]
   [:div#left]   (block left)
   [:div#middle] (block middle)
   [:div#right]  (block right))
