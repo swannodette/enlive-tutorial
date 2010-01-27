@@ -9,3 +9,7 @@
 
 (t/templ foo (file *webdir* "introspect.html"))
 (apply str (foo {:foo "Hello", :bar "world!"}))
+
+;; can't eval locals
+(let [markup "<span id='baz'></span>"]
+  (apply str (t/templ baz markup)))

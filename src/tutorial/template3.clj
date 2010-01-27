@@ -1,7 +1,11 @@
 (ns tutorial.template3
-  (:use [net.cgrand.enlive-html])
+  (:require [net.cgrand.enlive-html :as html])
   (:use [clojure.contrib.java-utils :only [file]])
   (:use compojure))
+
+;; =============================================================================
+;; Top Level Defs
+;; =============================================================================
 
 ;; change this line to reflect your setup
 (def *webdir* "/Users/davidnolen/development/clojure/enlive-tutorial/src/tutorial/")
@@ -11,30 +15,31 @@
 (defmacro block [sym]
   `(fn [n#] (if (nil? ~sym) n# ((substitute ~sym) n#))))
 
-(deftemplate layout (file *webdir* "template3.html")
-  [{header :header body :body footer :footer :as ctxt}] 
+;; =============================================================================
+;; The Templates Ma!
+;; =============================================================================
+
+(html/deftemplate base (file *webdir* "base.html")
+  [{header :header, body :body, footer :footer :as ctxt}] 
   [:#header] (block header)
-  [:#body]   (block body)
+  [:#left]   (block left)
   [:#footer] (block footer))
 
-(defsnippet header (file *webdir* "inherit.html") [:div#header]
-  [{name :name :as ctxt}]
-  [:span.name] (content name))
-
-(defsnippet link-model (file *webdir* "inherit.html")  [:ol#hnlinks :> first-child]
+(html/defsnippet link-model (file *webdir* "3col.html")  [:ol#links :> first-child]
   [[text href]] 
-  [:a] (do->
-        (content text) 
-        (set-attr :href href)))
+  [:a] (html/do->
+        (html/content text) 
+        (html/set-attr :href href)))
 
-(defsnippet body (file *webdir* "inherit.html") [:div#body]
-  [{time :time links :links :as context}]
-  [:span.time] (content time)
-  [:#hnlinks] (content (map link-model links)))
+(html/defsnippet body (file *webdir* "3col.html") [:div#body]
+  [{left :left, middle :middle, right :right :as context}]
+  [:div#left]   (block left)
+  [:div#middle] (block middle)
+  [:div#right]  (block right))
 
-(defsnippet footer (file *webdir* "inherit.html") [:div#footer]
-  [ctxt]
-  [:span.hits] (content (str @*hits*)))
+;; =============================================================================
+;; Pages
+;; =============================================================================
 
 (def pagea-context
      {:name "Page A"
@@ -45,9 +50,9 @@
               ["Enlive" "http://github.com/cgrand/enlive"]]})
 
 (defn pagea [ctxt]
-     (layout {:header (header ctxt)
-              :body (body ctxt)
-              :footer (footer ctxt)}))
+     (base {:header (header ctxt)
+            :body (body ctxt)
+            :footer (footer ctxt)}))
 
 (def pageb-context
      {:time "Funner Time"
@@ -57,11 +62,15 @@
               ["Enlive" "http://github.com/cgrand/enlive"]]})
 
 (defn pageb [ctxt]
-     (layout {:body (body ctxt)}))
+     (base {:body (body ctxt)}))
 
 (defn index
   ([] (index* {}))
   ([ctxt] (index* ctxt)))
+
+;; =============================================================================
+;; Routes
+;; =============================================================================
 
 (defroutes example-routes
   (GET "/static/"
@@ -73,9 +82,9 @@
   (ANY "*"
     [404 "Page Not Found"]))
 
-;; ========================================
+;; =============================================================================
 ;; The App
-;; ========================================
+;; =============================================================================
 
 (def *app* (atom nil))
 

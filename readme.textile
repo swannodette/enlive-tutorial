@@ -163,7 +163,7 @@ When outputting numbers you need to convert them with *str*.
 
 Since snippets take a selector sometimes you might not have set this value correctly. This is usually the case if you're not seeing any output at all from a snippet. It's really easy to test a snippet - remember they're just functions.
 
-h2. Macrology
+h2. Macroology
 
 Now that you understand how to template with Enlive there's something to consider. Enlive does not work by manipulating text, it actually manipuates structure. While this comes back in spades when you're actually constructing pages this does unfortunately make the simple case unweildy.
 
@@ -190,3 +190,22 @@ Now you have a nice function to convert strings into InputStreams. You can now d
   [ctxt]
   [:#foo] (content (:foo ctxt)))
 </pre>
+
+But really that is kind of annoying. The simple case is just a lot worse then what other templating solutions provide. Can this be made any better?
+
+Well this is Lisp after all!
+
+One of the most powerful tools you have at your disposal are macros. Now these are something you should attempt to use anywhere, but they can be quite useful when you just know that the code could better.
+
+In a ideal for the simplest case we would like something like the following:
+
+<pre>
+(templ simple "<span id='foo'></span><span id='bar'></span>")
+(simple {:foo "Hello ", :bar "world!"})
+</pre>
+
+Can we have our cake and eat it to.
+
+The following is somewhat advanced and most likely make the most if you have at least some passing familiarity with macros.
+
+Macro allow to you create templates for your code. The main difference between 

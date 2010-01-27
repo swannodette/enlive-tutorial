@@ -4,10 +4,10 @@
   (:use compojure))
 
 (def dummy-context 
-     {:links  [["Clojure" "http://www.clojure.org"]
-              ["Compojure" "http://www.compojure.org"]
-              ["Clojars" "http://www.clojars.org"]
-              ["Enlive" "http://github.com/cgrand/enlive"]]})
+     {:links [["Clojure" "http://www.clojure.org"]
+             ["Compojure" "http://www.compojure.org"]
+             ["Clojars" "http://www.clojars.org"]
+             ["Enlive" "http://github.com/cgrand/enlive"]]})
 
 (comment
   (map link-model (:links dummy-context))
