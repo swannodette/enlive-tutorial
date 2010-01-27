@@ -23,10 +23,10 @@
 ;; =============================================================================
 
 (html/deftemplate base (file *webdir* "base.html")
-  [{title :title, header :header, body :body, footer :footer :as ctxt}]
+  [{title :title, header :header, main :main, footer :footer :as ctxt}]
   [:#title]      (maybe-content title)
   [:#header]     (block header)
-  [:#body]       (block body)
+  [:#main]       (block main)
   [:#footer]     (block footer))
 
 (html/defsnippet link-model (file *webdir* "3col.html")  [:ol#links :> html/first-child]
@@ -35,11 +35,15 @@
         (html/content text) 
         (html/set-attr :href href)))
 
-(html/defsnippet body (file *webdir* "3col.html") [:div#body]
+(html/defsnippet main (file *webdir* "3col.html") [:div#main]
   [{left :left, middle :middle, right :right :as context}]
   [:div#left]   (block left)
   [:div#middle] (block middle)
   [:div#right]  (block right))
+
+(comment
+  (load "template3")
+  )
 
 ;; =============================================================================
 ;; Pages
@@ -47,7 +51,7 @@
 
 (defn pagea [{title :title :as ctxt}]
      (base {:title title
-            :body  (body ctxt)}))
+            :main  (main ctxt)}))
 
 (def pageb-context
      {:time "Funner Time"
@@ -57,7 +61,7 @@
               ["Enlive" "http://github.com/cgrand/enlive"]]})
 
 (defn pageb [ctxt]
-     (base {:body (body ctxt)}))
+     (base {:main (main ctxt)}))
 
 (defn index
   ([] (base {}))
@@ -69,13 +73,15 @@
 
 (defroutes example-routes
   (GET "/"
-    (apply str (index)))
+       (apply str (index)))
   (GET "/a/"
-    (apply str (pagea {:title "Page A"})))
+       (apply str (pagea {:title "Page A"})))
   (GET "/b/"
-    (apply str (pagea pageb-context)))
+       (apply str (pagea pageb-context)))
+  (GET "/main.css"
+       (serve-file *webdir* "main.css"))
   (ANY "*"
-    [404 "Page Not Found"]))
+       [404 "Page Not Found"]))
 
 ;; =============================================================================
 ;; The App
