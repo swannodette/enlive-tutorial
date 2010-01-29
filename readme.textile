@@ -27,7 +27,7 @@ Enlive presents a dramatically different approach to generating HTML then what's
 ** Template inheritance isn't some fancy trick, it just plain old function composition.
 ** You have access to the full power of Clojure to manipulate your templates (yes, macros!).
 
-One good analogy might be "XSLT that doesn't suck".
+One good analogy might be "XSLT that not only doesn't suck, it absolutely rulez".
 
 h2. What We'll Cover
 
