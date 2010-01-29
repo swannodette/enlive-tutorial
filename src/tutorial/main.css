@@ -25,29 +25,46 @@ div#main
 
 div.column
 {
-  width: 33%;
+  float: left;
   height: 100%;
 }
 
-div.column:last-child
+div#main div.column:nth-child(1),
+div#main div.column:nth-child(3)
 {
-  width: 34%;
+  width: 20%;
+}
+
+div#main div.column:nth-child(2)
+{
+  width: 60%;
 }
 
 div#left
 {
-  float: left;
   background-color: #fcc;
 }
 
 div#middle
 {
-  float: left;
   background-color: #cfc;
 }
 
 div#right
 {
-  float: left;
   background-color: #ccf;
+}
+
+div.nav
+{
+  border: 3px solid black;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+}
+
+div#navs
+{
+  height: 400px;
 }

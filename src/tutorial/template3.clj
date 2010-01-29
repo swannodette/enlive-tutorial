@@ -1,5 +1,5 @@
 (ns tutorial.template3
-  (:use [tutorial.utils :only [render]])
+  (:use [tutorial.utils :only [render parse-int]])
   (:require [net.cgrand.enlive-html :as html])
   (:use compojure))
 
@@ -30,7 +30,7 @@
   [:#footer]     (block footer))
 
 ;; just begging for a good macro abstraction
-(html/defsnippet link-model "tutorial/3col.html"  [:ol#links :> html/first-child]
+(html/defsnippet link-model "tutorial/3col.html" [:ol#links :> html/first-child]
   [[text href]] 
   [:a] (html/do->
         (html/content text) 
@@ -42,26 +42,46 @@
   [:div#middle] (block middle)
   [:div#right]  (block right))
 
-(comment
-  (load "template3")
-  )
+(html/defsnippet nav1 "tutorial/navs.html" [:div#nav1]
+  [{count :count :as ctxt}]
+  [:count] (html/content count (pluralize "thing" count)))
+
+(html/defsnippet nav2 "tutorial/navs.html" [:div#nav2] [])
+
+(html/defsnippet nav3 "tutorial/navs.html" [:div#nav3] [])
+
+;; =============================================================================
+;; Tags
+;; =============================================================================
+
+(defn pluralize [astr n]
+  (if (= n 1)
+    (str astr)
+    (str astr "s")))
 
 ;; =============================================================================
 ;; Pages
 ;; =============================================================================
 
-(defn pagea [ctxt]
-  (base (assoc ctxt :main (three-col ctxt))))
+(defn viewa [params session]
+  (base {:title "View A"
+         :main (three-col {})}))
 
-(def pageb-context
-     {:time "Funner Time"
-      :links [["Clojure" "http://www.clojure.org"]
-              ["Compojure" "http://www.compojure.org"]
-              ["Clojars" "http://www.clojars.org"]
-              ["Enlive" "http://github.com/cgrand/enlive"]]})
+(defn viewb [params session]
+  (let [nav1 (nav1 {:count (parse-int (or (:count params) 0))})
+        nav2 (nav2)]
+   (base {:title "View B"
+          :main (three-col {:left nav1
+                            :right nav2})})))
 
-(defn pageb [ctxt]
-     (base {:main (three-col ctxt)}))
+(defn viewc [params session]
+  (let [navs [(nav1 {:count (parse-int (or (:count params) 0))})
+              (nav2)]
+        navs (if (= (:actions params) "reverse") (reverse navs))
+        [nav1 nav2] navs]
+   (base {:title "View C"
+          :main (three-col {:left nav1
+                            :right nav2})})))
 
 (defn index
   ([] (base {}))
@@ -76,15 +96,21 @@
   (GET "/"
        (render (index)))
   (GET "/a/"
-       (render (pagea {:title "Page A"})))
+       (render (viewa params session)))
   (GET "/b/"
-       (render (pagea pageb-context)))
+       (render (viewb params session)))
+  (GET "/b/:count"
+       (render (viewb params session)))
+  (GET "/c/:action"
+       (render (viewb params session)))
 
   ;; static files
   (GET "/base.html"
        (serve-file *webdir* "base.html"))
   (GET "/3col.html"
        (serve-file *webdir* "3col.html"))
+  (GET "/navs.html"
+       (serve-file *webdir* "navs.html"))
   (GET "*/main.css"
        (serve-file *webdir* "main.css"))
 
