@@ -266,7 +266,7 @@ Pretty slick. Templating with Enlive is just write Clojure code. This very diffe
 
 One last live example before we dive into the code. Point your browser at *http://localhost:8080/c/*. Huh, looks pretty much like b. Point your browser at *http://localhost:8080/c/reverse*. Notice something different?
 
-<i>*We just flipped the two navs!*</b> Imagine that you want elements of your site to be easily customizable. How complicated is doing something like this?
+<i>*We just flipped the two navs!*</i> How complicated is doing something like this?
 
 <pre>
 (defn viewc [params session]
