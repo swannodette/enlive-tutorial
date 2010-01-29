@@ -44,7 +44,8 @@
 
 (html/defsnippet nav1 "tutorial/navs.html" [:div#nav1]
   [{count :count :as ctxt}]
-  [:count] (html/content count (pluralize "thing" count)))
+  [:.count] (html/content
+             (str (parse-int count) " " (pluralize "thing" (parse-int count)))))
 
 (html/defsnippet nav2 "tutorial/navs.html" [:div#nav2] [])
 
@@ -68,20 +69,20 @@
          :main (three-col {})}))
 
 (defn viewb [params session]
-  (let [nav1 (nav1 {:count (parse-int (or (:count params) 0))})
+  (let [nav1 (nav1 {:count (or (:count params) 0)})
         nav2 (nav2)]
    (base {:title "View B"
           :main (three-col {:left nav1
                             :right nav2})})))
 
 (defn viewc [params session]
-  (let [navs [(nav1 {:count (parse-int (or (:count params) 0))})
+  (let [navs [(nav1 {:count (or (:count params) 0)})
               (nav2)]
-        navs (if (= (:actions params) "reverse") (reverse navs))
+        navs (if (= (:action params) "reverse") (reverse navs) navs)
         [nav1 nav2] navs]
-   (base {:title "View C"
-          :main (three-col {:left nav1
-                            :right nav2})})))
+    (base {:title "View C"
+           :main (three-col {:left nav1
+                             :right nav2})})))
 
 (defn index
   ([] (base {}))
@@ -101,8 +102,10 @@
        (render (viewb params session)))
   (GET "/b/:count"
        (render (viewb params session)))
+  (GET "/c/"
+       (render (viewc params session)))
   (GET "/c/:action"
-       (render (viewb params session)))
+       (render (viewc params session)))
 
   ;; static files
   (GET "/base.html"
