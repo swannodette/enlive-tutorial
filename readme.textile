@@ -225,6 +225,69 @@ h2. Your First Template
 
 This is where things begin to get really interesting. We're going to use Compojure, and ultralight http framework. If you're familiar with Rack or CherryPy you will feel right at home.
 
+h2. Your Third Template
+
+We now have a basic working idea of how templates work in Enlive. Template are simply functions. Following a well-known pattern it's best to pass a single map to the template allowing the template to be easily changed over time as your requirementes grow.
+
+Now it's still unclear if there any real advantages to the Enlive way. Hopefully in this tutorial we can prove it's immense power.
+
+Start a REPL if you don't already have one running with *lein repl*. Type the following:
+
+<pre>
+user=> (stop-app)
+nil
+user=> (ns tutorial.template3)
+nil
+tutorial.template3=> (start-app)
+</pre>
+
+Point your favorite web brower to *http://localhost:8080/base.html*. You should see a fairly plain page. This is not a template. You can try opening up base.html as file with your browser and see that it's identical.
+
+Now point your browser at *http://localhost:8080/3col.html*. You should see another page that has a 3 column layout.
+
+Now point your browser at *http://localhost:8080/a/*. The code required to do this follows:
+
+<pre>
+(defn viewa [params session]
+  (base {:title "View A"
+         :main (three-col {})}))
+</pre>
+
+If you look at the markup for *base.html* and *3col.html* you will see that there is not one line of code! So how did we magically put these two things together with so little code!
+
+Once understand the what's going, the whole concept of template inheritance is completely boring. 
+
+<i>*In Enlive, constructing pages is simply putting some functions together!*</i>
+
+Take a look at *http://localhost:8080/navs.html*. You should see some truly ugly nav bars ;) Now point your browser at *http://locahost:8080/b/. You can see it's easy for to define a site wide layout, a 3 column middle main layout, and customize the contents of each column. Again there's absolute no code in the markup, only the following code is needed to construct this page:
+
+<pre>
+(defn viewb [params session]
+  (let [nav1 (nav1 {:count (or (:count params) 0)})
+        nav2 (nav2)]
+   (base {:title "View B"
+          :main (three-col {:left nav1
+                            :right nav2})})))
+</pre>
+
+Pretty slick. Templating with Enlive is just write Clojure code. This very different from even the good HTML templating solutions out there- very few give you the full power of the language.
+
+One last live example before we dive into the code. Point your browser at *http://localhost:8080/c/*. Huh, looks pretty much like b. Point your browser at *http://localhost:8080/c/reverse*. Notice something different?
+
+<i>*We just flipped the two navs!*</b> Imagine that you want elements of your site to be easily customizable. How complicated is doing something like this?
+
+<pre>
+(defn viewc [params session]
+  (let [navs [(nav1 {:count (or (:count params) 0)}) (nav2)]
+        navs (if (= (:action params) "reverse") (reverse navs) navs)
+        [nav1 nav2] navs]
+    (base {:title "View C"
+           :main (three-col {:left nav1
+                             :right nav2})})))
+</pre>
+
+We added two, yes, <i>two</i> new lines of code. If I was a web developer I'd be drooling right about now.
+
 h2. Macroology
 
 Now that you understand how to template with Enlive there's something to consider. Enlive does not work by manipulating text, it actually manipuates structure. While this comes back in spades when you're actually constructing pages this does unfortunately make the simple cases unweildy.
@@ -283,7 +346,7 @@ In a ideal for the simplest case we would like something like the following:
 (simple {:foo "Hello ", :bar "world!"})
 </pre>
 
-Can we have our cake and eat it to.
+Can we have our cake and eat it to?
 
 The following is somewhat advanced and most likely make the most if you have at least some passing familiarity with macros.
 
