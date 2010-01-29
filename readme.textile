@@ -227,9 +227,7 @@ This is where things begin to get really interesting. We're going to use Compoju
 
 h2. Your Third Template
 
-We now have a basic working idea of how templates work in Enlive. Template are simply functions. Following a well-known pattern it's best to pass a single map to the template allowing the template to be easily changed over time as your requirementes grow.
-
-Now it's still unclear if there any real advantages to the Enlive way. Hopefully in this tutorial we can prove it's immense power.
+We now have a basic working idea of how templates work in Enlive. Template are simply functions. Following a well-known pattern it's best to pass a single map to the template allowing the template to be easily changed over time as your requirementes grow. Now it's still unclear if there any real advantages to the Enlive way. Hopefully in this tutorial we can prove it's immense power.
 
 Start a REPL if you don't already have one running with *lein repl*. Type the following:
 
@@ -241,11 +239,7 @@ nil
 tutorial.template3=> (start-app)
 </pre>
 
-Point your favorite web brower to *http://localhost:8080/base.html*. You should see a fairly plain page. This is not a template. You can try opening up base.html as file with your browser and see that it's identical.
-
-Now point your browser at *http://localhost:8080/3col.html*. You should see another page that has a 3 column layout.
-
-Now point your browser at *http://localhost:8080/a/*. The code required to do this follows:
+Point your favorite web brower to *http://localhost:8080/base.html*. You should see a fairly plain page. This is not a template. You can try opening up base.html as file with your browser and see that it's identical. Now point your browser at *http://localhost:8080/3col.html*. You should see another page that has a 3 column layout. Now point your browser at *http://localhost:8080/a/*. The code required to do this follows:
 
 <pre>
 (defn viewa [params session]
@@ -253,9 +247,7 @@ Now point your browser at *http://localhost:8080/a/*. The code required to do th
          :main (three-col {})}))
 </pre>
 
-If you look at the markup for *base.html* and *3col.html* you will see that there is not one line of code! So how did we magically put these two things together with so little code!
-
-Once understand the what's going, the whole concept of template inheritance is completely boring. 
+If you look at the markup for *base.html* and *3col.html* you will see that there is not one line of code! So how did we magically put these two things together with so little code! Once understand the what's going, the whole concept of template inheritance is completely boring. 
 
 <i>*In Enlive, constructing pages is simply putting some functions together!*</i>
 
