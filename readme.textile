@@ -100,22 +100,22 @@ So let's break this down. *fetch-url* grabs the contents of the url and parses i
 
 Believe it or not, these 10 lines of code are enough to extract all of the headlines from the Hacker News front page. Let's try it out at the REPL now.
 
-<pre>
-user=> (hn-headlines)
+<pre class="console">
+tutorial.scrape1=> (hn-headlines)
 ("A 'lorem ipsum' for images." "Google Reader Can Now Track Changes to Any Website - Even Without a Feed" "jQuery 1.4.1 Released" ... "More")
 </pre>
 
 Nice. After this the next function *hn-points* should make a lot more sense. It does the same thing but we grab the score from a different place in the markup. Try to run this function as well.
 
-<pre>
-user=> (hn-points)
+<pre class="console">
+tutorial.scrape1=> (hn-points)
 ... output ..
 </pre>
 
 The last function takes the output of the two different functions and prints out the headline and score for each item on Hackers News. 
 
-<pre>
-user=> (print-hn-headlines-and-points)
+<pre class="console">
+tutorial.scrape1=> (print-hn-headlines-and-points)
 ... output ...
 </pre>
 
@@ -138,8 +138,8 @@ This is an anonymous function. I'm not going to explain that here, they're prett
 
 Oddly this *map* is accepting not one list of things, but two! Check this out:
 
-<pre>
-user=> (map + [1 2 3] [4 5 6])
+<pre class="console">
+tutorial.scrape1=> (map + [1 2 3] [4 5 6])
 (5 7 9)
 </pre>
 
@@ -173,11 +173,11 @@ td.title a, td.subtext:first-child
 Let try out the functions. Start up the repl with *lein repl* if you've shut it down and run the following.
 
 <pre class="console">
-user=> (ns tutorial.scrape2)
+tutorial.scrape1=> (ns tutorial.scrape2)
 nil
-user=> (load "scrape2")
+tutorial.scrape2=> (load "scrape2")
 nil
-user=> (hn-headlines-and-points)
+tutorial.scrape2=> (hn-headlines-and-points)
 ... output ...
 </pre>
 
@@ -192,8 +192,8 @@ The results are interleaved, so we can use Clojure's partition function to pair 
 
 To get a sense of what partition does let's use the REPL again:
 
-<pre>
-user=> (partition 2 [1 2 3 4 5 6 7 8 9 0])
+<pre class="console">
+tutorial.scrape2=> (partition 2 [1 2 3 4 5 6 7 8 9 0])
 ((1 2) (3 4) (5 6) (7 8) (9 0))
 </pre>
 
@@ -224,9 +224,9 @@ Let's get started. If you aren't running a repl be sure to start one up from the
 Once you see the REPL prompt type the following:
 
 <pre>
-user=> (ns tutorial.template1)
+tutorial.scrape3=> (ns tutorial.template1)
 nil
-user=> (load "template1")
+tutorial.template1=> (load "template1")
 nil
 tutorial.template1 => (start-app)
 </pre>
@@ -320,10 +320,10 @@ We now have a basic working idea of how templates work in Enlive. Template are s
 
 Start a REPL if you don't already have one running with *lein repl*. Type the following:
 
-<pre>
-user=> (stop-app)
+<pre class="console">
+tutorial.template2=> (stop-app)
 nil
-user=> (ns tutorial.template3)
+tutorial.template2=> (ns tutorial.template3)
 nil
 tutorial.template3=> (start-app)
 </pre>
@@ -376,11 +376,11 @@ Now that you understand how to template with Enlive there's something to conside
 Let's try something out before we dive into a lengthy explanation, type the following in the top level of the repo:
 
 <pre class="console">
-user=> (use 'tutorial.macroology)
+tutorial.template3=> (use 'tutorial.macroology)
 nil
-user=> (templ-str foo "<span id='bar'></span>")
+tutorial.macroology=> (templ-str foo "<span id='bar'></span>")
 #'user/foo
-user=> (foo {:bar "Cool!"})
+tutorial.macroology=> (foo {:bar "Cool!"})
 ("<html>" "<body>" "<span id=\"bar\">" "Cool!" "</span>" "</body>" "</html>")
 </pre>
 
