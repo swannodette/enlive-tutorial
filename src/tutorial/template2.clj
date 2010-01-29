@@ -36,7 +36,7 @@
 ;; The App
 ;; ========================================
 
-(def *app* (atom nil))
+(defonce *app* (atom nil))
 
 (defn start-app []
   (if (not (nil? @*app*))
