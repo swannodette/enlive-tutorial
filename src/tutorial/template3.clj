@@ -29,13 +29,14 @@
   [:#main]       (block main)
   [:#footer]     (block footer))
 
+;; just begging for a good macro abstraction
 (html/defsnippet link-model "tutorial/3col.html"  [:ol#links :> html/first-child]
   [[text href]] 
   [:a] (html/do->
         (html/content text) 
         (html/set-attr :href href)))
 
-(html/defsnippet main "tutorial/3col.html" [:div#main]
+(html/defsnippet three-col "tutorial/3col.html" [:div#main]
   [{left :left, middle :middle, right :right :as ctxt}]
   [:div#left]   (block left)
   [:div#middle] (block middle)
@@ -50,7 +51,7 @@
 ;; =============================================================================
 
 (defn pagea [ctxt]
-  (base (assoc ctxt :main (main ctxt))))
+  (base (assoc ctxt :main (three-col ctxt))))
 
 (def pageb-context
      {:time "Funner Time"
@@ -60,7 +61,7 @@
               ["Enlive" "http://github.com/cgrand/enlive"]]})
 
 (defn pageb [ctxt]
-     (base {:main (main ctxt)}))
+     (base {:main (three-col ctxt)}))
 
 (defn index
   ([] (base {}))
@@ -71,14 +72,22 @@
 ;; =============================================================================
 
 (defroutes example-routes
+  ;; app routes
   (GET "/"
        (render (index)))
   (GET "/a/"
        (render (pagea {:title "Page A"})))
   (GET "/b/"
        (render (pagea pageb-context)))
-  (GET "/main.css"
+
+  ;; static files
+  (GET "/base.html"
+       (serve-file *webdir* "base.html"))
+  (GET "/3col.html"
+       (serve-file *webdir* "3col.html"))
+  (GET "*/main.css"
        (serve-file *webdir* "main.css"))
+
   (ANY "*"
        [404 "Page Not Found"]))
 

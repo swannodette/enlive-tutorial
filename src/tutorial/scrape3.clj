@@ -29,7 +29,7 @@
     (zipmap [:title :byline :summary] result)))
 
 (defn print-story [story]
-  (println "--------------------------------------------------")
+  (println)
   (println (:title story))
   (println "\t" (or (:byline story) "No byline"))
   (println "\t" (or (:summary story) "No summary")))
@@ -37,10 +37,4 @@
 (defn print-stories []
   (doseq [story (map extract (stories))]
     (print-story story)))
-
-(comment
-  (defn empty-indices [v]
-    (filter (fn [[i s]] (nil? (seq s))) (indexed v)))
-  )
-
 
