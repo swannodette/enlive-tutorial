@@ -1,6 +1,6 @@
 (ns tutorial.template1
-  (:use [tutorial.utils :only [render maybe-content]])
   (:require [net.cgrand.enlive-html :as html])
+  (:use net.cgrand.contrib.utils)
   (:use compojure))
 
 (html/deftemplate index "tutorial/template1.html"
