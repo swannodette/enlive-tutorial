@@ -3,18 +3,14 @@
   (:use [net.cgrand.enlive-html :as html])
   (:use compojure))
 
-(html/deftemplate index* "tutorial/template1.html"
+(html/deftemplate index "tutorial/template1.html"
   [ctxt]
   [:p#message] #(if-let [msg (:message ctxt)] msg %))
 
-(defn index
-  ([] (index* {}))
-  ([ctxt] (index* ctxt)))
-
 (defroutes example-routes
   (GET "/"
-       (render (index)))
-  (GET "/change/"
+       (render (index {})))
+  (GET "/change"
        (render (index {:message "We changed the message!"})))
   (ANY "*"
        [404 "Page Not Found"]))
@@ -23,7 +19,7 @@
 ;; The App
 ;; ========================================
 
-(def *app* (atom nil))
+(defonce *app* (atom nil))
 
 (defn start-app []
   (if (not (nil? @*app*))
