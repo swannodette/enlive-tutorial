@@ -1,6 +1,6 @@
 (ns tutorial.template3
-  (:use [tutorial.utils :only [render parse-int]])
   (:require [net.cgrand.enlive-html :as html])
+  (:use [net.cgrand.contrib.utils])
   (:use compojure))
 
 ;; =============================================================================
@@ -12,12 +12,6 @@
 
 (def *hits* (atom 0))
 
-(defmacro block [sym]
-  `(fn [n#] (if (nil? ~sym) n# ((html/substitute ~sym) n#))))
-
-(defmacro maybe-content [sym]
-  `(fn [n#] (if (nil? ~sym) n# ((html/content ~sym) n#))))
-
 ;; =============================================================================
 ;; The Templates Ma!
 ;; =============================================================================
@@ -25,11 +19,10 @@
 (html/deftemplate base "tutorial/base.html"
   [{title :title, header :header, main :main, footer :footer :as ctxt}]
   [:#title]      (maybe-content title)
-  [:#header]     (block header)
-  [:#main]       (block main)
-  [:#footer]     (block footer))
+  [:#header]     (maybe-substitute header)
+  [:#main]       (maybe-substitute main)
+  [:#footer]     (maybe-substitute footer))
 
-;; just begging for a good macro abstraction
 (html/defsnippet link-model "tutorial/3col.html" [:ol#links :> html/first-child]
   [[text href]] 
   [:a] (html/do->
@@ -38,9 +31,9 @@
 
 (html/defsnippet three-col "tutorial/3col.html" [:div#main]
   [{left :left, middle :middle, right :right :as ctxt}]
-  [:div#left]   (block left)
-  [:div#middle] (block middle)
-  [:div#right]  (block right))
+  [:div#left]   (maybe-substitute left)
+  [:div#middle] (maybe-substitute middle)
+  [:div#right]  (maybe-substitute right))
 
 (html/defsnippet nav1 "tutorial/navs.html" [:div#nav1]
   [{count :count :as ctxt}]
@@ -50,15 +43,6 @@
 (html/defsnippet nav2 "tutorial/navs.html" [:div#nav2] [])
 
 (html/defsnippet nav3 "tutorial/navs.html" [:div#nav3] [])
-
-;; =============================================================================
-;; Tags
-;; =============================================================================
-
-(defn pluralize [astr n]
-  (if (= n 1)
-    (str astr)
-    (str astr "s")))
 
 ;; =============================================================================
 ;; Pages
