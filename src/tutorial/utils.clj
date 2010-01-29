@@ -11,5 +11,9 @@
 (defmacro block [sym]
   `(fn [n#] (if (nil? ~sym) n# ((html/substitute ~sym) n#))))
 
-(defmacro maybe-content [sym]
-  `(fn [n#] (if (nil? ~sym) n# ((html/content ~sym) n#))))
+(defmacro maybe-content [expr & rest]
+  `(fn [n#] (if (nil? ~expr)
+              (if-let [default# ~(first rest)]
+                ((html/content default#) n#)
+                n#)
+              ((html/content ~expr) n#))))

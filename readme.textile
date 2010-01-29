@@ -225,6 +225,97 @@ h2. Your First Template
 
 This is where things begin to get really interesting. We're going to use Compojure, and ultralight http framework. If you're familiar with Rack or CherryPy you will feel right at home.
 
+Let's get started. If you aren't running a repl be sure to start one up from the repo directory with *lein repl*.
+
+Once you see the REPL prompt type the following:
+
+<pre>
+user=> (ns tutorial.template1)
+nil
+user=> (load "template1")
+nil
+tutorial.template1 => (start-app)
+</pre>
+
+You should see some output that lets you know that Compojure is starting up a webserver on port 8080. Point your browser at *http://localhost:8080*. You should see a very boring page. Point your browser at *http://localhost:8080/change*. You should see something slightly different.
+
+First open template1.html and take a look at it. If you're used to other templating solutions the most shocking thing should be that there absolutely no Clojure code in this file. And there never will be. Period.
+
+Now let's take a look at the code. By now the namespace part should be familiar so we'll skip over that. After the ns declaration we'll see our first template definition:
+
+<pre>
+(html/deftemplate index "tutorial/template1.html"
+  [ctxt]
+  [:p#message] (html/content (:message ctxt)))
+</pre>
+
+Every template has the argument list [name source args & forms]. An Enlive template is a macro that when compiled will create a function with the same name. This function will have the same signature as defined by *args*. *forms* consists of pairs of Enlive selectors and a function to execute for each node that matches the selector.
+
+Here our template will find all *p* elements with the CSS id *message*. CSS ids should be unique so ideal this will only match a single element. Then we have the function which will receive this matching element.
+
+<pre>
+(html/content (:message ctxt))
+</pre>
+
+This means we'll replace the content of any matching node with the value for the key *:message* in the ctxt hash-map. The important thing to grasp here is that *html/content* is a function which <i>returns</i> a function which whill receive the matched element.
+
+For example what if we wanted to include a message if there is not value for *:message* in *cxtxt*? It would look something like this:
+
+<pre>
+(html/deftemplate index "tutorial/template1.html"
+  [ctxt]
+  [:p#message] (fn [match]
+                 (if-let [msg (:message ctxt)]
+                   ((html/content msg) match)
+                   ((html/content "Nothing to see here!") match))))
+</pre>
+
+It should be clear here that *html/content* returns a function which will receive the matching element and modify it. This could be made slightly less verbose like so:
+
+<pre>
+(html/deftemplate index "tutorial/template1.html"
+  [ctxt]
+  [:p#message] #(if-let [msg (or (:message ctxt)
+                                 "Nothing to see here!")]
+                  ((html/content msg) %)))
+</pre>
+
+But even this is kinda meh. While Enlive does not have a great shortcut for expressing this pattern it's easy to write macros (we'll get to those later. But watch out it's an advanced topic). I've included a handy macro called *maybe-content* which allows to write something like this:
+
+<pre>
+html/deftemplate index "tutorial/template1.html"
+  [ctxt]
+  [:p#message] (maybe-content (:message ctxt)
+                              "Nothing to set here!"))
+</pre>
+
+Pretty slick eh? ;) This is just touching the tip of the iceberg.
+
+The remainder of *template1.clj* is really specific to Compojure. We're not going to get too deep into that here because these tutorials are about Enlive, not Compojure.
+
+<pre>
+(defroutes example-routes
+  (GET "/"
+       (render (index {})))
+  (GET "/change"
+       (render (index {:message "We changed the message!"})))
+  (ANY "*"
+       [404 "Page Not Found"]))
+</pre>
+
+This is simply the route defining syntax. It should relatively familiar to the working web developer especially if you have experience with any modern web framework. A couple things to note *render* is not a function of Enlive, it's something I added via *utils.clj* in the repo. *render* isn't magic it's just a function that looks like this:
+
+<pre>
+(defn render [t]
+  (apply str t))
+</pre>
+
+All this does is take a list of strings and concatenate them into one large string. This is because when an Enlive template function is called that's what it returns, a list of strings.
+
+Also note that our template function *index* must be called with at least one parameter. That's because Enlive templates are just normal Clojure functions and there's no such thing as optional parameters in Clojure. It's quite simple to add that functionality via macros but it's just not worth getting into here. The last bit of *template1.clj* is just Compojure boilerplate for starting and stopping the server.
+
+Well that's about it! You've seen your first Enlive template. While it may not seem like much yet, <i>*there was absolutely no mixing of code and HTML*</i>. If you bear with me till the third template tutorial, I think you'll see some truly amazing repercussions from this fact.
+
 h2. Your Third Template
 
 We now have a basic working idea of how templates work in Enlive. Template are simply functions. Following a well-known pattern it's best to pass a single map to the template allowing the template to be easily changed over time as your requirementes grow. Now it's still unclear if there any real advantages to the Enlive way. Hopefully in this tutorial we can prove it's immense power.

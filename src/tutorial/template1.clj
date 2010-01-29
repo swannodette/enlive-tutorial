@@ -1,11 +1,11 @@
 (ns tutorial.template1
-  (:use [tutorial.utils :only [render]])
-  (:use [net.cgrand.enlive-html :as html])
+  (:use [tutorial.utils :only [render maybe-content]])
+  (:require [net.cgrand.enlive-html :as html])
   (:use compojure))
 
 (html/deftemplate index "tutorial/template1.html"
   [ctxt]
-  [:p#message] #(if-let [msg (:message ctxt)] msg %))
+  [:p#message] (html/content (:message ctxt)))
 
 (defroutes example-routes
   (GET "/"
