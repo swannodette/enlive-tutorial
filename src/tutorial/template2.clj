@@ -1,34 +1,63 @@
 (ns tutorial.template2
-  (:use [tutorial.utils :only [render]])
-  (:require [net.cgrand.enlive-html :as html])
-  (:import [java.util Calendar])
+  (:use [net.cgrand.enlive-html :only [selector deftemplate defsnippet content nth-of-type]])
+  (:use net.cgrand.contrib.utils)
   (:use compojure))
 
-(defn now-str []
-  (str (.getTime (Calendar/getInstance))))
+;; =============================================================================
+;; Dummy Data
+;; =============================================================================
 
-(def dummy-context 
+(def *dummy-context*
      {:title "Enlive Template2 Tutorial"
-      :links [["Clojure" "http://www.clojure.org"]
-              ["Compojure" "http://www.compojure.org"]
-              ["Clojars" "http://www.clojars.org"]
-              ["Enlive" "http://github.com/cgrand/enlive"]]})
+      :sections [{:title "Clojure"
+                  :links [{:text "Macros"
+                           :href "http://www.clojure.org/macros"}
+                          {:text "Multimethods & Hierarchies"
+                           :href "http://www.clojure.org/multimethods"}]}
+                 {:title "Compojure"
+                  :links [{:text "Requests"
+                           :href "http://www.compojure.org/docs/requests"}
+                          {:text "Middleware"
+                           :href "http://www.compojure.org/docs/middleware"}]}
+                 {:title"Clojars"
+                  :links [{:text "Clutch"
+                           :href "http://clojars.org/org.clojars.ato/clutch"}
+                          {:text "JOGL2"
+                           :href "http://clojars.org/jogl2"}]}
+                 {:title "Enlive"
+                  :links [{:text "Getting Started"
+                           :href "http://wiki.github.com/cgrand/enlive/getting-started"}
+                          {:text "Syntax"
+                           :href "http://enlive.cgrand.net/syntax.html"}]}]})
 
-(html/defsnippet link-model "tutorial/template2.html"  [:ul#links :> html/first-child]
-  [[text href]] 
+;; =============================================================================
+;; Templates
+;; =============================================================================
+
+(def *link-sel* (html/selector [:ul.links :> html/first-child]))
+
+(html/defsnippet link-model "tutorial/template2.html" *link-sel*
+  [{:keys [text href]}]
   [:a] (html/do-> 
         (html/content text) 
         (html/set-attr :href href)))
 
+(def *section-sel* (selector [:body :> #{[:h2.section-title (nth-of-type 1)]
+                                         [:ul.links (nth-of-type 1)]}]))
+
+(defsnippet section-model "tutorial/template2.html" *section-sel*
+  [{:keys [title links]}]
+  [:h2] (content title)
+  [:ul] (content (map link-model links)))
+
 (html/deftemplate index "tutorial/template2.html"
-  [ctxt]
-  [:#date]    (html/content (:date ctxt))
-  [:#title]   (html/content (:title ctxt))
-  [:ul#links] (html/content (map link-model (:links ctxt))))
+  [{:keys [title sections]}]
+  [:#title]   (html/content title)
+  [:body] (html/content (map section-model sections)))
 
 (defroutes example-routes
   (GET "/"
-       (render (index (assoc dummy-context :date (now-str)))))
+       (render (index *dummy-context*)))
   (ANY "*"
        [404 "Page Not Found"]))
 
