@@ -1,6 +1,6 @@
 (ns tutorial.template3
   (:require [net.cgrand.enlive-html :as html])
-  (:use [net.cgrand.contrib.utils])
+  (:use net.cgrand.contrib.utils)
   (:use compojure))
 
 ;; =============================================================================
@@ -76,7 +76,7 @@
 ;; Routes
 ;; =============================================================================
 
-(defroutes example-routes
+(defroutes app-routes
   ;; app routes
   (GET "/"
        (render (index)))
@@ -114,7 +114,7 @@
   (if (not (nil? @*app*))
     (stop @*app*))
   (reset! *app* (run-server {:port 8080}
-                            "/*" (servlet example-routes))))
+                            "/*" (servlet app-routes))))
 
 (defn stop-app []
   (stop @*app*))
