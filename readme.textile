@@ -61,7 +61,7 @@ lein repl
 
 This will launch a Clojure REPL (Read-Eval-Print-Loop) that has the classpath set properly. Be very thankful if you don't know what the last sentence means. Managing the classpath is one of the few real annoyances when programming Clojure and it's largely Java's fault.
 
-h2. Your First Scrape with Enlive
+h2. Your First Scrape with Enlive - Hacker News
 
 Enlive isn't just good for websites, it's also fantastic for scraping the content of webpages. It allows you to scrape content by using a syntax very similar to CSS selectors. In the REPL type the following lines (note that *user=>* is the REPL prompt, not something you type in):
 
@@ -147,7 +147,7 @@ Wow you can map two different vectors into one! Finally we have *doseq*. *doseq*
 
 Not bad for 17 lines of code. One obvious problem here is that we make two separate requests for the Hacker News front page. Let's fix this now.
 
-h2. Your Second Scrape
+h2. Your Second Scrape - Improvements
 
 Take a look at scrape2.clj. It's also about 17 lines of code and it looks pretty much the same except that we not longer have one function to grab headlines and another for article points.
 
@@ -209,13 +209,13 @@ Say hello to destructuring. A lot of popular languages allow you to destructure 
 
 The rest of the function should be clear from the last tutorial.
 
-h2. Your Third Scrape
+h2. Your Third Scrape - The New York Times
 
 By now you should feel like a pro. The third one, scrape3.clj tackles something considerably more difficult. Now to be clear this not that useful since the New York Times provides a fairly comprehensive list of RSS feeds. But the structure of the New Yorks Times page forces us to think about how to best leverage Enlive's abilities.
 
 Take a look at *scrape3.clj*. This is considerable longer.
 
-h2. Your First Template
+h2. Your First Template - The Basics
 
 This is where things begin to get really interesting. We're going to use Compojure, and ultralight http framework. If you're familiar with Rack or CherryPy you will feel right at home.
 
@@ -310,11 +310,68 @@ Also note that our template function *index* must be called with at least one pa
 
 Well that's about it! You've seen your first Enlive template. While it may not seem like much yet, <i>*there was absolutely no mixing of code and HTML*</i>. If you bear with me till the third template tutorial, I think you'll see some truly amazing repercussions from this fact.
 
-h2. Your Second Template
+h2. Your Second Template - Looping
 
 One of the things you use all the time when generating web pages is looping over some piece of HTML because you need to present a list of things to the user. People just love lists. How can Enlive create lists of HTML when there's no code in the template?! We'll get into this in this tutorial.
 
-h2. Your Third Template
+If you don't have a Clojure REPL running start a new one with *lein repl* at the commandline from the tutorial repo's directory. Enter the following (if you're continuing from the previous tutorial you should should stop the Compojure app for that tutorial first):
+
+<pre class="console">
+tutorial.template1=> (stop-app)
+nil
+tutorial.template1=> (ns tutorial.template2)
+nil
+tutorial.template2=> (load "template2")
+nil
+tutorial.template2=> (start-app)
+... output ...
+</pre>
+
+Open the file *template2.html* in your favorite web browser. It just page with a list of links, not that special. Point your browser at *http://localhost:8080/*. You should see pretty much the same thing except that we've dynamically inserted links.
+
+Wow, how did we do that if we have no inline code to define the loop? Let's get into the code. Open up *template2.clj* in your favorite text editor. At the top of the file you should see the by now familiar namespace declaration. After that we declare a variable for holding a dummy context which we're going to pass to our template.
+
+<pre>
+(def dummy-context
+     {:title "Enlive Template2 Tutorial"
+      :links [{:text "Clojure" :href "http://www.clojure.org"}
+              {:text "Compojure" :href "http://www.compojure.org"}
+              {:text "Clojars" :href "http://www.clojars.org"}
+              {:text "Enlive" :href "http://github.com/cgrand/enlive"}]})
+</pre>
+
+Clojure makes it easy to define nested data structures. *dummy-context* is just a hash-map (aka dictionary, aka associative array) that two key-value pairs. The first pair is for the title of the page. The second pair is for the list of links. Here we have a Clojure vector of hash-maps. If you're used to building up JSON data structures this shouldn't look too foreign to you.
+
+Following that we encounter something new, *html/defsnipped* (don't for get that *html* is just an alias for *net.cgrand.enlive-html*):
+
+<pre>
+(html/defsnippet link-model "tutorial/template2.html"  [:ul#links :> html/first-child]
+  [{text :text href :href}] 
+  [:a] (html/do-> 
+        (html/content text) 
+        (html/set-attr :href href)))
+</pre>
+
+Snippets are a ver cool feature of Enlive. They allow you to grab any peice of HTML out of a larger HTML file and make a kind of mini-template out of it. In this case we're getting the first-child of the element that matches the CSS selector *ul#links*. This snippet destructures it's first argument (a hash-map) to extract the value of the for the key *:text* and the key *:href*. We're also introduced to *html/do->*. This is a convenience, we often want to take the matched element and apply a series of transformations on it. In this case we want to set the content of the node as well as it's href attribute.
+
+No let's at the template to see how we put this together:
+
+<pre>
+(html/deftemplate index "tutorial/template2.html"
+  [{title :title links :links}]
+  [:#title]   (html/content title)
+  [:ul#links] (html/content (map link-model links)))
+</pre>
+
+The first match pair of the template should be familiar to you by now. The second pair is the foor loop. While the previous snippet may have seemed a bit verbose, this lines shows just how powerful Enlive is. Once you defined some snippets and templates you can really compose them which ever way you like and see fit.
+
+<pre>
+(html/content (map link-model links))
+</pre>
+
+Most templates are a giant mess of unreadable for loops. While it does seems like a little work to achieve the same effect with Enlive, consider the following. *template2.html* can actually show what the list will look like with dummy extra list items. These are removed because we only match the first child with our snippet. The designer doesn't need to start webserver or install any web framework at all, she can work directly with HTML.
+
+h2. Your Third Template - Template Inheritance
 
 We now have a basic working idea of how templates work in Enlive. Template are simply functions. Following a well-known pattern it's best to pass a single map to the template allowing the template to be easily changed over time as your requirementes grow. Now it's still unclear if there any real advantages to the Enlive way. Hopefully in this tutorial we can prove it's immense power.
 
@@ -368,6 +425,8 @@ One last live example before we dive into the code. Point your browser at *http:
 </pre>
 
 We added two, yes, <i>two</i> new lines of code. If I was a web developer I'd be drooling right about now.
+
+So how does this actually work? Open up *template3.clj* in your favorite text editor.
 
 h2. Macroology
 
