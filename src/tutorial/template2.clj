@@ -30,6 +30,9 @@
                           {:text "Syntax"
                            :href "http://enlive.cgrand.net/syntax.html"}]}]})
 
+(defn links [ctxt]
+  (reduce concat (map :links (:sections ctxt))))
+
 ;; =============================================================================
 ;; Templates
 ;; =============================================================================
@@ -50,14 +53,20 @@
   [:h2] (content title)
   [:ul] (content (map link-model links)))
 
-(html/deftemplate index "tutorial/template2.html"
+(deftemplate index "tutorial/template2.html"
   [{:keys [title sections]}]
-  [:#title] (html/content title)
-  [:body] (html/content (map section-model sections)))
+  [:#title] (content title)
+  [:body] (content (map section-model sections)))
+
+(deftemplate links-page "tutorial/links-page.html"
+  [links]
+  [:body] (content (map link-model links)))
 
 (defroutes example-routes
   (GET "/"
        (render (index *dummy-context*)))
+  (GET "/links"
+       (render (links-page )))
   (ANY "*"
        [404 "Page Not Found"]))
 

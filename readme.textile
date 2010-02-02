@@ -327,43 +327,111 @@ tutorial.template2=> (start-app)
 ... output ...
 </pre>
 
-Open the file *template2.html* in your favorite web browser. It just page with a list of links, not that special. Point your browser at *http://localhost:8080/*. You should see pretty much the same thing except that we've dynamically inserted links.
+Open up the file *template2.html* in your text editor and give it a quick look over. Then open the file *template2.html* in your favorite web browser. It's just page with a list of links, not that special. Point your browser at *http://localhost:8080/*. You should see pretty much the same thing except that we've dynamically inserted links.
 
-Wow, how did we do that if we have no inline code to define the loop? Let's get into the code. Open up *template2.clj* in your favorite text editor. At the top of the file you should see the by now familiar namespace declaration. After that we declare a variable for holding a dummy context which we're going to pass to our template.
+How did we do that if we have no inline code to define the loop? Let's get into the code. Open up *template2.clj* in your favorite text editor. At the top of the file you should see the by now familiar namespace declaration. After that we declare a variable for holding a dummy context which we're going to pass to our template.
 
 <pre>
-(def dummy-context
+(def *dummy-context*
      {:title "Enlive Template2 Tutorial"
-      :links [{:text "Clojure" :href "http://www.clojure.org"}
-              {:text "Compojure" :href "http://www.compojure.org"}
-              {:text "Clojars" :href "http://www.clojars.org"}
-              {:text "Enlive" :href "http://github.com/cgrand/enlive"}]})
+      :sections [{:title "Clojure"
+                  :links [{:text "Macros"
+                           :href "http://www.clojure.org/macros"}
+                          {:text "Multimethods & Hierarchies"
+                           :href "http://www.clojure.org/multimethods"}]}
+                 {:title "Compojure"
+                  :links [{:text "Requests"
+                           :href "http://www.compojure.org/docs/requests"}
+                          {:text "Middleware"
+                           :href "http://www.compojure.org/docs/middleware"}]}
+                 {:title"Clojars"
+                  :links [{:text "Clutch"
+                           :href "http://clojars.org/org.clojars.ato/clutch"}
+                          {:text "JOGL2"
+                           :href "http://clojars.org/jogl2"}]}
+                 {:title "Enlive"
+                  :links [{:text "Getting Started"
+                           :href "http://wiki.github.com/cgrand/enlive/getting-started"}
+                          {:text "Syntax"
+                           :href "http://enlive.cgrand.net/syntax.html"}]}]})
 </pre>
 
-Clojure makes it easy to define nested data structures. *dummy-context* is just a hash-map (aka dictionary, aka associative array) that two key-value pairs. The first pair is for the title of the page. The second pair is for the list of links. Here we have a Clojure vector of hash-maps. If you're used to building up JSON data structures this shouldn't look too foreign to you.
+This of course normally be something that would have a read out of a database. The take away here is Clojure makes it easy to define nested data structures. *dummy-context* is just a hash-map (aka dictionary, aka associative array) of two key-value pairs. The first pair is for the title of the page. The second pair is the list of sections. Each section also has a title as well as a list of link. Each link has some text and url. If you're used of building up JSON data structures this should pretty familiar to you.
 
-Following that we encounter something new, *html/defsnipped* (don't for get that *html* is just an alias for *net.cgrand.enlive-html*):
+h3. Figuring out your selectors
+
+Using Enlive for templating usually involve steps. The first step is figuring out which part of the markup you want to make into a component. Each component will become a snippet. A snippet is reusable mini-template that you can use when constructing larger templates. Once you've figured which things should componentized out you have to determine the selector which will allow you to match exactly that part of the document.
+
+Consider our situation. Our designer has handed us some nice markup and some CSS. To better communicate the final result they've included dummy content. With a traditional templating solution this is a big nono. With Enlive, working around it requires a minimal amount of effort. So the key here is to identify the "models".
+
+In our case we have two distinct models, the first is the pair of the section title and the links for that section. The second is the individual link. In templating laguage we would probably do something like this:
 
 <pre>
-(html/defsnippet link-model "tutorial/template2.html"  [:ul#links :> html/first-child]
+{% for section in sections %}
+<h2 class="section-title">{{ section.title }}</h2>
+<ul class="links">
+ {% for link in section.links %}
+ <a target="new" href="{{ link.href }}">{{ link.text }}</a>
+ {% end for %}
+</ul>
+{% endfor %}
+</pre>
+
+On level, as you'll see, there's a lot less typing involved in this. However you all have something that's a lot less reusable. The link loop and section loop are hopelessly interwinted. You have many pages on your site that use the same section pattern but not the internal link pattern. So Enlive makes you do more work upfront and very, very little work later on.
+
+So let's define our link component. We don't want the dummy content so we really only want to match the very first link that satisfies our need, the selector looks something like this:
+
+<pre>
+(def *link-sel* (html/selector [[:ul.links (nth-of-type 1)] :> html/first-child]))
+</pre>
+
+This is very important. We only want to match only the first ul element that we find that has the link class and only the very child inside that. This is the selector that gets the job done. The snippet that will template this component of your page look like the following:
+
+Now that we have our selector *defsnippet* (don't for get that *html* is just an alias for *net.cgrand.enlive-html*):
+
+<pre>
+(html/defsnippet link-model "tutorial/template2.html" *link-sel*
   [{text :text href :href}] 
   [:a] (html/do-> 
         (html/content text) 
         (html/set-attr :href href)))
 </pre>
 
-Snippets are a ver cool feature of Enlive. They allow you to grab any peice of HTML out of a larger HTML file and make a kind of mini-template out of it. In this case we're getting the first-child of the element that matches the CSS selector *ul#links*. This snippet destructures it's first argument (a hash-map) to extract the value of the for the key *:text* and the key *:href*. We're also introduced to *html/do->*. This is a convenience, we often want to take the matched element and apply a series of transformations on it. In this case we want to set the content of the node as well as it's href attribute.
+Snippets are like templates with two main differences. One, snippets take a selector so that they can match only specific parts of an HTML document. The function produced by a *defsnippet* returns transformed content, <i>not</i> a list of string like *deftemplate*. This snippet destructures it's first argument (a hash-map) to extract the value of the for the keys *:text* and *:href*. We're also introduced to *html/do->*. This is a convenience, we often want to take the matched element and apply a series of transformations on it. In this case we want to set the content of the node as well as it's href attribute.
 
-No let's at the template to see how we put this together:
+Let's try out or snippet to see that it worked:
+
+<pre class="console">
+</pre>
+
+Again we need to figure out the correct selector. Our HTML has some dummy content again. We only care about the first unique pair of *h2* and *p* tags.
+
+<pre>
+(def *section-sel* (selector [:body :> #{[:h2.section-title (nth-of-type 1)]
+                                         [:ul.links (nth-of-type 1)]}]))
+</pre>
+
+Now that we have our selector we can define our section snippet like so. Pretty straightforward. Remember *defsnippet* just creates a function which can take whichever arguments you specify and returns the transformed markup. We're simply creating links using *link-model* and putting those links inside of the *ul* in the section.
+
+<pre>
+(defsnippet section-model "tutorial/template2.html" *section-sel*
+  [{:keys [title links]}]
+  [:h2] (content title)
+  [:ul] (content (map link-model links)))
+</pre>
+
+Now let's at the template to see how we put this all together:
 
 <pre>
 (html/deftemplate index "tutorial/template2.html"
-  [{title :title links :links}]
-  [:#title]   (html/content title)
-  [:ul#links] (html/content (map link-model links)))
+  [{:keys [title sections]}]
+  [:#title] (html/content title)
+  [:body] (html/content (map section-model sections)))
 </pre>
 
-The first match pair of the template should be familiar to you by now. The second pair is the foor loop. While the previous snippet may have seemed a bit verbose, this lines shows just how powerful Enlive is. Once you defined some snippets and templates you can really compose them which ever way you like and see fit.
+As you can see it looks really similar to *section-model*. Again the main different is that templates don't take selectors and the function they returns a list of string. So you had to do a little more typing but the beauty of this design is that you can mix and match this logic however you please.
+
+For example say on a different page you only want the list of links.
 
 <pre>
 (html/content (map link-model links))
