@@ -34,7 +34,7 @@
 ;; Templates
 ;; =============================================================================
 
-(def *link-sel* (html/selector [:ul.links :> html/first-child]))
+(def *link-sel* (html/selector [[:ul.links (nth-of-type 1)] :> html/first-child]))
 
 (html/defsnippet link-model "tutorial/template2.html" *link-sel*
   [{:keys [text href]}]
@@ -52,7 +52,7 @@
 
 (html/deftemplate index "tutorial/template2.html"
   [{:keys [title sections]}]
-  [:#title]   (html/content title)
+  [:#title] (html/content title)
   [:body] (html/content (map section-model sections)))
 
 (defroutes example-routes
