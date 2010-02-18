@@ -115,7 +115,7 @@ tutorial.scrape1=> (hn-points)
 The last function takes the output of the two different functions and prints out the headline and score for each item on Hackers News. 
 
 <pre class="console">
-tutorial.scrape1=> (print-hn-headlines-and-points)
+tutorial.scrape1=> (print-headlines-and-points)
 ... output ...
 </pre>
 
