@@ -4,13 +4,13 @@ If somehow you happen to stumble upon this tutorial, please note that it not eve
 
 h1. An Introduction to Enlive
 
-Though Enlive has been around for sometime now the Clojure community has been slow to embrace this useful library. I believe this is due simply to the lack of good introductory documentation. This is no slam against Christophe Grand. He's a busy man and I'd rather he write up more excellent tutorials on how to optimize Clojure code to blazingly fast speeds than create introductory tutorials about Enlive. In anycase this is what open source communities are all about, right? Contribution!
+Though Enlive has been around for sometime now the Clojure community has been slow to embrace this useful library. I believe this is due simply to the lack of good introductory documentation. This is no slam against Christophe Grand. He's a busy man and I'd rather he write tutorials on optimizing Clojure than create introductory tutorials about Enlive. In anycase this is what open source communities are all about, right? Contribution!
 
-But really my reasons for creating this tutorial are not entirely altruistic. I've been playing with Enlive off and on for sometime now and I realize that I keep coming back to it having half-forgotten what I learned the last time. So now I'm writing this tutorial - for myself and all the Lispers and Lispers To Be.
+But really, my reasons for creating this tutorial are not entirely altruistic. I've been playing with Enlive off and on for sometime now and I realize that I keep coming back to it having half-forgotten what I learned the last time. So now I'm writing this tutorial - for myself and all the Clojurians and Clojurians To Be.
 
 h2. What You need to Know
 
-Not much. This tutorial is intended even for developers who have little or no exposure to Clojure. At the very least you'll need to have the Java Virtual Machine (JVM) installed. Don't expect a full blown discussion of Lisp but I'll try to explain the less obvious things as I go along.
+Not much. This tutorial is intended even for developers who have little or no exposure to Clojure. At the very least you'll need to have the Java Virtual Machine (JVM) installed. Don't expect a full blown discussion of Lisp but I'll try to explain the less obvious things specific to Clojure as I go along.
 
 As the tutorials progress they will be more useful to you if you have some experience with a modern webframework that ships with a decent HTML templating library. If you do know Clojure the tutorials are fairly amenable to skimming. My only real assumption is that you have some experience at the command line.
 
@@ -23,7 +23,7 @@ Enlive presents a dramatically different approach to generating HTML then what's
 ** Template inheritance isn't some fancy trick, it just plain old function composition.
 ** You have access to the full power of Clojure to manipulate your templates (yes, macros!).
 
-One good analogy might be "XSLT that not only doesn't suck, it absolutely rulez".
+One good analogy might be "XSLT that not only doesn't suck, it's wonderful".
 
 h2. What We'll Cover
 
@@ -574,10 +574,12 @@ Since snippets take a selector sometimes you might not have set this value corre
 
 h3. Template out of date
 
-Your template do not automatically reload. When you make edits to your html or you template I recommend running the following at the REPL:
+Your templates do not automatically reload. When you make edits to your HTML or your template code I recommend running the following at the REPL:
 
 <pre>
 (load "your-library-name")
 </pre>
+
+It's a minor annoyance for all the benefits you reap. It also wouldn't be too hard to create a system that reloaded tempaltes (at least while in development mode) upon page refresh.
 
 Be careful, *do not include the .clj extension*. Also *do not use -'s in your file name*. If you want dashes you need to name with actual file using underscores.

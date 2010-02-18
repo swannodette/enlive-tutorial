@@ -1,6 +1,7 @@
 (ns tutorial.template2
-  (:use [net.cgrand.enlive-html :only [selector deftemplate defsnippet content nth-of-type]])
-  (:use net.cgrand.contrib.utils)
+  (:use [net.cgrand.enlive-html
+         :only [selector deftemplate defsnippet content nth-of-type first-child]])
+  (:use tutorial.utils)
   (:use compojure))
 
 ;; =============================================================================
@@ -37,13 +38,13 @@
 ;; Templates
 ;; =============================================================================
 
-(def *link-sel* (html/selector [[:ul.links (nth-of-type 1)] :> html/first-child]))
+(def *link-sel* (selector [[:ul.links (nth-of-type 1)] :> first-child]))
 
-(html/defsnippet link-model "tutorial/template2.html" *link-sel*
+(defsnippet link-model "tutorial/template2.html" *link-sel*
   [{:keys [text href]}]
-  [:a] (html/do-> 
-        (html/content text) 
-        (html/set-attr :href href)))
+  [:a] (do-> 
+        (content text) 
+        (set-attr :href href)))
 
 (def *section-sel* (selector [:body :> #{[:h2.section-title (nth-of-type 1)]
                                          [:ul.links (nth-of-type 1)]}]))

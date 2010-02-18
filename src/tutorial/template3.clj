@@ -1,6 +1,6 @@
 (ns tutorial.template3
   (:require [net.cgrand.enlive-html :as html])
-  (:use net.cgrand.contrib.utils)
+  (:use tutorial.utils)
   (:use compojure))
 
 ;; =============================================================================
