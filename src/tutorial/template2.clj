@@ -1,7 +1,7 @@
 (ns tutorial.template2
   (:use [net.cgrand.enlive-html
          :only [selector deftemplate defsnippet content nth-of-type first-child]])
-  (:use net.cgrand.contrib.utils)
+  (:use tutorial.utils)
   (:use compojure))
 
 ;; =============================================================================
