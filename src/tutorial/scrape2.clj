@@ -9,7 +9,7 @@
 (defn hn-headlines-and-points []
   (map html/text
        (html/select (fetch-url *base-url*)
-                    #{[:td.title :a] [:td.subtext first-child]})))
+                    #{[:td.title :a] [:td.subtext html/first-child]})))
 
 (defn print-headlines-and-points []
   (doseq [line (map (fn [[h s]] (str h " (" s ")"))
