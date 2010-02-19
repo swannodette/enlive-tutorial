@@ -251,9 +251,9 @@ Here our template will find all *p* elements with the CSS id *message*. CSS ids 
 (html/content (:message ctxt))
 </pre>
 
-This means we'll replace the content of any matching node with the value for the key *:message* in the ctxt hash-map. The important thing to grasp here is that *html/content* is a function which <i>returns</i> a function which whill receive the matched element.
+This means we'll replace the content of any matching node with the value for the key *:message* in the ctxt hash-map. The important thing to grasp here is that *html/content* is a function which <i>returns</i> a function which will receive the matched element.
 
-For example what if we wanted to include a message if there is not value for *:message* in *cxtxt*? It would look something like this:
+For example what if we wanted to include a message if there is no value for *:message* in *ctxt*? It would look something like this:
 
 <pre>
 (html/deftemplate index "tutorial/template1.html"
@@ -277,7 +277,7 @@ It should be clear here that *html/content* returns a function which will receiv
 But even this is kinda meh. While Enlive does not have a great shortcut for expressing this pattern it's easy to write macros (we'll get to those later. But watch out it's an advanced topic). I've included a handy macro called *maybe-content* which allows to write something like this:
 
 <pre>
-html/deftemplate index "tutorial/template1.html"
+(html/deftemplate index "tutorial/template1.html"
   [ctxt]
   [:p#message] (maybe-content (:message ctxt)
                               "Nothing to set here!"))
@@ -304,7 +304,7 @@ This is simply the route defining syntax. It should relatively familiar to the w
   (apply str t))
 </pre>
 
-All this does is take a list of strings and concatenate them into one large string. This is because when an Enlive template function is called that's what it returns, a list of strings.
+All this does is take a list of strings and concatenate them into one large string. This is because when an Enlive template function is called it returns a list of strings.
 
 Also note that our template function *index* must be called with at least one parameter. That's because Enlive templates are just normal Clojure functions and there's no such thing as optional parameters in Clojure. It's quite simple to add that functionality via macros but it's just not worth getting into here. The last bit of *template1.clj* is just Compojure boilerplate for starting and stopping the server.
 
@@ -372,7 +372,7 @@ In our case we have two distinct models, the first is the pair of the section ti
 <ul class="links">
  {% for link in section.links %}
  <a target="new" href="{{ link.href }}">{{ link.text }}</a>
- {% end for %}
+ {% endfor %}
 </ul>
 {% endfor %}
 </pre>
@@ -385,9 +385,9 @@ So let's define our link component. We don't want the dummy content so we really
 (def *link-sel* (html/selector [[:ul.links (nth-of-type 1)] :> html/first-child]))
 </pre>
 
-This is very important. We only want to match only the first ul element that we find that has the link class and only the very child inside that. This is the selector that gets the job done. The snippet that will template this component of your page look like the following:
+This is very important. We only want to match only the first ul element that we find that has the links class and only the very child inside that. This is the selector that gets the job done. The snippet that will template this component of your page look like the following:
 
-Now that we have our selector *defsnippet* (don't for get that *html* is just an alias for *net.cgrand.enlive-html*):
+Now that we have our selector *defsnippet* (don't forget that *html* is just an alias for *net.cgrand.enlive-html*):
 
 <pre>
 (html/defsnippet link-model "tutorial/template2.html" *link-sel*
