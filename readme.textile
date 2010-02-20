@@ -74,9 +74,9 @@ tutorial.scrape1=> *base-url*
 "http://news.ycombinator.com/"
 </pre>
 
-The first line puts us into a namespace. Not that the REPL prompt reflects this. By switching into the tutorial namespace we use functions defined in the tutorial without having to qualify them. It's much easier to type *base-url* then *tutorial.scrape1/*base-url*. In the next line we load the first tutorial into the REPL. Unlike many scripting languages, loading a file actually <i>compiles</i> it. Clojure is not interpreted.
+The first line puts us into a namespace. Note that the REPL prompt reflects this. By switching into the tutorial namespace we can use functions defined in the tutorial without having to qualify them. It's much easier to type *base-url* then <bold>tutorial.scrape1/*base-url*</bold>. In the next line we load the first tutorial into the REPL. Unlike many scripting languages, loading a file actually <i>compiles</i> it. Clojure is not interpreted.
 
-Let's see what's in that file. Open up *scrape1.clj* with you favorite text editor (you can find it in repo/src/tutorial/). You'll see it's a fairly short program. 
+Let's see what's in that file. Open up *scrape1.clj* with your favorite text editor (you can find it in *your-tutorial-clone/src/tutorial/*). You'll see it's a fairly short program. 
 
 At the top of this file is the namespace declaration. This keeps your code from clashing with other people's code when they try to use your library. The namespace declaration also includes another library, Enlive, via *:require*. In this case we are generating an alias so we don't have to type the very long namespace for Enlive.
 
@@ -85,7 +85,7 @@ The function *fetch-url* grabs the contexts of a url synchronously. *fetch-url* 
 Note that the function *hn-headlines* uses *fetch-url*. But it's also surrounded by a lot of funny stuff. You might have noticed *html/select*; *html/select* takes parsed html content and selects the nodes specified by a Clojure vector that looks very similar to a CSS selector. 
 
 <pre>
-[:td.title a]
+[:td.title :a]
 </pre>
 
 Now that looks kind of weird. But if you squint a little it might remind you of this:
@@ -109,7 +109,7 @@ Nice. After this the next function *hn-points* should make a lot more sense. It 
 
 <pre class="console">
 tutorial.scrape1=> (hn-points)
-... output ..
+... output ...
 </pre>
 
 The last function takes the output of the two different functions and prints out the headline and score for each item on Hackers News. 
