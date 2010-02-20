@@ -1,6 +1,6 @@
 (ns tutorial.template2
   (:use [net.cgrand.enlive-html
-         :only [selector deftemplate defsnippet content nth-of-type first-child]])
+         :only [selector deftemplate defsnippet content nth-of-type first-child do-> set-attr]])
   (:use tutorial.utils)
   (:use compojure))
 
