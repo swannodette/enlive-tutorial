@@ -397,7 +397,7 @@ Now that we have our selector *defsnippet* (don't forget that *html* is just an 
         (html/set-attr :href href)))
 </pre>
 
-Snippets are like templates with two main differences. One, snippets take a selector so that they can match only specific parts of an HTML document. The function produced by a *defsnippet* returns transformed content, <i>not</i> a list of string like *deftemplate*. This snippet destructures it's first argument (a hash-map) to extract the value of the for the keys *:text* and *:href*. We're also introduced to *html/do->*. This is a convenience, we often want to take the matched element and apply a series of transformations on it. In this case we want to set the content of the node as well as it's href attribute.
+Snippets are like templates with two main differences. One, snippets take a selector so that they can match only specific parts of an HTML document. The function produced by a *defsnippet* returns transformed content, <i>not</i> a list of string like *deftemplate*. This snippet destructures it's first argument (a hash-map) to extract the value of the keys *:text* and *:href*. We're also introduced to *html/do->*. This is a convenience, we often want to take the matched element and apply a series of transformations on it. In this case we want to set the content of the node as well as it's href attribute.
 
 Let's try out or snippet to see that it worked:
 
@@ -437,7 +437,7 @@ For example say on a different page you only want the list of links.
 (html/content (map link-model links))
 </pre>
 
-Most templates are a giant mess of unreadable for loops. While it does seems like a little work to achieve the same effect with Enlive, consider the following. *template2.html* can actually show what the list will look like with dummy extra list items. These are removed because we only match the first child with our snippet. The designer doesn't need to start webserver or install any web framework at all, she can work directly with HTML.
+Most templates are a giant mess of unreadable for loops. While it does seems like a little work to achieve the same effect with Enlive, consider the following. *template2.html* can actually show what the list will look like with dummy extra list items. These are removed because we only match the first child with our snippet. The designer doesn't need to start webserver or install any web framework at all, he can work directly with HTML.
 
 h2. Your Third Template - Template Inheritance
 
@@ -449,6 +449,8 @@ Start a REPL if you don't already have one running with *lein repl*. Type the fo
 tutorial.template2=> (stop-app)
 nil
 tutorial.template2=> (ns tutorial.template3)
+nil
+tutorial.template3=> (load "template3")
 nil
 tutorial.template3=> (start-app)
 </pre>

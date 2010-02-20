@@ -1,6 +1,7 @@
 (ns tutorial.template3
   (:require [net.cgrand.enlive-html :as html])
   (:use tutorial.utils)
+  (:use [clojure.contrib.duck-streams :only [pwd]])
   (:use compojure))
 
 ;; =============================================================================
@@ -8,7 +9,7 @@
 ;; =============================================================================
 
 ;; change this line to reflect your setup
-(def *webdir* "/Users/davidnolen/development/clojure/enlive-tutorial/src/tutorial/")
+(def *webdir* (str (pwd) "/src/tutorial/"))
 
 (def *hits* (atom 0))
 
