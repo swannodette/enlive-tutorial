@@ -14,6 +14,32 @@ Not much. This tutorial is intended even for developers who have little or no ex
 
 As the tutorials progress they will be more useful to you if you have some experience with a modern webframework that ships with a decent HTML templating library. If you do know Clojure the tutorials are fairly amenable to skimming. My only real assumption is that you have some experience at the command line.
 
+h2. HTML Templating
+
+There are two real camps in HTML templating. The first which almost everyone is familiar is the PHP style template:
+
+<pre>
+<?php
+for($i = 0; $i < $len; $i++) {
+?><p>Foo<?echo$i?></p><?
+}
+?>
+</pre>
+
+This is of course enough to drive anyone insane and some templating frameworks like Django have made marginal improvements:
+
+<pre>
+{% for i in foo %}
+<p>Foo{{i}}</p>
+{% endfor %}
+</pre>
+
+This is a bit easier on the eyes. But as many a coder has discovered this just isn't that composable and you're stuck with a pathetic subset of your programming language.
+
+This has driven many programmers to eschew templating DSLs and to just generate markup in code. While this is fast and flexible since you now have the power of function composition it also means that you're putting quite a bit of distance between yourself and designer who is very comfortable with HTML/CSS.
+
+Which brings us to Enlive. Enlive give you all the advantages of a designer accessibility of a HTML templating DSL while not losing the power of composition you get from generating markup in code.L Enlive is all about having your cake and eating it too.
+
 h2. Why Enlive?
 
 Enlive presents a dramatically different approach to generating HTML then what's out there.
@@ -377,7 +403,7 @@ In our case we have two distinct models, the first is the pair of the section ti
 {% endfor %}
 </pre>
 
-On level, as you'll see, there's a lot less typing involved in this. However you all have something that's a lot less reusable. The link loop and section loop are hopelessly interwinted. You have many pages on your site that use the same section pattern but not the internal link pattern. So Enlive makes you do more work upfront and very, very little work later on.
+On one level, as you'll see, there's a lot less typing involved in this. However you all have something that's a lot less reusable. The link loop and section loop are hopelessly interwinted. You may have many pages on your site that use the same section pattern but not the internal link pattern. But since these can't be separated you'll have to do some copy and paste. Not so with Enlive. Enlive makes you do a little more work upfront and very, very little work later on.
 
 So let's define our link component. We don't want the dummy content so we really only want to match the very first link that satisfies our need, the selector looks something like this:
 
@@ -397,14 +423,25 @@ Now that we have our selector *defsnippet* (don't forget that *html* is just an 
         (html/set-attr :href href)))
 </pre>
 
-Snippets are like templates with two main differences. One, snippets take a selector so that they can match only specific parts of an HTML document. The function produced by a *defsnippet* returns transformed content, <i>not</i> a list of string like *deftemplate*. This snippet destructures it's first argument (a hash-map) to extract the value of the keys *:text* and *:href*. We're also introduced to *html/do->*. This is a convenience, we often want to take the matched element and apply a series of transformations on it. In this case we want to set the content of the node as well as it's href attribute.
+Snippets are like templates with two main differences. First, snippets take a selector. This means that they can match only specific parts of an HTML document. The function produced by a *defsnippet* returns transformed content, <i>not</i> a list of strings the *deftemplate* does. This snippet destructures it's first argument (a hash-map) to extract the value of the keys *:text* and *:href*. We're also introduced to *html/do->*. This is a convenience, we often want to take the matched element and apply a series of transformations on it. In this case we want to set the content of the node as well as it's href attribute.
 
 Let's try out or snippet to see that it worked:
 
 <pre class="console">
 </pre>
 
-Again we need to figure out the correct selector. Our HTML has some dummy content again. We only care about the first unique pair of *h2* and *p* tags.
+Again we need to figure out the correct selector. This time we're trying to emulate the following popular pattern:
+
+<pre>
+{% for x in xs %}
+<h2>{{ x.foo }}</h2>
+<p>{{ x.bar }}</p>
+{% endfor %}
+</pre>
+
+Not that unlike the previous example what we're looping over has no "container". Enlive recently added support for "ranges" making it simple to also express this pattern with Enlive templates.
+
+Our HTML has some dummy content again. We only care about the first unique pair of *h2* and *p* tags.
 
 <pre>
 (def *section-sel* (selector [:body :> #{[:h2.section-title (nth-of-type 1)]
