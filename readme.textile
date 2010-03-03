@@ -36,11 +36,11 @@ This is of course enough to drive anyone insane and some templating frameworks l
 
 This is a bit easier on the eyes. But as many a coder has discovered this isn't very composable and you're stuck with a limited subset of your programming language.
 
-This has driven many programmers to eschew templating DSLs and to generate markup directly in code. While this is fast and flexible since you now have the power of function composition it means that you're putting quite a bit of distance between yourself and a designer who is very comfortable with HTML/CSS.
+This has driven many programmers to eschew templating DSLs and to generate markup directly in code. While this is fast and flexible as you now have the power of function composition it also means that you're putting quite a bit of distance between yourself and a designer comfortable writing HTML and  CSS.
 
 So can we have our cake and eat it too? There are a few existing solutions that approach the idea from an interesting "direction":http://beebole.com/pure/.
 
-Which brings us to Enlive. Enlive gives you the advantages of designer accessibe templates (since they're just HTML) without not losing the power of fuction composition.
+Which brings us to Enlive. Enlive gives you the advantages of designer accessibe templates (since they're just HTML) without losing the power of fuction composition.
 
 h2. Why Enlive?
 
@@ -65,8 +65,6 @@ There are six examples in total.
 The first one covers grabbing the headlines and points from Hackers News. The next one shows how to make the code less redundant. The third scrapes the New York Times front page since that presents more challenges than Hacker News.
 
 The fourth example shows how to use Compojure and Enlive together. The fifth example shows how things like looping are achieved without writing any code into the markup. The sixth example shows that Enlive can do all the fancy template inheritance magic you might be used to if you're coming from Django or some other popular modern webframework.
-
-The final tutorial is fairly advanced. It illustrates how Clojure, being a Lisp, can in fact template itself! I use this ability to illustrate how some downsides to Enlive can be overcome. In fact I think the seventh section begins to touch upon how Enlive could be the foundation for a truly incredible templating framework that would put most others to shame (and with a lot less code to boot).
 
 h2. Clone This Repo
 
