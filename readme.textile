@@ -479,7 +479,7 @@ Now let's at the template to see how we put this all together:
 
 As you can see it looks really similar to *section-model*. Again the main different is that templates don't take selectors and the function they returns a list of string. So you had to do a little more typing but the beauty of this design is that you can mix and match this logic however you please.
 
-For example say on a different page you only want the list of links. Instead make a whole new template and repeating yourself with copy and paste you can do the following:
+For example say on a different page you only want the list of links. Instead of creating a whole new template file and repeating yourself with copy and paste you can do the following:
 
 <pre>
 (deftemplate links-page "tutorial/links-page.html"
@@ -487,9 +487,9 @@ For example say on a different page you only want the list of links. Instead mak
   [:body] (content (map link-model links)))
 </pre>
 
-That was easy.
+That was easy and DRY.
 
-Most templates are a giant mess of uncomposable for loops. For trivail cases Enlive is a bit more work, but for anything remotely like a real website, Enlive has some real advantages. *template2.html* can actually show what the page will look like with dummy extra list items. The designer doesn't need to start webserver or install any web framework at all, he/she can work directly with HTML. And you can mix match the various parts of the design as you see fit.
+Most template solutions are a giant mess of uncomposable for loops. It's true that for trivial cases Enlive is a bit more work, but for anything remotely like a real website, Enlive has real advantages. *template2.html* can actually show what the page will look like with dummy extra list items, that is the designer doesn't need to start webserver or install any web framework at all, he/she can work directly in HTML and CSS. And you can mix and match the various parts of the designed HTML as you see fit.
 
 h2. Your Third Template - Template Inheritance
 
