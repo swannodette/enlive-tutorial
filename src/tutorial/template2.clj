@@ -1,6 +1,7 @@
 (ns tutorial.template2
   (:use [net.cgrand.enlive-html
-         :only [selector deftemplate defsnippet content nth-of-type first-child do-> set-attr]])
+         :only [selector deftemplate defsnippet content clone-for
+                nth-of-type first-child do-> set-attr sniptest at emit*]])
   (:use tutorial.utils)
   (:use compojure))
 
@@ -38,7 +39,8 @@
 ;; Templates
 ;; =============================================================================
 
-(def *link-sel* (selector [[:ul.links (nth-of-type 1)] :> first-child]))
+; we only want to select a model ink
+(def *link-sel* (selector [[:ul (nth-of-type 1)] :> first-child]))
 
 (defsnippet link-model "tutorial/template2.html" *link-sel*
   [{:keys [text href]}]
@@ -46,8 +48,8 @@
         (content text)
         (set-attr :href href)))
 
-(def *section-sel* (selector [:body :> #{[:h2.section-title (nth-of-type 1)]
-                                         [:ul.links (nth-of-type 1)]}]))
+; we only want to select the model h2 ul range
+(def *section-sel* (selector {[:h2] [[:ul (nth-of-type 1)]]}))
 
 (defsnippet section-model "tutorial/template2.html" *section-sel*
   [{:keys [title links]}]
@@ -67,7 +69,7 @@
   (GET "/"
        (render (index *dummy-context*)))
   (GET "/links"
-       (render (links-page )))
+       (render (links-page (links *dummy-context*))))
   (ANY "*"
        [404 "Page Not Found"]))
 
