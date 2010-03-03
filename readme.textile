@@ -1,10 +1,10 @@
 h1. Under Construction
 
-If somehow you happen to stumble upon this tutorial, please note that it not even close to being complete. Proceed at your own peril.
+If somehow you happen to stumble upon this tutorial, please note that it is not even close to being complete. Proceed at your own peril.
 
 h1. An Introduction to Enlive
 
-Though Enlive has been around for sometime now the Clojure community has been slow to embrace this useful library. I believe this is due simply to the lack of good introductory documentation. This is no slam against Christophe Grand. He's a busy man and I'd rather he write tutorials on optimizing Clojure than create introductory tutorials about Enlive. In anycase this is what open source communities are all about, right? Contribution!
+Though Enlive has been around for sometime now the Clojure community has been slow to embrace this useful library. I believe this is due simply to the lack of good introductory documentation. This is no slam against Christophe Grand. He's a busy man and I'd rather he write tutorials on optimizing Clojure than create introductory tutorials about Enlive. In anycase contribution is what open source communities are all about, right?
 
 But really, my reasons for creating this tutorial are not entirely altruistic. I've been playing with Enlive off and on for sometime now and I realize that I keep coming back to it having half-forgotten what I learned the last time. So now I'm writing this tutorial - for myself and all the Clojurians and Clojurians To Be.
 
@@ -16,12 +16,12 @@ As the tutorials progress they will be more useful to you if you have some exper
 
 h2. HTML Templating
 
-There are two real camps in HTML templating. The first which almost everyone is familiar is the PHP style template:
+There are two real camps in HTML templating. The first which almost everyone is familiar with is the PHP style template:
 
 <pre>
 <?php
 for($i = 0; $i < $len; $i++) {
-?><p>Foo<?echo$i?></p><?
+?><p>Foo<?echo $i?></p><?
 }
 ?>
 </pre>
@@ -30,30 +30,37 @@ This is of course enough to drive anyone insane and some templating frameworks l
 
 <pre>
 {% for i in foo %}
-<p>Foo{{i}}</p>
+<p>Foo{{ i }}</p>
 {% endfor %}
 </pre>
 
-This is a bit easier on the eyes. But as many a coder has discovered this just isn't that composable and you're stuck with a pathetic subset of your programming language.
+This is a bit easier on the eyes. But as many a coder has discovered this isn't very composable and you're stuck with a limited subset of your programming language.
 
-This has driven many programmers to eschew templating DSLs and to just generate markup in code. While this is fast and flexible since you now have the power of function composition it also means that you're putting quite a bit of distance between yourself and designer who is very comfortable with HTML/CSS.
+This has driven many programmers to eschew templating DSLs and to generate markup directly in code. While this is fast and flexible since you now have the power of function composition it means that you're putting quite a bit of distance between yourself and a designer who is very comfortable with HTML/CSS.
 
-Which brings us to Enlive. Enlive give you all the advantages of a designer accessibility of a HTML templating DSL while not losing the power of composition you get from generating markup in code.L Enlive is all about having your cake and eating it too.
+So can we have our cake and eat it too? There are a few existing solutions that approach the idea from an interesting "direction":http://beebole.com/pure/.
+
+Which brings us to Enlive. Enlive gives you the advantages of designer accessibe templates (since they're just HTML) without not losing the power of fuction composition.
 
 h2. Why Enlive?
 
-Enlive presents a dramatically different approach to generating HTML then what's out there.
+Enlive presents a different appraoch from the more popular templating solutions:
 
-** Code and markup are completely separate (the implications are enormous)
+** Code and markup are completely separate.
 ** You get to use CSS like syntax to manipulate HTML.
-** Template inheritance isn't some fancy trick, it just plain old function composition.
+** Template inheritance isn't some fancy trick, it just function composition.
 ** You have access to the full power of Clojure to manipulate your templates (yes, macros!).
 
-One good analogy might be "XSLT that not only doesn't suck, it's wonderful".
+When working with the standard templating solutions you generally need to answer one of two question. Either "What type of text am I going to generate?" or "What type of HTML emitting functions should I write?"
+
+With Enlive you generally need to approach templating in two steps:
+
+** a) What selectors match the part of the HTML document that I care about?
+** b) What templates and snippets do I need write?
 
 h2. What We'll Cover
 
-There are seven examples in total.
+There are six examples in total.
 
 The first one covers grabbing the headlines and points from Hackers News. The next one shows how to make the code less redundant. The third scrapes the New York Times front page since that presents more challenges than Hacker News.
 
@@ -428,24 +435,30 @@ Snippets are like templates with two main differences. First, snippets take a se
 Let's try out or snippet to see that it worked:
 
 <pre class="console">
+tutorial.template2> (render (emit* (link-model {:href "bar" :text "foo"})))
 </pre>
 
-Again we need to figure out the correct selector. This time we're trying to emulate the following popular pattern:
+Here we have eto use emit* because snippets return a sequenes of nodes not strings the way templates do.
+
+Okay now we want to loop over the sections. A section is a *h2* tag followed by a *ul* tag. Again we need to figure out the correct selector. This time we're trying to emulate the following popular pattern:
 
 <pre>
-{% for x in xs %}
-<h2>{{ x.foo }}</h2>
-<p>{{ x.bar }}</p>
+{% for section in sections %}
+<h2>{{ section.title }}</h2>
+<ul>
+  {% for link in section.links %}
+  <a target="new" href="{{ link.href }}>{{ x.text }}</a>
+  {% endfor %}
+</ul>
 {% endfor %}
 </pre>
 
-Not that unlike the previous example what we're looping over has no "container". Enlive recently added support for "ranges" making it simple to also express this pattern with Enlive templates.
+Note that unlike the previous example what we're looping over has no "container". That is, there is no surrouding element for the adjacent *h2* and *ul* tags. Enlive recently added support for "ranges" making it simple to also express this pattern with Enlive templates.
 
-Our HTML has some dummy content again. We only care about the first unique pair of *h2* and *p* tags.
+Again our HTML has some dummy content again. We only care about the first range of *h2* and *ul* tags, we don't want to match any more than that. We can define a selector to do this like so:
 
 <pre>
-(def *section-sel* (selector [:body :> #{[:h2.section-title (nth-of-type 1)]
-                                         [:ul.links (nth-of-type 1)]}]))
+(def *section-sel* (selector {[:h2] [[:ul (nth-of-type 1)]]}))
 </pre>
 
 Now that we have our selector we can define our section snippet like so. Pretty straightforward. Remember *defsnippet* just creates a function which can take whichever arguments you specify and returns the transformed markup. We're simply creating links using *link-model* and putting those links inside of the *ul* in the section.
@@ -463,18 +476,22 @@ Now let's at the template to see how we put this all together:
 (html/deftemplate index "tutorial/template2.html"
   [{:keys [title sections]}]
   [:#title] (html/content title)
-  [:body] (html/content (map section-model sections)))
+  [:body]   (html/content (map section-model sections)))
 </pre>
 
 As you can see it looks really similar to *section-model*. Again the main different is that templates don't take selectors and the function they returns a list of string. So you had to do a little more typing but the beauty of this design is that you can mix and match this logic however you please.
 
-For example say on a different page you only want the list of links.
+For example say on a different page you only want the list of links. Instead make a whole new template and repeating yourself with copy and paste you can do the following:
 
 <pre>
-(html/content (map link-model links))
+(deftemplate links-page "tutorial/links-page.html"
+  [links]
+  [:body] (content (map link-model links)))
 </pre>
 
-Most templates are a giant mess of unreadable for loops. While it does seems like a little work to achieve the same effect with Enlive, consider the following. *template2.html* can actually show what the list will look like with dummy extra list items. These are removed because we only match the first child with our snippet. The designer doesn't need to start webserver or install any web framework at all, he can work directly with HTML.
+That was easy.
+
+Most templates are a giant mess of uncomposable for loops. For trivail cases Enlive is a bit more work, but for anything remotely like a real website, Enlive has some real advantages. *template2.html* can actually show what the page will look like with dummy extra list items. The designer doesn't need to start webserver or install any web framework at all, he/she can work directly with HTML. And you can mix match the various parts of the design as you see fit.
 
 h2. Your Third Template - Template Inheritance
 
@@ -534,70 +551,6 @@ One last live example before we dive into the code. Point your browser at *http:
 We added two, yes, <i>two</i> new lines of code. If I was a web developer I'd be drooling right about now.
 
 So how does this actually work? Open up *template3.clj* in your favorite text editor.
-
-h2. Macroology
-
-Now that you understand how to template with Enlive there's something to consider. Enlive does not work by manipulating text, it actually manipuates structure. While this comes back in spades when you're actually constructing pages this does unfortunately make the simple cases unweildy.
-
-Let's try something out before we dive into a lengthy explanation, type the following in the top level of the repo:
-
-<pre class="console">
-tutorial.template3=> (use 'tutorial.macroology)
-nil
-tutorial.macroology=> (templ-str foo "<span id='bar'></span>")
-#'user/foo
-tutorial.macroology=> (foo {:bar "Cool!"})
-("<html>" "<body>" "<span id=\"bar\">" "Cool!" "</span>" "</body>" "</html>")
-</pre>
-
-Wowzers! That was way simpler than what we've been doing this whole time. Why didn't we just use something like this from the beginning?
-
-Well that's because this isn't actually Enlive code. As I was putting together this tutorial I realized that the for the simple cases Enlive really gets whooped by the other templating engine out there. But Lisp has the answer for just this sort of problem.
-
-Since we've been singing Enlive praises most of this time, let's look at what there is to dislike about it.
-
-One problem is that Enlive doesn't really let you create templates from a string of markup. The following is invalid:
-
-<pre>
-(deftemplate foo "<span id='foo'></span>"
-  [ctxt]
-  [:#foo] (content (:foo ctxt)))
-</pre>
-
-In order to do that you need to hand an the string as an InputStream to *deftemplate*. You can do that like so:
-
-<pre>
-(use 'net.cgrand.enlive-html)
-(import '[java.io ByteArrayInputStream])
-(defn to-in-stream [str] (ByteArrayInputStream. (.getBytes str "UTF-8")))
-</pre>
-
-Now you have a nice function to convert strings into InputStreams. You can now define the template like this:
-
-<pre>
-(deftemplate foo (to-in-stream "<span id='foo'></span>")
-  [ctxt]
-  [:#foo] (content (:foo ctxt)))
-</pre>
-
-But really that is kind of annoying. The simple case is just a lot worse then what other templating solutions provide. Can this be made any better?
-
-Well this is Lisp after all!
-
-One of the most powerful tools you have at your disposal are macros. Now these are *not* you should use just anywhere, but they can be quite helpful when you are finding some unbearably verbose.
-
-In a ideal for the simplest case we would like something like the following:
-
-<pre>
-(templ simple "<span id='foo'></span><span id='bar'></span>")
-(simple {:foo "Hello ", :bar "world!"})
-</pre>
-
-Can we have our cake and eat it to?
-
-The following is somewhat advanced and most likely make the most if you have at least some passing familiarity with macros.
-
-Macro allow to you create templates for your code.
 
 h2. Common Mistakes & Caveats
 
