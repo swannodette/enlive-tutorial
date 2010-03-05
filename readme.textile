@@ -525,7 +525,7 @@ Point your favorite web brower to *http://localhost:8080/base.html*. You should 
 
 If you look at the markup for *base.html* and *3col.html* you will see that there is not one line of code! So how did we magically put these two things together with so little code! Once understand the what's going, the whole concept of template inheritance is completely boring. 
 
-<i>*In Enlive, constructing pages is simply putting some functions together!*</i>
+In Enlive, constructing pages is simply putting some functions together!
 
 Take a look at *http://localhost:8080/navs.html*. You should see some truly ugly nav bars ;) Now point your browser at *http://locahost:8080/b/. You can see it's easy for to define a site wide layout, a 3 column middle main layout, and customize the contents of each column. Again there's absolute no code in the markup, only the following code is needed to construct this page:
 
@@ -542,7 +542,7 @@ Pretty slick. Templating with Enlive is just write Clojure code. This very diffe
 
 One last live example before we dive into the code. Point your browser at *http://localhost:8080/c/*. Huh, looks pretty much like b. Point your browser at *http://localhost:8080/c/reverse*. Notice something different?
 
-<i>*We just flipped the two navs!*</i> How complicated is doing something like this?
+We just flipped the two navs! How complicated is doing something like this?
 
 <pre>
 (defn viewc [params session]
