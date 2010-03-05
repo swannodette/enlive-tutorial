@@ -15,20 +15,14 @@
 ;; =============================================================================
 
 (html/deftemplate base "tutorial/base.html"
-  [{title :title, header :header, main :main, footer :footer :as ctxt}]
+  [{:keys [title header main footer]}]
   [:#title]      (maybe-content title)
   [:#header]     (maybe-substitute header)
   [:#main]       (maybe-substitute main)
   [:#footer]     (maybe-substitute footer))
 
-(html/defsnippet link-model "tutorial/3col.html" [:ol#links :> html/first-child]
-  [[text href]] 
-  [:a] (html/do->
-        (html/content text) 
-        (html/set-attr :href href)))
-
 (html/defsnippet three-col "tutorial/3col.html" [:div#main]
-  [{left :left, middle :middle, right :right :as ctxt}]
+  [{:keys [left middle right]}]
   [:div#left]   (maybe-substitute left)
   [:div#middle] (maybe-substitute middle)
   [:div#right]  (maybe-substitute right))
@@ -46,20 +40,18 @@
          :main (three-col {})}))
 
 (defn viewb [params session]
-  (let [nav1 (nav1)
-        nav2 (nav2)]
+  (let [navl (nav1)
+        navr (nav2)]
    (base {:title "View B"
-          :main (three-col {:left  nav1
-                            :right nav2})})))
+          :main (three-col {:left  navl
+                            :right navr})})))
 
 (defn viewc [params session]
   (let [navs [(nav1) (nav2)]
-        navs (if (= (:action params) "reverse")
-               (into [] (reverse navs))
-               navs)]
+        [navl navr] (if (= (:action params) "reverse") (reverse navs) navs)]
     (base {:title "View C"
-           :main (three-col {:left  (navs 0)
-                             :right (navs 1)})})))
+           :main (three-col {:left  navl
+                             :right navr})})))
 
 (defn index
   ([] (base {}))

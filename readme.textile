@@ -4,15 +4,13 @@ If somehow you happen to stumble upon this tutorial, please note that it is not 
 
 h1. An Introduction to Enlive
 
-Though Enlive has been around for sometime now the Clojure community has been slow to embrace this useful library. I believe this is due simply to the lack of good introductory documentation. This is no slam against Christophe Grand. He's a busy man and I'd rather he write tutorials on optimizing Clojure than create introductory tutorials about Enlive. In anycase contribution is what open source communities are all about, right?
-
-But really, my reasons for creating this tutorial are not entirely altruistic. I've been playing with Enlive off and on for sometime now and I realize that I keep coming back to it having half-forgotten what I learned the last time. So now I'm writing this tutorial - for myself and all the Clojurians and Clojurians To Be.
+Though Enlive has been around for sometime now the Clojure community has been slow to embrace this useful library. I believe this is due simply to the lack of good introductory documentation based on real examples. Please let me know if you find this tutorial useful or helpful in any way. Feel free to suggest additions, corrections, and improvements (even better fork the repo and send me a patch).
 
 h2. What You need to Know
 
-Not much. This tutorial is intended even for developers who have little or no exposure to Clojure. At the very least you'll need to have the Java Virtual Machine (JVM) installed. Don't expect a full blown discussion of Lisp but I'll try to explain the less obvious things specific to Clojure as I go along.
+Not much. This tutorial assumes little about your exposure to Clojure. At the very least you'll need to have the Java Virtual Machine (JVM) installed. I won't go into great detail about Clojure's features but I'll try to explain any concepts which may impede your understanding of Enlive's functionality.
 
-As the tutorials progress they will be more useful to you if you have some experience with a modern webframework that ships with a decent HTML templating library. If you do know Clojure the tutorials are fairly amenable to skimming. My only real assumption is that you have some experience at the command line.
+As the tutorials progress they will be more useful to you if you have some experience with a modern webframework that ships with a HTML templating library. If you do know Clojure the tutorials are fairly amenable to skimming. My only real assumption is that you have some experience at the command line.
 
 h2. HTML Templating
 
@@ -21,7 +19,7 @@ There are two real camps in HTML templating. The first which almost everyone is 
 <pre>
 <?php
 for($i = 0; $i < $len; $i++) {
-?><p>Foo<?echo $i?></p><?
+?><p>Foo <?echo $i?></p><?
 }
 ?>
 </pre>
@@ -30,15 +28,15 @@ This is of course enough to drive anyone insane and some templating frameworks l
 
 <pre>
 {% for i in foo %}
-<p>Foo{{ i }}</p>
+<p>Foo {{ i }}</p>
 {% endfor %}
 </pre>
 
-This is a bit easier on the eyes. But as many a coder has discovered this isn't very composable and you're stuck with a limited subset of your programming language.
+This is a bit easier on the eyes. But this isn't very composable and you're stuck with a limited subset of your programming language. By not composable I mean that building pages is largely a copy and paste affair even when templating solutions support inheritance.
 
-This has driven many programmers to eschew templating DSLs and to generate markup directly in code. While this is fast and flexible as you now have the power of function composition it also means that you're putting quite a bit of distance between yourself and a designer comfortable writing HTML and  CSS.
+This has driven many programmers to discard templating DSLs and to generate markup directly in code. While this is fast and flexible as you now have the power of function composition, it also means that you're putting quite a bit of distance between yourself and a designer comfortable writing HTML and CSS.
 
-So can we have our cake and eat it too? There are a few existing solutions that approach the idea from an interesting "direction":http://beebole.com/pure/.
+There are a few existing solutions that have a novel approach to this problem such as "Pure":http://beebole.com/pure/.
 
 Which brings us to Enlive. Enlive gives you the advantages of designer accessibe templates (since they're just HTML) without losing the power of fuction composition.
 
@@ -62,9 +60,7 @@ h2. What We'll Cover
 
 There are six examples in total.
 
-The first one covers grabbing the headlines and points from Hackers News. The next one shows how to make the code less redundant. The third scrapes the New York Times front page since that presents more challenges than Hacker News.
-
-The fourth example shows how to use Compojure and Enlive together. The fifth example shows how things like looping are achieved without writing any code into the markup. The sixth example shows that Enlive can do all the fancy template inheritance magic you might be used to if you're coming from Django or some other popular modern webframework.
+The first one covers grabbing the headlines and points from Hackers News. The next one shows how to make the code less redundant. The third scrapes the New York Times front page since that presents more challenges than Hacker News. The fourth example shows how to use Compojure and Enlive together. The fifth example shows how things like looping are achieved without writing any code into the markup. The sixth example shows that Enlive can do all the fancy template inheritance magic you might be used to if you're coming from Django or some other popular modern webframework.
 
 h2. Clone This Repo
 
@@ -387,20 +383,20 @@ How did we do that if we have no inline code to define the loop? Let's get into 
                            :href "http://enlive.cgrand.net/syntax.html"}]}]})
 </pre>
 
-This of course normally be something that would have a read out of a database. The take away here is Clojure makes it easy to define nested data structures. *dummy-context* is just a hash-map (aka dictionary, aka associative array) of two key-value pairs. The first pair is for the title of the page. The second pair is the list of sections. Each section also has a title as well as a list of link. Each link has some text and url. If you're used of building up JSON data structures this should pretty familiar to you.
+This of course normally be something that would have a read out of a database. The take away here is Clojure makes it easy to define nested data structures. *dummy-context* is just a hash-map (aka dictionary, aka associative array) of two key-value pairs. The first pair is for the title of the page. The second pair is the list of sections. Each section also has a title as well as a list of link. Each link has some text and url. If you're used to building up JSON data structures from databse results this should pretty familiar to you.
 
 h3. Figuring out your selectors
 
-Using Enlive for templating usually involve steps. The first step is figuring out which part of the markup you want to make into a component. Each component will become a snippet. A snippet is reusable mini-template that you can use when constructing larger templates. Once you've figured which things should componentized out you have to determine the selector which will allow you to match exactly that part of the document.
+Using Enlive for templating usually involve two steps. The first step is figuring out which part of the markup you want to make into a component. Each component will become a snippet. A snippet is reusable mini-template that you can use when constructing larger templates. In order to create a working snippet you need to determine the CSS selector which will allow you to match exactly that part of the document.
 
-Consider our situation. Our designer has handed us some nice markup and some CSS. To better communicate the final result they've included dummy content. With a traditional templating solution this is a big nono. With Enlive, working around it requires a minimal amount of effort. So the key here is to identify the "models".
+Consider our situation. Our designer has handed us some nice markup and some CSS. To better convey the final result they have included dummy content. With a traditional templating solution this is a big nono. With Enlive, working around it requires a minimal amount of effort. So the key here is to identify the "model" element.
 
-In our case we have two distinct models, the first is the pair of the section title and the links for that section. The second is the individual link. In templating laguage we would probably do something like this:
+In our case we have two distinct models, the first is the pair of the section title and the links for that section. The second is the individual link. In a templating laguage we would probably do something like this:
 
 <pre>
 {% for section in sections %}
-<h2 class="section-title">{{ section.title }}</h2>
-<ul class="links">
+<h2 class="title">{{ section.title }}</h2>
+<ul class="content">
  {% for link in section.links %} <!-- Inner Loop -->
  <a target="new" href="{{ link.href }}">{{ link.text }}</a>
  {% endfor %}
@@ -408,21 +404,21 @@ In our case we have two distinct models, the first is the pair of the section ti
 {% endfor %}
 </pre>
 
-We want to be able handle the inner loop. On one level, as you'll see, there's a little bit less typing involved in the traditional approach. However you will have something that's a lot less reusable. That because the the inner link loop and the outer section loop are hopelessly interwinted. You may have many pages on your site that use the same section pattern but not the internal link pattern. But since these can't be separated you'll have to do some copy and paste. Not so with Enlive. Enlive makes you do a little more work upfront and very, very little work later on.
+First, we want to be able handle the inner loop. On one level, as you're about see, there's a little more typing involved upfront when using Enlive. But you will end up with something that's considerably more reusable. In the traditional template the inner link loop and the outer section loop are hopelessly interwined. You may have many pages on your site that use the same section pattern but not the internal link pattern. But since these can't be separated you'll have to do some copy and paste. Not so with Enlive.
 
 So let's define our link component. We don't want the dummy content so we really only want to match the very first link that satisfies our need, the selector looks something like this:
 
 <pre>
-(def *link-sel* (html/selector [[:ul.links (nth-of-type 1)] :> html/first-child]))
+(def *link-sel* (html/selector [[:.content (nth-of-type 1)] :> html/first-child]))
 </pre>
 
-This is very important. We only want to match only the first ul element that we find that has the links class and only the very child inside that. This is the selector that gets the job done. It's analagous to:
+We only want to match only the first ul element that we find that has the links class and only the very child inside that. This is the selector that gets the job done. It's analagous to:
 
 <pre>
-ul.links:nth-of-type(1) > *:first-child
+.links:nth-of-type(1) > *:first-child
 </pre>
 
-It's important to note that using *nth-of-type* requires an extra pair of brackets around the element *ul*. Take note of this. This extra pair of brackets is easy to forget. Whenever you want to be more specfic about what type of tag you want to match (beyond matching on CSS id or class) you'll need an extra pair of brackets.
+It's important to note that using *nth-of-type* requires an extra pair of brackets around the element *ul*. This extra pair of brackets is easy to forget. Whenever you want to be more specfic about what type of tag you want to match (beyond matching on CSS id or class) you'll need an extra pair of brackets.
 
 Now that we have our selector *defsnippet* will look like the following (don't forget that *html* is just an alias for *net.cgrand.enlive-html*):
 
@@ -434,15 +430,15 @@ Now that we have our selector *defsnippet* will look like the following (don't f
         (html/set-attr :href href)))
 </pre>
 
-Snippets are like templates with two main differences. First, snippets take a selector. This means that they can match only specific parts of an HTML document. The function produced by a *defsnippet* returns transformed content, <i>not</i> a list of strings the *deftemplate* does. This snippet destructures it's first argument (a hash-map) to extract the value of the keys *:text* and *:href*. We're also introduced to *html/do->*. This is a convenience, we often want to take the matched element and apply a series of transformations on it. In this case we want to set the content of the node as well as it's href attribute.
+Snippets are like templates with two main differences. First, snippets take a selector. This means that they can match only specific parts of an HTML document. The function produced by a *defsnippet* returns transformed content, <i>not</i> a list of strings the way *deftemplate* does. This snippet destructures it's first argument (a hash-map) to extract the value of the keys *:text* and *:href*. We're also introduced to *html/do->*. This is a convenience, we often want to take the matched element and apply a series of transformations on it. In this case we want to set the content of the node as well as it's href attribute.
 
-Let's try out or snippet to see that it worked:
+Let's try out our snippet to see that it worked:
 
 <pre class="console">
 tutorial.template2> (render (emit* (link-model {:href "bar" :text "foo"})))
 </pre>
 
-Here we have eto use emit* because snippets return a sequenes of nodes not strings the way templates do.
+Here we have to use emit* because snippets return a sequenes of nodes not strings the way templates do. *render* is just a utility function for taking a number of strings and creating a single string.
 
 Okay now we want to loop over the sections. A section is a *h2* tag followed by a *ul* tag. Again we need to figure out the correct selector. This time we're trying to emulate the following popular pattern for the outer loop:
 
@@ -457,12 +453,12 @@ Okay now we want to loop over the sections. A section is a *h2* tag followed by 
 {% endfor %}
 </pre>
 
-Note that unlike the previous example what we're looping over has no "container". That is, there is no surrouding element for the adjacent *h2* and *ul* tags. Enlive recently added support for "ranges" making it simple to also express this pattern with Enlive templates.
+Note that unlike the previous example what we're looping over has no "container". That is, there is no surrouding element for the adjacent *h2* and *ul* tags. Enlive recently added support for "ranges" making it simple to express this pattern with Enlive templates.
 
 Again our HTML has some dummy content again. We only care about the first range of *h2* and *ul* tags, we don't want to match any more than that. We can define a selector to do this like so:
 
 <pre>
-(def *section-sel* (selector {[:h2] [[:ul (nth-of-type 1)]]}))
+(def *section-sel* (selector {[:.title] [[:.content (nth-of-type 1)]]}))
 </pre>
 
 There no CSS selector that can represent this. Again take care to note that since we want to select only the first *ul* that we find we need an extra pair of brackets around :ul. This is a common mistake to leave these out.
@@ -471,9 +467,9 @@ Now that we have our selector we can define our section snippet like so. Pretty 
 
 <pre>
 (defsnippet section-model "tutorial/template2.html" *section-sel*
-  [{:keys [title links]}]
-  [:h2] (content title)
-  [:ul] (content (map link-model links)))
+  [{:keys [title data]} model]
+  [:.title]   (content title)
+  [:.content] (content (map model data)))
 </pre>
 
 Now let's at the template to see how we put this all together:
@@ -482,22 +478,12 @@ Now let's at the template to see how we put this all together:
 (html/deftemplate index "tutorial/template2.html"
   [{:keys [title sections]}]
   [:#title] (html/content title)
-  [:body]   (html/content (map section-model sections)))
+  [:body]   (html/content (map #(section-model % link-model) sections)))
 </pre>
 
-As you can see it looks really similar to *section-model*. Again the main different is that templates don't take selectors and the function they returns a list of string. So you had to do a little more typing but the beauty of this design is that you can mix and match this logic however you please.
+As you can see it looks really similar to *section-model*. Again the main difference is that templates don't take selectors and the function they define returns a list of string.
 
-For example say on a different page you only want the list of links. Instead of creating a whole new template file and repeating yourself with copy and paste you can do the following:
-
-<pre>
-(deftemplate links-page "tutorial/links-page.html"
-  [links]
-  [:body] (content (map link-model links)))
-</pre>
-
-That was easy and DRY.
-
-Most template solutions are a giant mess of uncomposable for loops. It's true that for trivial cases Enlive is a bit more work, but for anything remotely like a real website, Enlive has real advantages. *template2.html* can actually show what the page will look like with dummy extra list items, that is the designer doesn't need to start webserver or install any web framework at all, he/she can work directly in HTML and CSS. And you can mix and match the various parts of the designed HTML as you see fit.
+Thus while we've seen some interesting features and HTML/code seperation is cool, Enlive seems like it involves <i>more</i> work then it actually saves. That's because we're showing very trival example. In the third example we'll show just how much time Enlive can save you laying things out how a real site might be organized.
 
 h2. Your Third Template - Template Inheritance
 
@@ -531,10 +517,10 @@ Take a look at *http://localhost:8080/navs.html*. You should see some truly ugly
 
 <pre>
 (defn viewb [params session]
-  (let [nav1 (nav1 {:count (or (:count params) 0)})
+  (let [nav1 (nav1)
         nav2 (nav2)]
    (base {:title "View B"
-          :main (three-col {:left nav1
+          :main (three-col {:left  nav1
                             :right nav2})})))
 </pre>
 
@@ -546,17 +532,47 @@ We just flipped the two navs! How complicated is doing something like this?
 
 <pre>
 (defn viewc [params session]
-  (let [navs [(nav1 {:count (or (:count params) 0)}) (nav2)]
-        navs (if (= (:action params) "reverse") (reverse navs) navs)
-        [nav1 nav2] navs]
+  (let [navs [(nav1) (nav2)]
+        [nav1 nav2] (if (= (:action params) "reverse") (reverse navs) navs)]
     (base {:title "View C"
-           :main (three-col {:left nav1
+           :main (three-col {:left  nav1
                              :right nav2})})))
 </pre>
 
-We added two, yes, <i>two</i> new lines of code. If I was a web developer I'd be drooling right about now.
+We added one, yes, <i>one</i> more line of code.
 
 So how does this actually work? Open up *template3.clj* in your favorite text editor.
+
+h3. The Templates and Snippets
+
+The first thing to look at is the *base* template.
+
+<pre>
+(html/deftemplate base "tutorial/base.html"
+  [{:keys [title header main footer]}]
+  [:#title]      (maybe-content title)
+  [:#header]     (maybe-substitute header)
+  [:#main]       (maybe-substitute main)
+  [:#footer]     (maybe-substitute footer))
+</pre>
+
+First thing, *maybe-content* and *maybe-substitute* are not Enlive functions. They are two simple macros. *maybe-content* will only set the content of its node if its argument is not nil. *maybe-substitute* will only substitute its node if its argument is not nil.
+
+Why would we do this? This because want to be able to handle template inheritance. That is base represents the most basic template. We can then "inherit" from this template overriding only specific elements of this base template. Note that this template uses *base.html*. You should look at this file now.
+
+Next is the *three-col* col snippet. It should be pretty obvious that this is a snippet for doing three column layout. Note that it uses *3co.html*, you should take a look at this file.
+
+The last bits are the various nav snippets and they are loaded *navs.html*. Again you should gover this file.
+
+h3. The Pages
+
+Now for the fun part. The pages are just functions now more no less. The first page *viewa* is just rendering the base template with the title "View A" and setting the main block of the page to the 3 column snippet.
+
+The page *viewb* does pretty much the same thing but this time we've add some navs for flair. Notice how much this function looks like *viewb*. Template inheritance is just function composition.
+
+*viewc* does pretty much the same thing but it checks to see if there is a parameter for reversing the navs. If present, the order of the navs is reversed.
+
+It should be far more clear now what Enlive brings to the table over traditional templating solutions. While preparing your templates and snippets take a little more work up front, building different pages from these templates and snippets is very, very fast and making changes is just moving a couple of values around in your functions, not mucking around with a broken DSL.
 
 h2. Common Mistakes & Caveats
 
