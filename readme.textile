@@ -401,14 +401,14 @@ In our case we have two distinct models, the first is the pair of the section ti
 {% for section in sections %}
 <h2 class="section-title">{{ section.title }}</h2>
 <ul class="links">
- {% for link in section.links %}
+ {% for link in section.links %} <!-- Inner Loop -->
  <a target="new" href="{{ link.href }}">{{ link.text }}</a>
  {% endfor %}
 </ul>
 {% endfor %}
 </pre>
 
-On one level, as you'll see, there's a lot less typing involved in this. However you all have something that's a lot less reusable. The link loop and section loop are hopelessly interwinted. You may have many pages on your site that use the same section pattern but not the internal link pattern. But since these can't be separated you'll have to do some copy and paste. Not so with Enlive. Enlive makes you do a little more work upfront and very, very little work later on.
+We want to be able handle the inner loop. On one level, as you'll see, there's a little bit less typing involved in the traditional approach. However you will have something that's a lot less reusable. That because the the inner link loop and the outer section loop are hopelessly interwinted. You may have many pages on your site that use the same section pattern but not the internal link pattern. But since these can't be separated you'll have to do some copy and paste. Not so with Enlive. Enlive makes you do a little more work upfront and very, very little work later on.
 
 So let's define our link component. We don't want the dummy content so we really only want to match the very first link that satisfies our need, the selector looks something like this:
 
@@ -416,9 +416,15 @@ So let's define our link component. We don't want the dummy content so we really
 (def *link-sel* (html/selector [[:ul.links (nth-of-type 1)] :> html/first-child]))
 </pre>
 
-This is very important. We only want to match only the first ul element that we find that has the links class and only the very child inside that. This is the selector that gets the job done. The snippet that will template this component of your page look like the following:
+This is very important. We only want to match only the first ul element that we find that has the links class and only the very child inside that. This is the selector that gets the job done. It's analagous to:
 
-Now that we have our selector *defsnippet* (don't forget that *html* is just an alias for *net.cgrand.enlive-html*):
+<pre>
+ul.links:nth-of-type(1) > *:first-child
+</pre>
+
+It's important to note that using *nth-of-type* requires an extra pair of brackets around the element *ul*. Take note of this. This extra pair of brackets is easy to forget. Whenever you want to be more specfic about what type of tag you want to match (beyond matching on CSS id or class) you'll need an extra pair of brackets.
+
+Now that we have our selector *defsnippet* will look like the following (don't forget that *html* is just an alias for *net.cgrand.enlive-html*):
 
 <pre>
 (html/defsnippet link-model "tutorial/template2.html" *link-sel*
@@ -438,10 +444,10 @@ tutorial.template2> (render (emit* (link-model {:href "bar" :text "foo"})))
 
 Here we have eto use emit* because snippets return a sequenes of nodes not strings the way templates do.
 
-Okay now we want to loop over the sections. A section is a *h2* tag followed by a *ul* tag. Again we need to figure out the correct selector. This time we're trying to emulate the following popular pattern:
+Okay now we want to loop over the sections. A section is a *h2* tag followed by a *ul* tag. Again we need to figure out the correct selector. This time we're trying to emulate the following popular pattern for the outer loop:
 
 <pre>
-{% for section in sections %}
+{% for section in sections %} <!-- OUTER LOOP -->
 <h2>{{ section.title }}</h2>
 <ul>
   {% for link in section.links %}
@@ -458,6 +464,8 @@ Again our HTML has some dummy content again. We only care about the first range 
 <pre>
 (def *section-sel* (selector {[:h2] [[:ul (nth-of-type 1)]]}))
 </pre>
+
+There no CSS selector that can represent this. Again take care to note that since we want to select only the first *ul* that we find we need an extra pair of brackets around :ul. This is a common mistake to leave these out.
 
 Now that we have our selector we can define our section snippet like so. Pretty straightforward. Remember *defsnippet* just creates a function which can take whichever arguments you specify and returns the transformed markup. We're simply creating links using *link-model* and putting those links inside of the *ul* in the section.
 
