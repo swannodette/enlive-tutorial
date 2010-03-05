@@ -483,7 +483,7 @@ Now let's at the template to see how we put this all together:
 
 As you can see it looks really similar to *section-model*. Again the main difference is that templates don't take selectors and the function they define returns a list of string.
 
-Thus while we've seen some interesting features and HTML/code seperation is cool, Enlive seems like it involves <i>more</i> work then it actually saves. That's because we're showing very trival example. In the third example we'll show just how much time Enlive can save you laying things out how a real site might be organized.
+Thus while we've seen some interesting features and HTML/code seperation is cool, Enlive seems like it involves <i>more</i> work then it actually saves. That's because we're showing a very trival example. In the third example we'll show just how much time Enlive can save you when building a less trivial example.
 
 h2. Your Third Template - Template Inheritance
 
