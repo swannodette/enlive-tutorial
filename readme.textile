@@ -55,8 +55,8 @@ When working with the standard templating solutions you generally need to answer
 
 With Enlive you generally need to approach templating in two steps:
 
-** a) What selectors match the part of the HTML document that I care about?
-** b) What templates and snippets do I need write?
+# What selectors match the part of the HTML document that I care about?
+# What templates and snippets do I need write?
 
 h2. What We'll Cover
 
