@@ -8,10 +8,7 @@
 ;; Top Level Defs
 ;; =============================================================================
 
-;; change this line to reflect your setup
 (def *webdir* (str (pwd) "/src/tutorial/"))
-
-(def *hits* (atom 0))
 
 ;; =============================================================================
 ;; The Templates Ma!
@@ -36,13 +33,8 @@
   [:div#middle] (maybe-substitute middle)
   [:div#right]  (maybe-substitute right))
 
-(html/defsnippet nav1 "tutorial/navs.html" [:div#nav1]
-  [{count :count :as ctxt}]
-  [:.count] (html/content
-             (str (parse-int count) " " (pluralize "thing" (parse-int count)))))
-
+(html/defsnippet nav1 "tutorial/navs.html" [:div#nav1] [])
 (html/defsnippet nav2 "tutorial/navs.html" [:div#nav2] [])
-
 (html/defsnippet nav3 "tutorial/navs.html" [:div#nav3] [])
 
 ;; =============================================================================
@@ -54,20 +46,20 @@
          :main (three-col {})}))
 
 (defn viewb [params session]
-  (let [nav1 (nav1 {:count (or (:count params) 0)})
+  (let [nav1 (nav1)
         nav2 (nav2)]
    (base {:title "View B"
-          :main (three-col {:left nav1
+          :main (three-col {:left  nav1
                             :right nav2})})))
 
 (defn viewc [params session]
-  (let [navs [(nav1 {:count (or (:count params) 0)})
-              (nav2)]
-        navs (if (= (:action params) "reverse") (reverse navs) navs)
-        [nav1 nav2] navs]
+  (let [navs [(nav1) (nav2)]
+        navs (if (= (:action params) "reverse")
+               (into [] (reverse navs))
+               navs)]
     (base {:title "View C"
-           :main (three-col {:left nav1
-                             :right nav2})})))
+           :main (three-col {:left  (navs 0)
+                             :right (navs 1)})})))
 
 (defn index
   ([] (base {}))
@@ -84,8 +76,6 @@
   (GET "/a/"
        (render (viewa params session)))
   (GET "/b/"
-       (render (viewb params session)))
-  (GET "/b/:count"
        (render (viewb params session)))
   (GET "/c/"
        (render (viewc params session)))
