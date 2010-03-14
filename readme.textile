@@ -76,7 +76,7 @@ Once you have Leiningen installed, switch into this repository's directory. From
 lein deps
 </pre>
 
-This will install all of the dependencies required for getting through the tutorial. This might take a minute and and will probably generate a lot of ouptut. Once the the dependencies are installed enter the following command at your terminal:
+This will install all of the dependencies required for getting through the tutorial. This might take a minute and and will probably generate <i>a lot</i> of ouptut. While this may seem disconcerting, this means you'll have a fully functioning Clojure setup with needing to bother with installing Emacs or an IDE. Once the the dependencies are installed enter the following command at your terminal:
 
 <pre class="console">
 lein repl
@@ -86,7 +86,7 @@ This will launch a Clojure REPL (Read-Eval-Print-Loop) that has the classpath se
 
 h2. Your First Scrape with Enlive - Hacker News
 
-Enlive isn't just good for websites, it's also fantastic for scraping the content of webpages. It allows you to scrape content by using a syntax very similar to CSS selectors. In the REPL type the following lines (note that *user=>* is the REPL prompt, not something you type in):
+Enlive is fantastic for scraping the content of webpages. It allows you to scrape content by using a syntax very similar to CSS selectors. In the REPL type the following lines (note that *user=>* is the REPL prompt, not something you type in):
 
 <pre class="console">
 user=> (ns tutorial.scrape1)
@@ -97,7 +97,7 @@ tutorial.scrape1=> *base-url*
 "http://news.ycombinator.com/"
 </pre>
 
-The first line puts us into a namespace. Note that the REPL prompt reflects this. By switching into the tutorial namespace we can use functions defined in the tutorial without having to qualify them. It's much easier to type *base-url* then <bold>tutorial.scrape1/*base-url*</bold>. In the next line we load the first tutorial into the REPL. Unlike many scripting languages, loading a file actually <i>compiles</i> it. Clojure is not interpreted.
+The first line puts us into a namespace. Note that the REPL prompt reflects this. By switching into the tutorial namespace we can use functions defined in the tutorial without having to qualify them. It's much easier to type <pre>*base-url*<pre> then <pre>tutorial.scrape1/*base-url*</pre>. In the next line we load the first tutorial into the REPL. Unlike many scripting languages, loading a file actually <i>compiles</i> it. Clojure is not interpreted.
 
 Let's see what's in that file. Open up *scrape1.clj* with your favorite text editor (you can find it in *your-tutorial-clone/src/tutorial/*). You'll see it's a fairly short program. 
 
