@@ -8,6 +8,8 @@ Not much. This tutorial assumes little about your exposure to Clojure. At the ve
 
 As the tutorials progress they will be more useful to you if you have some experience with a modern webframework that ships with a HTML templating library. If you do know Clojure the tutorials are fairly amenable to skimming. My only real assumption is that you have some experience at the command line.
 
+Enlive has many features and I can't possibly cover them all here. Fortunately the Clojure community is vibrant and helpful. If you run into issues or have questions join the "Enlive mailing list":http://groups.google.com/group/enlive-clj or jump on the #clojure channel on irc.freenode.net.
+
 h2. HTML Templating
 
 There are two real camps in HTML templating. The first which almost everyone is familiar with is the PHP style template:
