@@ -80,4 +80,4 @@
                             "/*" (servlet example-routes))))
 
 (defn stop-app []
-  (stop @*app*))
+  (when @*app* (stop @*app*)))
