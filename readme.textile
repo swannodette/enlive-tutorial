@@ -101,11 +101,11 @@ The first line puts us into a namespace. Note that the REPL prompt reflects this
 
 Let's see what's in that file. Open up *scrape1.clj* with your favorite text editor (you can find it in *your-tutorial-clone/src/tutorial/*). You'll see it's a fairly short program. 
 
-At the top of this file is the namespace declaration. This keeps your code from clashing with other people's code when they try to use your library. The namespace declaration also includes another library, Enlive, via *:require*. In this case we are generating an alias so we don't have to type the very long namespace for Enlive.
+At the top of this file is the namespace declaration. This keeps your code from clashing with other people's code when they try to use your library. The namespace declaration also includes another library, Enlive, via <code>:require</code>. In this case we are generating an alias so we don't have to type the very long namespace for Enlive.
 
-The function *fetch-url* grabs the contexts of a url synchronously. *fetch-url* uses *html/html-resource* (remember we aliased *net.cgrand.enlive-html* to *html* for convenience) another handy function defined in the Enlive library. It takes raw HTML and converts it into a nested data structure (think DOM minus tediousness).
+The function <code>fetch-url</code> grabs the contexts of a url synchronously. <code>fetch-url</code> uses <code>html/html-resource</code> (remember we aliased *net.cgrand.enlive-html* to *html* for convenience) another handy function defined in the Enlive library. It takes raw HTML and converts it into a nested data structure (think DOM minus tediousness).
 
-Note that the function *hn-headlines* uses *fetch-url*. But it's also surrounded by a lot of funny stuff. You might have noticed *html/select*; *html/select* takes parsed html content and selects the nodes specified by a Clojure vector that looks very similar to a CSS selector. 
+Note that the function <code>hn-headlines</code> uses <code>fetch-url</code>. But it's also surrounded by a lot of funny stuff. You might have noticed <code>html/select</code>; <code>html/select</code> takes parsed html content and selects the nodes specified by a Clojure vector that looks very similar to a CSS selector. 
 
 <pre>
 [:td.title :a]
@@ -119,7 +119,7 @@ td.title a
 
 This is a CSS selector for matching all links inside of table elements that have the CSS class "title". If you're a Javascript hacker you should know this stuff by heart.
 
-So let's break this down. *fetch-url* grabs the contents of the url and parses it into a data structure. *html/select* takes it and extracts only those nodes that match the selector - it always returns a vector of nodes. We then use Clojure's *map* function to interate over the vector's elements applying a function to extract each nodes' text-node, in this case *html/text* (*map* is actually lazy, but we're not going to get into what that means in this Enlive tutorial).
+So let's break this down. <code>fetch-url</code> grabs the contents of the url and parses it into a data structure. <code>html/select</code> takes it and extracts only those nodes that match the selector - it always returns a vector of nodes. We then use Clojure's <code>map</code> function to interate over the vector's elements applying a function to extract each nodes' text-node, in this case <code>html/text</code> (<code>map</code> is actually lazy, but we're not going to get into what that means in this Enlive tutorial).
 
 Believe it or not, these 10 lines of code are enough to extract all of the headlines from the Hacker News front page. Let's try it out at the REPL now.
 
@@ -128,7 +128,7 @@ tutorial.scrape1=> (hn-headlines)
 ("A 'lorem ipsum' for images." "Google Reader Can Now Track Changes to Any Website - Even Without a Feed" "jQuery 1.4.1 Released" ... "More")
 </pre>
 
-Nice. After this the next function *hn-points* should make a lot more sense. It does the same thing but we grab the score from a different place in the markup. Try to run this function as well.
+Nice. After this the next function <code>hn-points</code> should make a lot more sense. It does the same thing but we grab the score from a different place in the markup. Try to run this function as well.
 
 <pre class="console">
 tutorial.scrape1=> (hn-points)
@@ -150,23 +150,23 @@ tutorial.scrape1=> (print-headlines-and-points)
     (println line)))
 </pre>
 
-Let's break it down. Again we have *map*. We know that it maps a function over a vector to return a new vector of elemenets with that fuction applied.
+Let's break it down. Again we have <code>map</code>. We know that it maps a function over a vector to return a new vector of elemenets with that fuction applied.
 
 <pre>
 #(str %1 " (" %2 ")") ; is just shorthand for
 (fn [arg1 arg2] (str arg1 " (" arg2 ")")
 </pre>
 
-This is an anonymous function. I'm not going to explain that here, they're pretty popular these days. *str* is built in function for doing string concatenation.
+This is an anonymous function. I'm not going to explain that here, they're pretty popular these days. <code>str</code> is built in function for doing string concatenation.
 
-Oddly this *map* is accepting not one list of things, but two! Check this out:
+Oddly this <code>map</code> is accepting not one list of things, but two! Check this out:
 
 <pre class="console">
 tutorial.scrape1=> (map + [1 2 3] [4 5 6])
 (5 7 9)
 </pre>
 
-Wow you can map two different vectors into one! Finally we have *doseq*. *doseq* is just a convenient way to work with lists when you're dealing with *side effects* like printing to the REPL. I'm not going to get into that here. All it does is say take list of things, assign each thing one at time to a variable, and then execute the following expression (hopefully you're actually doing something with that variable!
+Wow you can map two different vectors into one! Finally we have <code>doseq</code>. <code>doseq</code> is just a convenient way to work with lists when you're dealing with *side effects* like printing to the REPL. I'm not going to get into that here. All it does is say take list of things, assign each thing one at time to a variable, and then execute the following expression (hopefully you're actually doing something with that variable!
 
 Not bad for 17 lines of code. One obvious problem here is that we make two separate requests for the Hacker News front page. Let's fix this now.
 
