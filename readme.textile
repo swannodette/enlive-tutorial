@@ -238,7 +238,7 @@ h2. Your Third Scrape - The New York Times
 
 By now you should feel like a pro. The third one, scrape3.clj tackles something considerably more difficult. Now to be clear this not that useful since the New York Times provides a fairly comprehensive list of RSS feeds. But the structure of the New Yorks Times page forces us to think about how to best leverage Enlive's abilities.
 
-Take a look at *scrape3.clj*. This is considerable longer. Before we dive in let's see how it works. Start up the Clojure REPL if it's not already up and running.
+Take a look at *scrape3.clj*. This is a bit longer. Before we dive in let's see how it works. Start up the Clojure REPL if it's not already up and running.
 
 <pre class="console">
 tutorial.scrape2=> (ns tutorial.scrape3)
@@ -249,7 +249,7 @@ tutorial.scrape3=> (print-stories)
 ... output ...
 </pre>
 
-Now this isn't perfect for a variety of reason but it work well enough for the purposes of demonstration. Let's look at the code. At the top of the file we see that we have a variety of selectors.
+Now this isn't perfect for a variety of reason but it works well enough for the purposes of demonstration. Let's look at the code. At the top of the file we see that we have a variety of selectors.
 
 <pre>
 (def *story-selector*
@@ -287,7 +287,7 @@ So that's it for scraping. It's time to move onto how Enlive is useful for build
 
 h2. Your First Template - The Basics
 
-This is where things begin to get really interesting. We're going to use Compojure, and ultralight http framework. If you're familiar with Rack or CherryPy you will feel right at home.
+This is where things begin to get really interesting. We're going to use Compojure, an ultralight http framework. If you're familiar with Rack or CherryPy you will feel right at home.
 
 Let's get started. If you aren't running a repl be sure to start one up from the repo directory with *lein repl*.
 
@@ -426,7 +426,7 @@ How did we do that if we have no inline code to define the loop? Let's get into 
                            :href "http://enlive.cgrand.net/syntax.html"}]}]})
 </pre>
 
-This of course normally be something that would have a read out of a database. The take away here is Clojure makes it easy to define nested data structures. <code>*dummy-context*</code> is just a hash-map (aka dictionary, aka associative array) of two key-value pairs. The first pair is for the title of the page. The second pair is the list of sections. Each section also has a title as well as a list of link. Each link has some text and url. If you're used to building up JSON data structures from databse results this should pretty familiar to you.
+This of course would be something that we probably would have read out of a database. The take away here is that Clojure makes it easy to define nested data structures. <code>*dummy-context*</code> is just a hash-map (aka dictionary, aka associative array) of two key-value pairs. The first pair is for the title of the page. The second pair is the list of sections. Each section also has a title as well as a list of links. Each link has some text and url. If you're used to building up JSON data structures from databse results this should pretty familiar to you.
 
 h3. Figuring out your selectors
 
@@ -526,7 +526,7 @@ Now let's at the template to see how we put this all together:
 
 As you can see it looks really similar to <code>section-model</code>. Again the main difference is that templates don't take selectors and the function they define returns a list of string.
 
-Thus while we've seen some interesting features and HTML/code seperation is cool, Enlive seems like it involves <i>more</i> work then it actually saves. That's because we're showing a very trival example. In the third example we'll show just how much time Enlive can save you when building a less trivial example.
+While we've seen some interesting features and HTML/code seperation is cool, Enlive seems like it involves <i>more</i> work then it actually saves. That's because we're showing a very trival example. In the third example we'll show just how much time Enlive can save you when building a less trivial example.
 
 h2. Your Third Template - Template Inheritance
 
