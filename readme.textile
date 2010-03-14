@@ -34,7 +34,7 @@ This has driven many programmers to discard templating DSLs and to generate mark
 
 There are a few existing solutions that have a novel approach to this problem such as "Pure":http://beebole.com/pure/.
 
-Which brings us to Enlive. Enlive gives you the advantages of designer accessibe templates (since they're just HTML) without losing the power of fuction composition.
+Which brings us to Enlive. Enlive gives you the advantages of designer accessibe templates (since they're just HTML) without losing the power of fuction composition. As a result, your designer can create all the various widgets for your website using only HTML and CSS and you can compose your pages from any combination of their designs.
 
 h2. Why Enlive?
 
@@ -603,17 +603,17 @@ Why would we do this? This because want to be able to handle template inheritanc
 
 Next is the <code>three-col</code> col snippet. It should be pretty obvious that this is a snippet for doing three column layout. Note that it uses *3co.html*, you should take a look at this file.
 
-The last bits are the various nav snippets and they are loaded *navs.html*. Again you should gover this file.
+The last bits are the various nav snippets and they are loaded *navs.html*. Again you should go over this file.
 
 h3. The Pages
 
-Now for the fun part. The pages are just functions now more no less. The first page <code>viewa</code> is just rendering the base template with the title "View A" and setting the main block of the page to the 3 column snippet.
+Now for the fun part. The pages are just functions no more no less. The first page <code>viewa</code> is just rendering the base template with the title "View A" and setting the main block of the page to the 3 column snippet.
 
 The page <code>viewb</code> does pretty much the same thing but this time we've add some navs for flair. Notice how much this function looks like <code>viewb</code>. Template inheritance is just function composition.
 
 <code>viewc</code> does pretty much the same thing but it checks to see if there is a parameter for reversing the navs. If present, the order of the navs is reversed.
 
-It should be far more clear now what Enlive brings to the table over traditional templating solutions. While preparing your templates and snippets take a little more work up front, building different pages from these templates and snippets is very, very fast and making changes is just moving a couple of values around in your functions, not mucking around with a broken DSL.
+It should be far more clear now what Enlive brings to the table over traditional templating solutions. While preparing your templates and snippets take a little more work up front, building different pages from these templates and snippets is very, very fast and making changes is just moving a couple of values around in your functions, not mucking around with a hampered DSL. Your designer can create all the various widget for your website using HTML and CSS and you can compose your pages from any combination of their designs.
 
 h2. Common Mistakes & Caveats
 
