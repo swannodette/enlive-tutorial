@@ -228,7 +228,7 @@ Man, but what's up with the *fn* this time?
 (fn [[h s]] (str h " (" s ")"))
 </pre>
 
-Say hello to destructuring. A lot of popular languages allow you to destructure but probably not as ubiquitously as Clojure does. Here we know that we are going to receive a two element vector for each item in the vector we're mapping over. So we're just saying we to assign the first element of that pair to the local variable h and the other to v.
+Say hello to destructuring. A lot of popular languages allow you to destructure but probably not as ubiquitously as Clojure does. Here we know that we are going to receive a two element vector for each item in the vector we're mapping over. So we're just saying we to assign the first element of that pair to the local variable *h* and the other to *s*.
 
 The rest of the function should be clear from the last tutorial.
 
