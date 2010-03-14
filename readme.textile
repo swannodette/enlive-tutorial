@@ -44,15 +44,15 @@ Enlive presents a different appraoch from the more popular templating solutions:
 
 ** Code and markup are completely separate.
 ** You get to use CSS like syntax to manipulate HTML.
-** Template inheritance isn't some fancy trick, it just function composition.
+** Template inheritance isn't some fancy trick, it's just function composition.
 ** You have access to the full power of Clojure to manipulate your templates (yes, macros!).
 
-When working with the standard templating solutions you generally need to answer one of two question. Either "What type of text am I going to generate?" or "What type of HTML emitting functions should I write?"
+When working with the standard templating solutions you generally need to answer one of two questions, either "What type of text am I going to generate?" or "What type of HTML emitting functions should I write?"
 
-With Enlive you generally need to approach templating in two steps:
+In contrast, with Enlive you usually break down the problem thus:
 
-# What selectors match the part of the HTML document that I care about?
-# What templates and snippets do I need write?
+# Determine which selectors match the part of the HTML document that you care about.
+# Determine which templates and snippets you need write to compose your pages.
 
 h2. What We'll Cover
 
