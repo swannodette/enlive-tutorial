@@ -277,9 +277,9 @@ Here we know from looking at the markup of the page that headlines might match a
     (zipmap [:headline :byline :summary] (map #(re-gsub #"\n" "" %) result))))
 </pre>
 
-Here we take a node and extract the match. Note that we have to call first on the result of *html/select* because *html/select* always returns a sequence of nodes and not a single node. *zipmap* is a handy function, it allows us to take two sequences and zip them up into a hash-map. So after extract only the text nodes of the matches and removing any newline characters we zip it up into a tidy hash-map.
+Here we take a node and extract the match. Note that we have to call first on the result of <code>html/select</code> because <code>html/select</code> always returns a sequence of nodes and not a single node. <code>zipmap</code> is a handy function, it allows us to take two sequences and zip them up into a hash-map. So after extract only the text nodes of the matches and removing any newline characters we zip it up into a tidy hash-map.
 
-Because this scrape is not comprehensive we might match empty stories, so define a function *empty-story?* that checks for that. Hopefully by this point you can begin to make sense of the last three functions.
+Because this scrape is not comprehensive we might match empty stories, so define a function <code>empty-story?</code> that checks for that. Hopefully by this point you can begin to make sense of the last three functions.
 
 So that's it for scraping. It's time to move onto how Enlive is useful for building your own pages.
 
@@ -319,9 +319,9 @@ Here our template will find all *p* elements with the CSS id *message*. CSS ids 
 (html/content (:message ctxt))
 </pre>
 
-This means we'll replace the content of any matching node with the value for the key *:message* in the ctxt hash-map. The important thing to grasp here is that *html/content* is a function which <i>returns</i> a function which will receive the matched element.
+This means we'll replace the content of any matching node with the value for the key <code>:message</code> in the ctxt hash-map. The important thing to grasp here is that <code>html/content</code> is a function which <i>returns</i> a function which will receive the matched element.
 
-For example what if we wanted to include a message if there is no value for *:message* in *ctxt*? It would look something like this:
+For example what if we wanted to include a message if there is no value for <code>:message</code> in <code>ctxt</code>? It would look something like this:
 
 <pre>
 (html/deftemplate index "tutorial/template1.html"
@@ -332,7 +332,7 @@ For example what if we wanted to include a message if there is no value for *:me
                    ((html/content "Nothing to see here!") match))))
 </pre>
 
-It should be clear here that *html/content* returns a function which will receive the matching element and modify it. This could be made slightly less verbose like so:
+It should be clear here that <code>html/content</code> returns a function which will receive the matching element and modify it. This could be made slightly less verbose like so:
 
 <pre>
 (html/deftemplate index "tutorial/template1.html"
@@ -342,7 +342,7 @@ It should be clear here that *html/content* returns a function which will receiv
                   ((html/content msg) %)))
 </pre>
 
-But even this is kinda meh. While Enlive does not have a great shortcut for expressing this pattern it's easy to write macros (we'll get to those later. But watch out it's an advanced topic). I've included a handy macro called *maybe-content* which allows to write something like this:
+But even this is kinda meh. While Enlive does not have a great shortcut for expressing this pattern it's easy to write macros (we'll get to those later. But watch out it's an advanced topic). I've included a handy macro called <code>maybe-content</code> which allows to write something like this:
 
 <pre>
 (html/deftemplate index "tutorial/template1.html"
@@ -365,7 +365,7 @@ The remainder of *template1.clj* is really specific to Compojure. We're not goin
        [404 "Page Not Found"]))
 </pre>
 
-This is simply the route defining syntax. It should relatively familiar to the working web developer especially if you have experience with any modern web framework. A couple things to note *render* is not a function of Enlive, it's something I added via *utils.clj* in the repo. *render* isn't magic it's just a function that looks like this:
+This is simply the route defining syntax. It should relatively familiar to the working web developer especially if you have experience with any modern web framework. A couple things to note <code>render</code> is not a function of Enlive, it's something I added via *utils.clj* in the repo. <code>render</code> isn't magic it's just a function that looks like this:
 
 <pre>
 (defn render [t]
@@ -374,9 +374,9 @@ This is simply the route defining syntax. It should relatively familiar to the w
 
 All this does is take a list of strings and concatenate them into one large string. This is because when an Enlive template function is called it returns a list of strings.
 
-Also note that our template function *index* must be called with at least one parameter. That's because Enlive templates are just normal Clojure functions and there's no such thing as optional parameters in Clojure. It's quite simple to add that functionality via macros but it's just not worth getting into here. The last bit of *template1.clj* is just Compojure boilerplate for starting and stopping the server.
+Also note that our template function <code>index</code> must be called with at least one parameter. That's because Enlive templates are just normal Clojure functions and there's no such thing as optional parameters in Clojure. It's quite simple to add that functionality via macros but it's just not worth getting into here. The last bit of *template1.clj* is just Compojure boilerplate for starting and stopping the server.
 
-Well that's about it! You've seen your first Enlive template. While it may not seem like much yet, <i>*there was absolutely no mixing of code and HTML*</i>. If you bear with me till the third template tutorial, I think you'll see some truly amazing repercussions from this fact.
+Well that's about it! You've seen your first Enlive template. While it may not seem like much yet, <i>*there was absolutely no mixing of code and HTML*</i>. If you bear with me till the third template tutorial, I think you'll see just some how powerful this can be.
 
 h2. Your Second Template - Looping
 
@@ -424,7 +424,7 @@ How did we do that if we have no inline code to define the loop? Let's get into 
                            :href "http://enlive.cgrand.net/syntax.html"}]}]})
 </pre>
 
-This of course normally be something that would have a read out of a database. The take away here is Clojure makes it easy to define nested data structures. *dummy-context* is just a hash-map (aka dictionary, aka associative array) of two key-value pairs. The first pair is for the title of the page. The second pair is the list of sections. Each section also has a title as well as a list of link. Each link has some text and url. If you're used to building up JSON data structures from databse results this should pretty familiar to you.
+This of course normally be something that would have a read out of a database. The take away here is Clojure makes it easy to define nested data structures. <code>dummy-context</code> is just a hash-map (aka dictionary, aka associative array) of two key-value pairs. The first pair is for the title of the page. The second pair is the list of sections. Each section also has a title as well as a list of link. Each link has some text and url. If you're used to building up JSON data structures from databse results this should pretty familiar to you.
 
 h3. Figuring out your selectors
 
@@ -459,9 +459,9 @@ We only want to match only the first ul element that we find that has the links 
 .content:nth-of-type(1) > *:first-child
 </pre>
 
-It's important to note that using *nth-of-type* requires an extra pair of brackets around the element *ul*. This extra pair of brackets is easy to forget. Whenever you want to be more specfic about what type of tag you want to match (beyond matching on CSS id or class) you'll need an extra pair of brackets.
+It's important to note that using <code>nth-of-type</code> requires an extra pair of brackets around the element *ul*. This extra pair of brackets is easy to forget. Whenever you want to be more specfic about what type of tag you want to match (beyond matching on CSS id or class) you'll need an extra pair of brackets.
 
-Now that we have our selector *defsnippet* will look like the following (don't forget that *html* is just an alias for *net.cgrand.enlive-html*):
+Now that we have our selector <code>defsnippet</code> will look like the following (don't forget that <code>html</code> is just an alias for <code>net.cgrand.enlive-html</code>):
 
 <pre>
 (html/defsnippet link-model "tutorial/template2.html" *link-sel*
@@ -471,7 +471,7 @@ Now that we have our selector *defsnippet* will look like the following (don't f
         (html/set-attr :href href)))
 </pre>
 
-Snippets are like templates with two main differences. First, snippets take a selector. This means that they can match only specific parts of an HTML document. The function produced by a *defsnippet* returns transformed content, <i>not</i> a list of strings the way *deftemplate* does. This snippet destructures it's first argument (a hash-map) to extract the value of the keys *:text* and *:href*. We're also introduced to *html/do->*. This is a convenience, we often want to take the matched element and apply a series of transformations on it. In this case we want to set the content of the node as well as it's href attribute.
+Snippets are like templates with two main differences. First, snippets take a selector. This means that they can match only specific parts of an HTML document. The function produced by a <code>defsnippet</code> returns transformed content, <i>not</i> a list of strings the way <code>deftemplate</code> does. This snippet destructures it's first argument (a hash-map) to extract the value of the keys <code>:text</code> and <code>:href</code>. We're also introduced to <code>html/do-></code>. This is a convenience, we often want to take the matched element and apply a series of transformations on it. In this case we want to set the content of the node as well as it's href attribute.
 
 Let's try out our snippet to see that it worked:
 
@@ -479,7 +479,7 @@ Let's try out our snippet to see that it worked:
 tutorial.template2> (render (emit* (link-model {:href "bar" :text "foo"})))
 </pre>
 
-Here we have to use emit* because snippets return a sequenes of nodes not strings the way templates do. *render* is just a utility function for taking a number of strings and creating a single string.
+Here we have to use <code>emit*</code> because snippets return a sequenes of nodes not strings the way templates do. <code>render</code> is just a utility function for taking a number of strings and creating a single string.
 
 Okay now we want to loop over the sections. A section is a *h2* tag followed by a *ul* tag. Again we need to figure out the correct selector. This time we're trying to emulate the following popular pattern for the outer loop:
 
@@ -502,9 +502,9 @@ Again our HTML has some dummy content again. We only care about the first range 
 (def *section-sel* (selector {[:.title] [[:.content (nth-of-type 1)]]}))
 </pre>
 
-There no CSS selector that can represent this. Again take care to note that since we want to select only the first *ul* that we find we need an extra pair of brackets around :ul. This is a common mistake to leave these out.
+There no CSS selector that can represent this. Again take care to note that since we want to select only the first *ul* that we find we need an extra pair of brackets around <code>:ul</code>. This is a common mistake to leave these out.
 
-Now that we have our selector we can define our section snippet like so. Pretty straightforward. Remember *defsnippet* just creates a function which can take whichever arguments you specify and returns the transformed markup. We're simply creating links using *link-model* and putting those links inside of the *ul* in the section.
+Now that we have our selector we can define our section snippet like so. Pretty straightforward. Remember <code>defsnippet</code> just creates a function which can take whichever arguments you specify and returns the transformed markup. We're simply creating links using <code>link-model</code> and putting those links inside of the *ul* in the section.
 
 <pre>
 (defsnippet section-model "tutorial/template2.html" *section-sel*
@@ -522,7 +522,7 @@ Now let's at the template to see how we put this all together:
   [:body]   (html/content (map #(section-model % link-model) sections)))
 </pre>
 
-As you can see it looks really similar to *section-model*. Again the main difference is that templates don't take selectors and the function they define returns a list of string.
+As you can see it looks really similar to <code>section-model</code>. Again the main difference is that templates don't take selectors and the function they define returns a list of string.
 
 Thus while we've seen some interesting features and HTML/code seperation is cool, Enlive seems like it involves <i>more</i> work then it actually saves. That's because we're showing a very trival example. In the third example we'll show just how much time Enlive can save you when building a less trivial example.
 
@@ -597,21 +597,21 @@ The first thing to look at is the *base* template.
   [:#footer]     (maybe-substitute footer))
 </pre>
 
-First thing, *maybe-content* and *maybe-substitute* are not Enlive functions. They are two simple macros. *maybe-content* will only set the content of its node if its argument is not nil. *maybe-substitute* will only substitute its node if its argument is not nil.
+First thing, <code>maybe-content</code> and <code>maybe-substitute</code> are not Enlive functions. They are two simple macros. <code>maybe-content</code> will only set the content of its node if its argument is not nil. <code>maybe-substitute</code> will only substitute its node if its argument is not nil.
 
 Why would we do this? This because want to be able to handle template inheritance. That is base represents the most basic template. We can then "inherit" from this template overriding only specific elements of this base template. Note that this template uses *base.html*. You should look at this file now.
 
-Next is the *three-col* col snippet. It should be pretty obvious that this is a snippet for doing three column layout. Note that it uses *3co.html*, you should take a look at this file.
+Next is the <code>three-col</code> col snippet. It should be pretty obvious that this is a snippet for doing three column layout. Note that it uses *3co.html*, you should take a look at this file.
 
 The last bits are the various nav snippets and they are loaded *navs.html*. Again you should gover this file.
 
 h3. The Pages
 
-Now for the fun part. The pages are just functions now more no less. The first page *viewa* is just rendering the base template with the title "View A" and setting the main block of the page to the 3 column snippet.
+Now for the fun part. The pages are just functions now more no less. The first page <code>viewa</code> is just rendering the base template with the title "View A" and setting the main block of the page to the 3 column snippet.
 
-The page *viewb* does pretty much the same thing but this time we've add some navs for flair. Notice how much this function looks like *viewb*. Template inheritance is just function composition.
+The page <code>viewb</code> does pretty much the same thing but this time we've add some navs for flair. Notice how much this function looks like <code>viewb</code>. Template inheritance is just function composition.
 
-*viewc* does pretty much the same thing but it checks to see if there is a parameter for reversing the navs. If present, the order of the navs is reversed.
+<code>viewc</code> does pretty much the same thing but it checks to see if there is a parameter for reversing the navs. If present, the order of the navs is reversed.
 
 It should be far more clear now what Enlive brings to the table over traditional templating solutions. While preparing your templates and snippets take a little more work up front, building different pages from these templates and snippets is very, very fast and making changes is just moving a couple of values around in your functions, not mucking around with a broken DSL.
 
@@ -619,7 +619,7 @@ h2. Common Mistakes & Caveats
 
 h3. Converting Numbers
 
-When outputting numbers you need to convert them with *str*.
+When outputting numbers you need to convert them with <code>str</code>.
 
 <pre>
 [:div.foobar] (content (str 1))
