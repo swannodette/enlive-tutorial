@@ -36,7 +36,7 @@ This has driven many programmers to discard templating DSLs and to generate mark
 
 There are a few existing solutions that have a novel approach to this problem such as "Pure":http://beebole.com/pure/.
 
-Which brings us to Enlive. Enlive gives you the advantages of designer accessibe templates (since they're just HTML) without losing the power of fuction composition. As a result, your designer can create all the various widgets for your website using only HTML and CSS and you can compose your pages from any combination of their designs.
+Which brings us to Enlive. Enlive gives you the advantages of designer accessibe templates (since they're just HTML) without losing the power of function composition. As a result, your designer can create all the various widgets for your website using only HTML and CSS and you can compose your pages from any combination of their designs.
 
 h2. Why Enlive?
 
@@ -152,7 +152,7 @@ tutorial.scrape1=> (print-headlines-and-points)
     (println line)))
 </pre>
 
-Let's break it down. Again we have <code>map</code>. We know that it maps a function over a vector to return a new vector of elements with that fuction applied.
+Let's break it down. Again we have <code>map</code>. We know that it maps a function over a vector to return a new vector of elements with that function applied.
 
 <pre>
 #(str %1 " (" %2 ")") ; is just shorthand for
