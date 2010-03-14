@@ -345,16 +345,15 @@ It should be clear here that <code>html/content</code> returns a function which 
                   ((html/content msg) %)))
 </pre>
 
-But even this is kinda meh. While Enlive does not have a great shortcut for expressing this pattern it's easy to write macros (we'll get to those later. But watch out it's an advanced topic). I've included a handy macro called <code>maybe-content</code> which allows to write something like this:
+But even this is kinda meh. While Enlive does not have a great shortcut for expressing this pattern it's easy to write macros. I've included a handy macro called <code>maybe-content</code> which allows to write something like this:
 
 <pre>
 (html/deftemplate index "tutorial/template1.html"
   [ctxt]
-  [:p#message] (maybe-content (:message ctxt)
-                              "Nothing to set here!"))
+  [:p#message] (maybe-content (:message ctxt) "Nothing to set here!"))
 </pre>
 
-Pretty slick eh? ;) This is just touching the tip of the iceberg.
+Pretty slick eh? ;)
 
 The remainder of *template1.clj* is really specific to Compojure. We're not going to get too deep into that here because these tutorials are about Enlive, not Compojure.
 
