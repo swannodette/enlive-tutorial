@@ -5,24 +5,22 @@
 
 (def *base-url* "http://nytimes.com/")
 
-;; TODO: exclude bottom page links
-;; some of the byline stuff seems way off
-;; strip new line characters
-;; MAYBE: unicode chars
-
 (def *story-selector*
      (html/selector [[:div.story
                       (html/but :.advertisement)
                       (html/but :.autosStory)
                       (html/but :.adCreative)]]))
 
-(def *extract-selector*
-     (html/selector #{[:h2 :a],
-                      [:h3 :a],
-                      [:ul.headlinesOnly :h5 :a],
-                      [html/root :> :h6 :a],
-                      [:.byline],
-                      [:.summary]}))
+(def *headline-selector*
+     (html/selector #{[html/root :> :h2 :a],
+                      [html/root :> :h3 :a]
+                      [html/root :> :h5 :a]}))
+
+(def *byline-selector*
+     (html/selector [html/root :> :.byline]))
+
+(def *summary-selector*
+     (html/selector [html/root :> :.summary]))
 
 (defn fetch-url [url]
   (html/html-resource (java.net.URL. url)))
@@ -31,16 +29,26 @@
   (html/select (fetch-url *base-url*) *story-selector*))
 
 (defn extract [node]
-  (let [result (map html/text (html/select [node] *extract-selector*))]
-    (zipmap [:title :byline :summary] (map #(re-gsub #"\n" "" %) result))))
+  (let [headline (first (html/select [node] *headline-selector*))
+        byline   (first (html/select [node] *byline-selector*))
+        summary  (first (html/select [node] *summary-selector*))
+        result   (map html/text [headline byline summary])]
+    (zipmap [:headline :byline :summary] (map #(re-gsub #"\n" "" %) result))))
+
+(defn empty-story? [node]
+  (every? (fn [[k v]] (= v "")) node))
+
+(defn check [story key default]
+  (let [v (key story)]
+   (if (not= v "") v default)))
 
 (defn print-story [story]
   (println)
-  (println (:title story))
-  (println "\t" (or (:byline story) "No byline"))
-  (println "\t" (or (:summary story) "No summary")))
+  (println (check story :headline "No headline"))
+  (println "\t" (check story :byline "No byline"))
+  (println "\t" (check story :summary "No summary")))
 
 (defn print-stories []
-  (doseq [story (map extract (stories))]
+  (doseq [story (filter (complement empty-story?) (map extract (stories)))]
     (print-story story)))
 

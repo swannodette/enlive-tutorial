@@ -240,7 +240,52 @@ h2. Your Third Scrape - The New York Times
 
 By now you should feel like a pro. The third one, scrape3.clj tackles something considerably more difficult. Now to be clear this not that useful since the New York Times provides a fairly comprehensive list of RSS feeds. But the structure of the New Yorks Times page forces us to think about how to best leverage Enlive's abilities.
 
-Take a look at *scrape3.clj*. This is considerable longer.
+Take a look at *scrape3.clj*. This is considerable longer. Before we dive in let's see how it works. Start up the Clojure REPL if it's not already up and running.
+
+<pre>
+tutorial.scrape2=> (ns tutorial.scrape3)
+nil
+tutorial.scrape3=> (laod "scrape3")
+nil
+tutorial.scrape3=> (print-stories)
+... output ...
+</pre>
+
+Now this isn't perfect for a variety of reason but it work well enough for the purposes of demonstration. Let's look at the code. At the top of the file we see that we have a variety of selectors.
+
+<pre>
+(def *story-selector*
+     (html/selector [[:div.story
+                      (html/but :.advertisement)
+                      (html/but :.autosStory)
+                      (html/but :.adCreative)]]))
+</pre>
+
+Here we are matching any div with the CSS class story that does not also have any of the other classes specified.
+
+<pre>
+(def *headline-selector*
+     (html/selector #{[html/root :> :h2 :a],
+                      [html/root :> :h3 :a]
+                      [html/root :> :h5 :a]}))
+</pre>
+
+Here we know from looking at the markup of the page that headlines might match any of these three selectors. The selectors will only match headline tags that are children of the root element. We do this because there are story divs on the New York Times webpage that actually have multiple headlines underneath. The byline and story summary selectors are pretty much the same.
+
+<pre>
+(defn extract [node]
+  (let [headline (first (html/select [node] *headline-selector*))
+        byline   (first (html/select [node] *byline-selector*))
+        summary  (first (html/select [node] *summary-selector*))
+        result   (map html/text [headline byline summary])]
+    (zipmap [:headline :byline :summary] (map #(re-gsub #"\n" "" %) result))))
+</pre>
+
+Here we take a node and extract the match. Note that we have to call first on the result of *html/select* because *html/select* always returns a sequence of nodes and not a single node. *zipmap* is a handy function, it allows us to take two sequences and zip them up into a hash-map. So after extract only the text nodes of the matches and removing any newline characters we zip it up into a tidy hash-map.
+
+Because this scrape is not comprehensive we might match empty stories, so define a function *empty-story?* that checks for that. Hopefully by this point you can begin to make sense of the last three functions.
+
+So that's it for scraping. It's time to move onto how Enlive is useful for building your own pages.
 
 h2. Your First Template - The Basics
 
@@ -415,7 +460,7 @@ So let's define our link component. We don't want the dummy content so we really
 We only want to match only the first ul element that we find that has the links class and only the very child inside that. This is the selector that gets the job done. It's analagous to:
 
 <pre>
-.links:nth-of-type(1) > *:first-child
+.content:nth-of-type(1) > *:first-child
 </pre>
 
 It's important to note that using *nth-of-type* requires an extra pair of brackets around the element *ul*. This extra pair of brackets is easy to forget. Whenever you want to be more specfic about what type of tag you want to match (beyond matching on CSS id or class) you'll need an extra pair of brackets.
