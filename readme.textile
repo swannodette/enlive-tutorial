@@ -68,7 +68,7 @@ git clone git://github.com/swannodette/enlive-tutorial.git
 
 h2. Install Leiningen
 
-In order to start playing around as fast possible you should use Leiningen. Leiningen is the easy_install (Python) and gems (Ruby) of the Clojure world. Phil Hagelberg and Co. have done a considerable amount of excellent work to make dependency management simple. I truly envy the new Clojurians who do not know the dark times before *lien repl* and *lein swank* :)
+In order to start playing around as fast possible you should use Leiningen. It'll take only a couple minutes to get through the instructions "here":http://github.com/technomancy/leiningen. Leiningen is the easy_install (Python) and gems (Ruby) of the Clojure world. Phil Hagelberg and Co. have done a considerable amount of excellent work to make dependency management simple. I truly envy the new Clojurians who do not know the dark times before *lien repl* and *lein swank* :)
 
 Once you have Leiningen installed, switch into this repository's directory. From there run the following command:
 
