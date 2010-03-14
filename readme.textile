@@ -52,7 +52,7 @@ When working with the standard templating solutions you generally need to answer
 In contrast, with Enlive you usually break down the problem thus:
 
 # Determine which selectors match the part of the HTML document that you care about.
-# Determine which templates and snippets you need write to compose your pages.
+# Determine which templates and snippets you need to write to compose your pages.
 
 h2. What We'll Cover
 
@@ -599,10 +599,10 @@ The first thing to look at is the *base* template.
 <pre>
 (html/deftemplate base "tutorial/base.html"
   [{:keys [title header main footer]}]
-  [:#title]      (maybe-content title)
-  [:#header]     (maybe-substitute header)
-  [:#main]       (maybe-substitute main)
-  [:#footer]     (maybe-substitute footer))
+  [:#title]  (maybe-content title)
+  [:#header] (maybe-substitute header)
+  [:#main]   (maybe-substitute main)
+  [:#footer] (maybe-substitute footer))
 </pre>
 
 Remember, <code>maybe-content</code> and <code>maybe-substitute</code> are not Enlive functions. They are two simple macros I've written for the purposes of this tutorial. <code>maybe-content</code> will only set the content of its node if its argument is not nil. <code>maybe-substitute</code> will only substitute its node if its argument is not nil.
