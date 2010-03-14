@@ -16,10 +16,10 @@
 
 (html/deftemplate base "tutorial/base.html"
   [{:keys [title header main footer]}]
-  [:#title]      (maybe-content title)
-  [:#header]     (maybe-substitute header)
-  [:#main]       (maybe-substitute main)
-  [:#footer]     (maybe-substitute footer))
+  [:#title]  (maybe-content title)
+  [:#header] (maybe-substitute header)
+  [:#main]   (maybe-substitute main)
+  [:#footer] (maybe-substitute footer))
 
 (html/defsnippet three-col "tutorial/3col.html" [:div#main]
   [{:keys [left middle right]}]
