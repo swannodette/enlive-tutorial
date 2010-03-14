@@ -97,7 +97,7 @@ tutorial.scrape1=> *base-url*
 "http://news.ycombinator.com/"
 </pre>
 
-The first line puts us into a namespace. Note that the REPL prompt reflects this. By switching into the tutorial namespace we can use functions defined in the tutorial without having to qualify them. It's much easier to type <pre>*base-url*</pre> then <pre>tutorial.scrape1/*base-url*</pre>. In the next line we load the first tutorial into the REPL. Unlike many scripting languages, loading a file actually <i>compiles</i> it. Clojure is not interpreted.
+The first line puts us into a namespace. Note that the REPL prompt reflects this. By switching into the tutorial namespace we can use functions defined in the tutorial without having to qualify them. It's much easier to type <code>*base-url*</code> then <code>tutorial.scrape1/*base-url*</code>. In the next line we load the first tutorial into the REPL. Unlike many scripting languages, loading a file actually <i>compiles</i> it. Clojure is not interpreted.
 
 Let's see what's in that file. Open up *scrape1.clj* with your favorite text editor (you can find it in *your-tutorial-clone/src/tutorial/*). You'll see it's a fairly short program. 
 
