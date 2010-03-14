@@ -424,7 +424,7 @@ How did we do that if we have no inline code to define the loop? Let's get into 
                            :href "http://enlive.cgrand.net/syntax.html"}]}]})
 </pre>
 
-This of course normally be something that would have a read out of a database. The take away here is Clojure makes it easy to define nested data structures. <code>dummy-context</code> is just a hash-map (aka dictionary, aka associative array) of two key-value pairs. The first pair is for the title of the page. The second pair is the list of sections. Each section also has a title as well as a list of link. Each link has some text and url. If you're used to building up JSON data structures from databse results this should pretty familiar to you.
+This of course normally be something that would have a read out of a database. The take away here is Clojure makes it easy to define nested data structures. <code>*dummy-context*</code> is just a hash-map (aka dictionary, aka associative array) of two key-value pairs. The first pair is for the title of the page. The second pair is the list of sections. Each section also has a title as well as a list of link. Each link has some text and url. If you're used to building up JSON data structures from databse results this should pretty familiar to you.
 
 h3. Figuring out your selectors
 
