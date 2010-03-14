@@ -105,7 +105,7 @@ Let's see what's in that file. Open up *scrape1.clj* with your favorite text edi
 
 At the top of this file is the namespace declaration. This keeps your code from clashing with other people's code when they try to use your library. The namespace declaration also includes another library, Enlive, via <code>:require</code>. In this case we are generating an alias so we don't have to type the very long namespace for Enlive.
 
-The function <code>fetch-url</code> grabs the contexts of a url synchronously. <code>fetch-url</code> uses <code>html/html-resource</code> (remember we aliased *net.cgrand.enlive-html* to *html* for convenience) another handy function defined in the Enlive library. It takes raw HTML and converts it into a nested data structure (think DOM minus tediousness).
+The function <code>fetch-url</code> grabs the contents of a url synchronously. <code>fetch-url</code> uses <code>html/html-resource</code> (remember we aliased *net.cgrand.enlive-html* to *html* for convenience) another handy function defined in the Enlive library. It takes raw HTML and converts it into a nested data structure (think DOM minus tediousness).
 
 Note that the function <code>hn-headlines</code> uses <code>fetch-url</code>. But it's also surrounded by a lot of funny stuff. You might have noticed <code>html/select</code>; <code>html/select</code> takes parsed html content and selects the nodes specified by a Clojure vector that looks very similar to a CSS selector. 
 
@@ -180,7 +180,7 @@ Take a look at scrape2.clj. It's also about 17 lines of code and it looks pretty
 (defn hn-headlines-and-points []
   (map html/text
        (html/select (fetch-url *base-url*)
-                    #{[:td.title :a] [:td.subtext first-child]})))
+                    #{[:td.title :a] [:td.subtext html/first-child]})))
 </pre>
 
 This select grabs what we're interested at the same time.
