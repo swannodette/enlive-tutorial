@@ -1,7 +1,3 @@
-h1. Under Construction
-
-If somehow you happen to stumble upon this tutorial, please note that it is not even close to being complete. Proceed at your own peril.
-
 h1. An Introduction to Enlive
 
 Though Enlive has been around for sometime now the Clojure community has been slow to embrace this useful library. I believe this is due simply to the lack of good introductory documentation based on real examples. Please let me know if you find this tutorial useful or helpful in any way. Feel free to suggest additions, corrections, and improvements (even better fork the repo and send me a patch).
