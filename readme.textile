@@ -78,7 +78,7 @@ Once you have Leiningen installed, switch into this repository's directory. From
 lein deps
 </pre>
 
-This will install all of the dependencies required for getting through the tutorial. This might take a minute and and will probably generate <i>a lot</i> of ouptut. While this may seem disconcerting, this means you'll have a fully functioning Clojure setup with needing to bother with installing Emacs or an IDE. Once the the dependencies are installed enter the following command at your terminal:
+This will install all of the dependencies required for getting through the tutorial. This might take a minute and and will probably generate <i>a lot</i> of ouptut. While this may seem disconcerting, this means you'll have a fully functioning Clojure setup without needing to bother with installing Emacs or an IDE. Once the the dependencies are installed enter the following command at your terminal:
 
 <pre class="console">
 lein repl
