@@ -345,7 +345,7 @@ It should be clear that <code>html/content</code> returns a function which will 
                   ((html/content msg) %)))
 </pre>
 
-Even this is kinda meh. While Enlive does not have a great shortcut for expressing this pattern since Clojure is a competent Lisp, it's easy to write macros to remove the boilerplate. I've included a handy macro called <code>maybe-content</code> which allows us to write the following instead:
+Even this is kinda meh. While Enlive does not have a great shortcut for expressing this pattern, since Clojure is a competent Lisp, it's easy to write macros to remove the boilerplate. I've included a handy macro called <code>maybe-content</code> which allows us to write the following instead:
 
 <pre>
 (html/deftemplate index "tutorial/template1.html"
@@ -367,7 +367,7 @@ The remainder of *template1.clj* is really specific to Compojure. We're not goin
        [404 "Page Not Found"]))
 </pre>
 
-This is the Compojure route defining syntax. It shouldrelatively familiar to the working web developer especially if you have any experience with a modern web framework. A couple things to note <code>render</code> is not a function of Enlive, it's something I added via *utils.clj* in the repository. <code>render</code> isn't magic it's just a function that looks like this:
+This is the Compojure route defining syntax. It should be relatively familiar to those of you who have experience with a modern web framework. A couple things to note <code>render</code> is not a function of Enlive, it's something I added via *utils.clj* in the repository. <code>render</code> isn't magic it's just a function that looks like this:
 
 <pre>
 (defn render [t]
