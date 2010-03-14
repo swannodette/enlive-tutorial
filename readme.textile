@@ -277,9 +277,9 @@ Here we know from looking at the markup of the page that headlines might match a
     (zipmap [:headline :byline :summary] (map #(re-gsub #"\n" "" %) result))))
 </pre>
 
-Here we take a node and extract the match. Note that we have to call first on the result of <code>html/select</code> because <code>html/select</code> always returns a sequence of nodes and not a single node. <code>zipmap</code> is a handy function, it allows us to take two sequences and zip them up into a hash-map. So after extract only the text nodes of the matches and removing any newline characters we zip it up into a tidy hash-map.
+Here we take a node and extract the match. Note that we have to call first on the result of <code>html/select</code> because <code>html/select</code> always returns a sequence of nodes and not a single node. <code>zipmap</code> is a handy function, it allows us to take two sequences and zip them up into a hash-map. So here we take only the text nodes from the matches and remove any newline characters before we finally zip it up into a tidy hash-map.
 
-Because this scrape is not comprehensive we might match empty stories, so define a function <code>empty-story?</code> that checks for that. Hopefully by this point you can begin to make sense of the last three functions.
+Because this scrape is not comprehensive we might match empty stories, so we define a function <code>empty-story?</code> that checks for that. Hopefully by this point you can begin to make sense of the last three functions.
 
 So that's it for scraping. It's time to move onto how Enlive is useful for building your own pages.
 
@@ -291,12 +291,13 @@ Let's get started. If you aren't running a repl be sure to start one up from the
 
 Once you see the REPL prompt type the following:
 
-<pre>
+<pre class="console">
 tutorial.scrape3=> (ns tutorial.template1)
 nil
 tutorial.template1=> (load "template1")
 nil
-tutorial.template1 => (start-app)
+tutorial.template1=> (start-app)
+... output ...
 </pre>
 
 You should see some output that lets you know that Compojure is starting up a webserver on port 8080. Point your browser at *http://localhost:8080*. You should see a very boring page. Point your browser at *http://localhost:8080/change*. You should see something slightly different.
