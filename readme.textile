@@ -238,7 +238,7 @@ By now you should feel like a pro. The third one, scrape3.clj tackles something 
 
 Take a look at *scrape3.clj*. This is considerable longer. Before we dive in let's see how it works. Start up the Clojure REPL if it's not already up and running.
 
-<pre>
+<pre class="console">
 tutorial.scrape2=> (ns tutorial.scrape3)
 nil
 tutorial.scrape3=> (laod "scrape3")
