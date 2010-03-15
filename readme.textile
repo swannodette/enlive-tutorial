@@ -348,11 +348,12 @@ It should be clear that <code>html/content</code> returns a function which will 
 <pre>
 (html/deftemplate index "tutorial/template1.html"
   [ctxt]
-  [:p#message] #(let [msg (or (:message ctxt) "Nothing to see here!")]
-                  ((html/content msg) %)))
+  [:p#message] (html/content (get ctxt :message "Nothing to set here"))
 </pre>
 
-Even this is kinda meh. While Enlive does not have a great shortcut for expressing this pattern, since Clojure is a competent Lisp, it's easy to write macros to remove the boilerplate. I've included a handy macro called <code>maybe-content</code> which allows us to write the following instead:
+This is a considerable improvement and shows off a couple nice Clojure features. However even this is kinda meh. Why? Because what we really want is not just a way to specify a default. Honestly the default value will probably be in the markup itself! It would be much cooler to leave the content of the node <i>unchanged</i> if we for some reason hand it nil for it's content value. This would allow us to easily implement template inheritance which we'll talk about later (grin).
+
+While Enlive does not have a great shortcut for expressing this pattern of "change the content of this node only if given a non-nil value", since Clojure is a competent Lisp, it's easy to write macros to remove the boilerplate. I've included a handy macro called <code>maybe-content</code> which allows us to write the following instead:
 
 <pre>
 (html/deftemplate index "tutorial/template1.html"
@@ -360,7 +361,7 @@ Even this is kinda meh. While Enlive does not have a great shortcut for expressi
   [:p#message] (maybe-content (:message ctxt) "Nothing to set here!"))
 </pre>
 
-Pretty slick eh? ;) While macros are too advanced of a topic to delve into here, having them around when you're templating HTML is incredibly powerful.
+Pretty slick eh? ;) We get the terseness of the <code>get</code> as well as the plumbing for template inheritance. While macros are too advanced of a topic to delve into here, having them around when you're templating HTML is incredibly powerful.
 
 The remainder of *template1.clj* is really specific to Compojure. We're not going to get too deep into that because these tutorials are about Enlive, not Compojure.
 
