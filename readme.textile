@@ -348,8 +348,7 @@ It should be clear that <code>html/content</code> returns a function which will 
 <pre>
 (html/deftemplate index "tutorial/template1.html"
   [ctxt]
-  [:p#message] #(if-let [msg (or (:message ctxt)
-                                 "Nothing to see here!")]
+  [:p#message] #(let [msg (or (:message ctxt) "Nothing to see here!")]
                   ((html/content msg) %)))
 </pre>
 
@@ -573,7 +572,7 @@ Take a look at *http://localhost:8080/navs.html*. You should see some truly ugly
                             :right nav2})})))
 </pre>
 
-Pretty slick. Templating with Enlive is just writing some Clojure code. This different from even the good HTML templating solutions out there- few give you the full power of the language.
+Pretty slick. Templating with Enlive is just writing some Clojure code. This is different from even the good HTML templating solutions out there- few give you the full power of the language.
 
 One last live example before we dive into the code. Point your browser at *http://localhost:8080/c/*. Huh, looks pretty much like b. Point your browser at *http://localhost:8080/c/reverse*. Notice something different?
 
