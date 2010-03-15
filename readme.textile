@@ -78,7 +78,7 @@ Once you have Leiningen installed, switch into this repository's directory. From
 lein deps
 </pre>
 
-This will install all of the dependencies required for getting through the tutorial. This might take a minute and and will probably generate <i>a lot</i> of output. While this may seem disconcerting, this means you'll have a fully functioning Clojure setup without needing to bother with installing Emacs or an IDE. Once the the dependencies are installed enter the following command at your terminal:
+This will install all of the dependencies required for getting through the tutorial. This might take a minute and and will probably generate <i>a lot</i> of output. While this may seem disconcerting, this means you'll have a fully functioning Clojure setup without needing to bother with installing Emacs, configuring VIM, or an mucking around with an IDE. Once the the dependencies are installed enter the following command at your terminal:
 
 <pre class="console">
 lein repl
@@ -91,15 +91,17 @@ h2. Your First Scrape with Enlive - Hacker News
 Enlive is fantastic for scraping the content of webpages. It allows you to scrape content by using a syntax very similar to CSS selectors. In the REPL type the following lines (note that *user=>* is the REPL prompt, not something you type in):
 
 <pre class="console">
-user=> (ns tutorial.scrape1)
+user=> (load "tutorial/scrape1")
 nil
-tutorial.scrape1=> (load "scrape1")
+user=> (in-ns 'tutorial.scrape1)
 nil
 tutorial.scrape1=> *base-url*
 "http://news.ycombinator.com/"
 </pre>
 
-The first line puts us into a namespace. Note that the REPL prompt reflects this. By switching into the tutorial namespace we can use functions defined in the tutorial without having to qualify them. It's much easier to type <code>*base-url*</code> then <code>tutorial.scrape1/*base-url*</code>. In the next line we load the first tutorial into the REPL. Unlike many scripting languages, loading a file actually <i>compiles</i> it. Clojure is not interpreted.
+The first line loads the file. Note that we need to specify that the *scrape1* file is to be found in the *tutorial* directory which is under the *src* directory of the repo. *src* is put onto the classpath by *lein* so we don't need to specify it. Also take care to note that we left off the *.clj* extension. Unlike many scripting languages, loading a file actually <i>compiles</i> it. Clojure is not interpreted.
+
+We then use <code>in-ns</code> to put ourselves into that tutorial's namespace. By switching into the tutorial namespace we can use functions defined in the tutorial without having to qualify them. It's much easier to type <code>*base-url*</code> then <code>tutorial.scrape1/*base-url*</code>.
 
 Let's see what's in that file. Open up *scrape1.clj* with your favorite text editor (you can find it in *your-tutorial-clone/src/tutorial/*). You'll see it's a fairly short program. 
 
@@ -198,13 +200,15 @@ td.title a, td.subtext:first-child
 Lets try out the functions. Start up the REPL with *lein repl* if you've shut it down and run the following.
 
 <pre class="console">
-tutorial.scrape1=> (ns tutorial.scrape2)
+tutorial.scrape1=> (load "scrape2")
 nil
-tutorial.scrape2=> (load "scrape2")
+tutorial.scrape1=> (in-ns 'tutorial.scrape2)
 nil
 tutorial.scrape2=> (hn-headlines-and-points)
 ... output ...
 </pre>
+
+The above assumes you've continued from the first tutorial. If you're starting from scratch you'll need to be more specific about your loading, use <code>(load "tutorial/scrape2")</code> instead.
 
 The results are interleaved so we can use Clojure's partition function to pair them up and output them just like we did in the previous scrape. The map looks a little bit different:
 
@@ -241,13 +245,15 @@ Our third scrape tackles the New York Times whose front page structure is consid
 Take a look at *scrape3.clj*. This is a bit longer. Before we dive in let's see how it works. Start up the Clojure REPL if it's not already up and running.
 
 <pre class="console">
-tutorial.scrape2=> (ns tutorial.scrape3)
+tutorial.scrape2=> (load "scrape3")
 nil
-tutorial.scrape3=> (load "scrape3")
+tutorial.scrape2=> (in-ns 'tutorial.scrape3)
 nil
 tutorial.scrape3=> (print-stories)
 ... output ...
 </pre>
+
+If you're not continuing from the second tutorial you'll need to more specific about your loading, using <code>(load "tutorial/scrape3")</code> instead.
 
 Now this isn't perfect for a variety of reasons but it works well enough for the purposes of demonstration. Let's look at the code. At the top of the file we see that we have a variety of selectors.
 
@@ -302,13 +308,15 @@ Let's get started. If you aren't running a REPL be sure to start one up from the
 Once you see the REPL prompt type the following:
 
 <pre class="console">
-tutorial.scrape3=> (ns tutorial.template1)
+tutorial.scrape3=> (load "template1")
 nil
-tutorial.template1=> (load "template1")
+tutorial.scrape3=> (in-ns 'tutorial.template1)
 nil
 tutorial.template1=> (start-app)
 ... output ...
 </pre>
+
+If you're not continuing from the third tutorial you'll need to be more specific about your loading, use <code>(load "tutorial/template1")</code> instead.
 
 You should see some output that lets you know that Compojure is starting up a webserver on port 8080. Point your browser at *http://localhost:8080*. You should see a very boring page. Point your browser at *http://localhost:8080/change*. You should see something slightly different.
 
@@ -348,7 +356,7 @@ It should be clear that <code>html/content</code> returns a function which will 
 <pre>
 (html/deftemplate index "tutorial/template1.html"
   [ctxt]
-  [:p#message] (html/content (get ctxt :message "Nothing to set here"))
+  [:p#message] (html/content (get ctxt :message "Nothing to see here"))
 </pre>
 
 This is a considerable improvement and shows off a couple nice Clojure features. However even this is kinda meh. Why? Because what we really want is not just a way to specify a default. Honestly the default value will probably be in the markup itself! It would be much cooler to leave the content of the node <i>unchanged</i> if we for some reason hand it nil for it's content value. This would allow us to easily implement template inheritance which we'll talk about later (grin).
@@ -358,7 +366,7 @@ While Enlive does not have a great shortcut for expressing this pattern of "chan
 <pre>
 (html/deftemplate index "tutorial/template1.html"
   [ctxt]
-  [:p#message] (maybe-content (:message ctxt) "Nothing to set here!"))
+  [:p#message] (maybe-content (:message ctxt) "Nothing to see here!"))
 </pre>
 
 Pretty slick eh? ;) We get the terseness of the <code>get</code> as well as the plumbing for template inheritance. While macros are too advanced of a topic to delve into here, having them around when you're templating HTML is incredibly powerful.
@@ -397,13 +405,15 @@ If you don't have a Clojure REPL running start a new one with *lein repl* at the
 <pre class="console">
 tutorial.template1=> (stop-app)
 nil
-tutorial.template1=> (ns tutorial.template2)
+tutorial.template1=> (load "template2")
 nil
-tutorial.template2=> (load "template2")
+tutorial.template1=> (in-ns 'tutorial.template2)
 nil
 tutorial.template2=> (start-app)
 ... output ...
 </pre>
+
+If you're not continuing from the previous tutorial you can ignore <code>(stop-app)</code> and you'll need to be more specific about your loading, use <code>(load "tutorial/template2")</code> instead.
 
 Open up the file *template2.html* in your text editor and give it a quick look over. Then open the file *template2.html* in your favorite web browser. It's just page with a list of links, not that special. Point your browser at *http://localhost:8080/*. You should see pretty much the same thing except that we've dynamically inserted links.
 
@@ -545,12 +555,14 @@ Start a REPL if you don't already have one running with *lein repl*. Type the fo
 <pre class="console">
 tutorial.template2=> (stop-app)
 nil
-tutorial.template2=> (ns tutorial.template3)
+tutorial.template2=> (load "template3")
 nil
-tutorial.template3=> (load "template3")
+tutorial.template2=> (in-ns 'tutorial.template3)
 nil
 tutorial.template3=> (start-app)
 </pre>
+
+If you're not continuing from the previous tutorial you should ignore <code>(stop-app)</code> and you'll need to be more specific about your loading, use <code>(load "tutorial/template3")</code> instead.
 
 Point your favorite web browser to *http://localhost:8080/base.html*. You should see a fairly plain page. This is not a template. You can try opening up base.html as a file in your browser and see that it's identical to what is being served by Compojure. Now point your browser at *http://localhost:8080/3col.html*. You should see another page that has a 3 column layout. Now point your browser at *http://localhost:8080/a/*. The code required to do this follows:
 
