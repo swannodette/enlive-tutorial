@@ -253,7 +253,7 @@ tutorial.scrape3=> (print-stories)
 ... output ...
 </pre>
 
-If you're not continuing from the second tutorial you'll need to more specific about your loading, using <code>(load "tutorial/scrape3")</code> instead.
+If you're not continuing from a previous tutorial you'll need to more specific about your loading, using <code>(load "tutorial/scrape3")</code> instead.
 
 Now this isn't perfect for a variety of reasons but it works well enough for the purposes of demonstration. Let's look at the code. At the top of the file we see that we have a variety of selectors.
 
@@ -316,7 +316,7 @@ tutorial.template1=> (start-app)
 ... output ...
 </pre>
 
-If you're not continuing from the third tutorial you'll need to be more specific about your loading, use <code>(load "tutorial/template1")</code> instead.
+If you're not continuing from a previous tutorial you'll need to be more specific about your loading, use <code>(load "tutorial/template1")</code> instead.
 
 You should see some output that lets you know that Compojure is starting up a webserver on port 8080. Point your browser at *http://localhost:8080*. You should see a very boring page. Point your browser at *http://localhost:8080/change*. You should see something slightly different.
 
@@ -413,7 +413,7 @@ tutorial.template2=> (start-app)
 ... output ...
 </pre>
 
-If you're not continuing from the previous tutorial you can ignore <code>(stop-app)</code> and you'll need to be more specific about your loading, use <code>(load "tutorial/template2")</code> instead.
+If you're not continuing from a previous tutorial you can ignore <code>(stop-app)</code> and you'll need to be more specific about your loading, use <code>(load "tutorial/template2")</code> instead.
 
 Open up the file *template2.html* in your text editor and give it a quick look over. Then open the file *template2.html* in your favorite web browser. It's just page with a list of links, not that special. Point your browser at *http://localhost:8080/*. You should see pretty much the same thing except that we've dynamically inserted links.
 
@@ -562,7 +562,7 @@ nil
 tutorial.template3=> (start-app)
 </pre>
 
-If you're not continuing from the previous tutorial you should ignore <code>(stop-app)</code> and you'll need to be more specific about your loading, use <code>(load "tutorial/template3")</code> instead.
+If you're not continuing from a previous tutorial you should ignore <code>(stop-app)</code> and you'll need to be more specific about your loading, use <code>(load "tutorial/template3")</code> instead.
 
 Point your favorite web browser to *http://localhost:8080/base.html*. You should see a fairly plain page. This is not a template. You can try opening up base.html as a file in your browser and see that it's identical to what is being served by Compojure. Now point your browser at *http://localhost:8080/3col.html*. You should see another page that has a 3 column layout. Now point your browser at *http://localhost:8080/a/*. The code required to do this follows:
 
