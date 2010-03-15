@@ -22,7 +22,7 @@ for($i = 0; $i < $len; $i++) {
 ?>
 </pre>
 
-This is of course enough to drive anyone insane and some templating frameworks like Django have made marginal improvements:
+This is of course enough to drive anyone insane and some templating solutions like the one in Django have made marginal improvements:
 
 <pre>
 {% for i in foo %}
@@ -36,11 +36,11 @@ This has driven many programmers to discard templating DSLs and to generate mark
 
 There are a few existing solutions that have a novel approach to this problem such as "Pure":http://beebole.com/pure/.
 
-Which brings us to Enlive. Enlive gives you the advantages of designer accessibe templates (since they're just HTML) without losing the power of function composition. As a result, your designer can create all the various widgets for your website using only HTML and CSS and you can compose your pages from any combination of their designs.
+Which brings us to Enlive. Enlive gives you the advantages of designer accessible templates (since they're just HTML) without losing the power of function composition. As a result, your designer can create all the various widgets for your website using only HTML and CSS and you can compose your pages from any combination of their designs.
 
 h2. Why Enlive?
 
-Enlive presents a different appraoch from the more popular templating solutions:
+Enlive presents a different approach from the more popular templating solutions:
 
 ** Code and markup are completely separate.
 ** You get to use CSS like syntax to manipulate HTML.
@@ -78,7 +78,7 @@ Once you have Leiningen installed, switch into this repository's directory. From
 lein deps
 </pre>
 
-This will install all of the dependencies required for getting through the tutorial. This might take a minute and and will probably generate <i>a lot</i> of ouptut. While this may seem disconcerting, this means you'll have a fully functioning Clojure setup without needing to bother with installing Emacs or an IDE. Once the the dependencies are installed enter the following command at your terminal:
+This will install all of the dependencies required for getting through the tutorial. This might take a minute and and will probably generate <i>a lot</i> of output. While this may seem disconcerting, this means you'll have a fully functioning Clojure setup without needing to bother with installing Emacs or an IDE. Once the the dependencies are installed enter the following command at your terminal:
 
 <pre class="console">
 lein repl
@@ -422,7 +422,7 @@ How did we do that if we have no inline code to define the loop? Let's get into 
                            :href "http://www.compojure.org/docs/requests"}
                           {:text "Middleware"
                            :href "http://www.compojure.org/docs/middleware"}]}
-                 {:title"Clojars"
+                 {:title "Clojars"
                   :links [{:text "Clutch"
                            :href "http://clojars.org/org.clojars.ato/clutch"}
                           {:text "JOGL2"
@@ -434,15 +434,15 @@ How did we do that if we have no inline code to define the loop? Let's get into 
                            :href "http://enlive.cgrand.net/syntax.html"}]}]})
 </pre>
 
-This of course would be something that we probably would have read out of a database. The take away here is that Clojure makes it easy to define nested data structures. <code>*dummy-context*</code> is just a hash-map (aka dictionary, aka associative array) of two key-value pairs. The first pair is for the title of the page. The second pair is the list of sections. Each section also has a title as well as a list of links. Each link has some text and url. If you're used to building up JSON data structures from databse results this should be pretty familiar to you.
+This of course would be something that we probably would have read out of a database. The take away here is that Clojure makes it easy to define nested data structures. <code>*dummy-context*</code> is just a hash-map (aka dictionary, aka associative array) of two key-value pairs. The first pair is for the title of the page. The second pair is the list of sections. Each section also has a title as well as a list of links. Each link has some text and url. If you're used to building up JSON data structures from database results this should be pretty familiar to you.
 
 h3. Figuring out your selectors
 
 Using Enlive for templating usually involve two steps. The first step is figuring out which part of the markup you want to make into a component. Each component will become a snippet. A snippet is a reusable mini-template that you can use when constructing larger templates. In order to create a working snippet you need to determine the CSS selector which will allow you to match exactly that part of the document.
 
-Consider our situation. Our designer has handed us some nice markup and some CSS. To better convey the final result they have included some dummy content. With a traditional templating solution this is a big nono. With Enlive, working around it requires a minimal amount of effort. So the key here is to identify the "model" element.
+Consider our situation. Our designer has handed us some nice markup and some CSS. To better convey the final result they have included some dummy content. With a traditional templating solution this is a big no no. With Enlive, working around it requires a minimal amount of effort. So the key here is to identify the "model" element.
 
-In our case we have two distinct models, the first is the pair of the section title and the links for that section. The second is the individual link. In a templating laguage we would probably do something like this:
+In our case we have two distinct models, the first is the pair of the section title and the links for that section. The second is the individual link. In a templating DSL we would probably do something like the following:
 
 <pre>
 {% for section in sections %}
@@ -463,13 +463,13 @@ So let's define our link component. We don't want the dummy content so we really
 (def *link-sel* (html/selector [[:.content (nth-of-type 1)] :> html/first-child]))
 </pre>
 
-We only want to match the first ul element that we find that has the links class and only the very first child inside that. This is the selector that gets the job done. It's analagous to:
+We only want to match the first ul element that we find that has the links class and only the very first child inside that. This is the selector that gets the job done. It's analogous to:
 
 <pre>
 .content:nth-of-type(1) > *:first-child
 </pre>
 
-It's important to note that using <code>nth-of-type</code> requires an extra pair of brackets around the element *ul*. This extra pair of brackets is easy to forget. Whenever you want to be more specfic about what type of element you want to match (beyond matching on CSS id or class) you'll need an extra pair of brackets.
+It's important to note that using <code>nth-of-type</code> requires an extra pair of brackets around the element *ul*. This extra pair of brackets is easy to forget. Whenever you want to be more specific about what type of element you want to match (beyond matching on CSS id or class) you'll need an extra pair of brackets.
 
 Now that we have our selector <code>defsnippet</code> will look like the following (don't forget that <code>html</code> is just an alias for <code>net.cgrand.enlive-html</code>):
 
@@ -489,7 +489,7 @@ Let's try out our snippet to see that it worked:
 tutorial.template2> (render (emit* (link-model {:href "bar" :text "foo"})))
 </pre>
 
-Here we have to use <code>emit*</code> because snippets return a sequenes of nodes not strings the way templates do. <code>render</code> is just a utility function for taking a number of strings and creating a single string.
+Here we have to use <code>emit*</code> because snippets return a sequence of nodes not strings the way templates do. <code>render</code> is just a utility function for taking a number of strings and creating a single string.
 
 Okay now we want to loop over the sections. A section is a *h2* tag followed by a *ul* tag. Again we need to figure out the correct selector. This time we're trying to emulate the following popular pattern for the outer loop:
 
@@ -504,7 +504,7 @@ Okay now we want to loop over the sections. A section is a *h2* tag followed by 
 {% endfor %}
 </pre>
 
-Note that unlike the previous example what we're looping over has no "container". That is, there is no surrouding element for the adjacent *h2* and *ul* tags. Enlive recently added support for "ranges" making it simple to express this pattern with Enlive templates.
+Note that unlike the previous example what we're looping over has no "container". That is, there is no surrounding element for the adjacent *h2* and *ul* tags. Enlive recently added support for "ranges" making it simple to express this pattern with Enlive templates.
 
 Again our HTML has some dummy content again. We only care about the first range of *h2* and *ul* tags, we don't want to match any more than that. We can define a selector to do this like so:
 
@@ -534,7 +534,7 @@ Now let's look at the template to see how we put this all together:
 
 As you can see it looks really similar to <code>section-model</code>. Again the main difference is that templates don't take selectors and the function they define returns a list of strings.
 
-That's it. While we've seen some interesting features and while HTML and code seperation is cool, so far you may think Enlive involves <i>more</i> work then it actually saves. That's because we're showing a very trival example. In the third example we'll demonstrate just how much time Enlive can save you when building something a little more real world.
+That's it. While we've seen some interesting features and while HTML and code separation is cool, so far you may think Enlive involves <i>more</i> work then it actually saves. That's because we're showing a very trivial example. In the third example we'll demonstrate just how much time Enlive can save you when building something a little more real world.
 
 h2. Your Third Template - Template Inheritance
 
@@ -552,7 +552,7 @@ nil
 tutorial.template3=> (start-app)
 </pre>
 
-Point your favorite web brower to *http://localhost:8080/base.html*. You should see a fairly plain page. This is not a template. You can try opening up base.html as a file in your browser and see that it's identical to what is being served by Compojure. Now point your browser at *http://localhost:8080/3col.html*. You should see another page that has a 3 column layout. Now point your browser at *http://localhost:8080/a/*. The code required to do this follows:
+Point your favorite web browser to *http://localhost:8080/base.html*. You should see a fairly plain page. This is not a template. You can try opening up base.html as a file in your browser and see that it's identical to what is being served by Compojure. Now point your browser at *http://localhost:8080/3col.html*. You should see another page that has a 3 column layout. Now point your browser at *http://localhost:8080/a/*. The code required to do this follows:
 
 <pre>
 (defn viewa [params session]
@@ -643,6 +643,6 @@ Your templates do not automatically reload. When you make edits to your HTML or 
 (load "your-library-name")
 </pre>
 
-It's a minor annoyance for all the benefits you reap. It also wouldn't be too hard to create a system that reloaded tempaltes (at least while in development mode) upon page refresh.
+It's a minor annoyance for all the benefits you reap. It also wouldn't be too hard to create a system that reloaded templates (at least while in development mode) upon page refresh.
 
 Be careful, *do not include the .clj extension*. Also *do not use -'s in your file name*. If you want dashes you need to name the actual file using underscores.
