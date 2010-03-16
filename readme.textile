@@ -417,7 +417,17 @@ If you're not continuing from a previous tutorial you can ignore <code>(stop-app
 
 Open up the file *template2.html* in your text editor and give it a quick look over. Then open the file *template2.html* in your favorite web browser. It's just page with a list of links, not that special. Point your browser at *http://localhost:8080/*. You should see pretty much the same thing except that we've dynamically inserted links.
 
-How did we do that if we have no inline code to define the loop? Let's get into the code. Open up *template2.clj* in your favorite text editor. At the top of the file you should see the by now familiar namespace declaration. After that we declare a variable for holding a dummy context which we're going to pass to our template.
+How did we do that if we have no inline code to define the loop? Let's get into the code. Open up *template2.clj* in your favorite text editor. At the top of the file you should see the by now familiar namespace declaration. One thing we've changed is how we import Enlive functionality.
+
+<pre>
+(:use [net.cgrand.enlive-html
+         :only [selector deftemplate defsnippet content clone-for
+                nth-of-type first-child do-> set-attr sniptest at emit*]])
+</pre>
+
+In this tutorial we'd rather use the Enlive functions without having to qualify them. So we import them using <code>:use</code> and specify that we only want to import a specific set of definitions.
+
+After that we declare a variable for holding a dummy context which we're going to pass to our template.
 
 <pre>
 (def *dummy-context*
@@ -470,28 +480,28 @@ First, we want to be able handle the inner loop. On one level, as you're about s
 So let's define our link component. We don't want the dummy content so we really only want to match the very first link that satisfies our need, the selector looks something like this:
 
 <pre>
-(def *link-sel* (html/selector [[:.content (nth-of-type 1)] :> html/first-child]))
+(def *link-sel* (selector [[:.content (nth-of-type 1)] :> first-child]))
 </pre>
 
-We only want to match the first ul element that we find that has the links class and only the very first child inside that. This is the selector that gets the job done. It's analogous to:
+We only want to match the first ul element that we find that has the content class and only the very first child inside that. This is the selector that gets the job done. It's analogous to:
 
 <pre>
 .content:nth-of-type(1) > *:first-child
 </pre>
 
-It's important to note that using <code>nth-of-type</code> requires an extra pair of brackets around the element *ul*. This extra pair of brackets is easy to forget. Whenever you want to be more specific about what type of element you want to match (beyond matching on CSS id or class) you'll need an extra pair of brackets.
+It's important to note that using <code>nth-of-type</code> requires an extra pair of brackets around the element that matches <code>:.content</content>. This extra pair of brackets is easy to forget. Whenever you want to be more specific about what type of element you want to match (beyond matching on CSS id or class) you'll need an extra pair of brackets.
 
 Now that we have our selector <code>defsnippet</code> will look like the following (don't forget that <code>html</code> is just an alias for <code>net.cgrand.enlive-html</code>):
 
 <pre>
-(html/defsnippet link-model "tutorial/template2.html" *link-sel*
+(defsnippet link-model "tutorial/template2.html" *link-sel*
   [{text :text href :href}] 
-  [:a] (html/do-> 
-        (html/content text) 
-        (html/set-attr :href href)))
+  [:a] (do-> 
+        (content text) 
+        (set-attr :href href)))
 </pre>
 
-Snippets are like templates with two main differences. First, snippets take a selector. This means that they can match only specific parts of an HTML document. The function produced by a <code>defsnippet</code> returns transformed content, <i>not</i> a list of strings the way <code>deftemplate</code> does. This snippet destructures it's first argument (a hash-map) to extract the value of the keys <code>:text</code> and <code>:href</code>. We're also introduced to <code>html/do-></code>. This is a convenience, we often want to take the matched element and apply a series of transformations to it. In this case we want to set the content of the node as well as its href attribute.
+Snippets are like templates with two main differences. First, snippets take a selector. This means that they can match only specific parts of an HTML document. The function produced by a <code>defsnippet</code> returns transformed content, <i>not</i> a list of strings the way <code>deftemplate</code> does. This snippet destructures it's first argument (a hash-map) to extract the value of the keys <code>:text</code> and <code>:href</code>. We're also introduced to <code>do-></code>. This is a convenience, we often want to take the matched element and apply a series of transformations to it. In this case we want to set the content of the node as well as its href attribute.
 
 Let's try out our snippet to see that it worked:
 
@@ -522,7 +532,7 @@ Again our HTML has some dummy content again. We only care about the first range 
 (def *section-sel* (selector {[:.title] [[:.content (nth-of-type 1)]]}))
 </pre>
 
-There is no CSS selector that can represent this. Again take care to note that since we want to select only the first *ul* that we find, we need an extra pair of brackets around <code>:ul</code>. This is a common mistake to leave these out.
+There is no CSS selector that can represent this. Again take care to note that since we want to select only the first *ul* that we find, we need an extra pair of brackets around <code>:.content</code>. This is a common mistake to leave these out.
 
 Now that we have our selector we can define our section snippet like so. Pretty straightforward. Remember <code>defsnippet</code> just creates a function which can take whichever arguments you specify and returns the transformed markup. We're creating links using <code>link-model</code> and putting those links inside of the *ul* in the section.
 
@@ -536,10 +546,10 @@ Now that we have our selector we can define our section snippet like so. Pretty 
 Now let's look at the template to see how we put this all together:
 
 <pre>
-(html/deftemplate index "tutorial/template2.html"
+(deftemplate index "tutorial/template2.html"
   [{:keys [title sections]}]
-  [:#title] (html/content title)
-  [:body]   (html/content (map #(section-model % link-model) sections)))
+  [:#title] (content title)
+  [:body]   (content (map #(section-model % link-model) sections)))
 </pre>
 
 As you can see it looks really similar to <code>section-model</code>. Again the main difference is that templates don't take selectors and the function they define returns a list of strings.
@@ -572,7 +582,7 @@ Point your favorite web browser to *http://localhost:8080/base.html*. You should
          :main (three-col {})}))
 </pre>
 
-If you look at the markup for *base.html* and *3col.html* you will see that there is not one line of code! So how did we magically put these two things together with so little code! Once you understand what's going, you'll see that template inheritance in Enlive is nothing more than putting some functions together.
+If you look at the markup for *base.html* and *3col.html* you will see that there is not one line of code! So how did we magically put these two things together with so little code! Once you understand what's going, you'll see that template inheritance in Enlive is nothing more than combining some functions.
 
 Take a look at *http://localhost:8080/navs.html*. You should see some truly ugly nav bars ;) Now point your browser at *http://locahost:8080/b/*. You can see it's easy to define a site wide layout, a 3 column middle main layout, and customize the contents of each column. Again there's absolute no code in the markup, only the following code is needed to construct this page:
 
