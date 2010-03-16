@@ -49,6 +49,6 @@
   (println "\t" (check story :summary "No summary")))
 
 (defn print-stories []
-  (doseq [story (filter (complement empty-story?) (map extract (stories)))]
+  (doseq [story (remove empty-story? (map extract (stories)))]
     (print-story story)))
 

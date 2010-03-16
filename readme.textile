@@ -291,7 +291,7 @@ Because this scrape is not comprehensive we might match empty stories, so we def
 
 <pre>
 (defn print-stories []
-  (doseq [story (filter (complement empty-story?) (map extract (stories)))]
+  (doseq [story (remove empty-story? (map extract (stories)))]
     (print-story story)))
 </pre>
 
