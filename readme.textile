@@ -489,7 +489,7 @@ We only want to match the first ul element that we find that has the content cla
 .content:nth-of-type(1) > *:first-child
 </pre>
 
-It's important to note that using <code>nth-of-type</code> requires an extra pair of brackets around the element that matches <code>:.content</content>. This extra pair of brackets is easy to forget. Whenever you want to be more specific about what type of element you want to match (beyond matching on CSS id or class) you'll need an extra pair of brackets.
+It's important to note that using <code>nth-of-type</code> requires an extra pair of brackets around the element that matches <code>:.content</code>. This extra pair of brackets is easy to forget. Whenever you want to be more specific about what type of element you want to match (beyond matching on CSS id or class) you'll need an extra pair of brackets.
 
 Now that we have our selector <code>defsnippet</code> will look like the following (don't forget that <code>html</code> is just an alias for <code>net.cgrand.enlive-html</code>):
 
