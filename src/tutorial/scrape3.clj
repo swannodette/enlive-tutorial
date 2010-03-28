@@ -6,21 +6,19 @@
 (def *base-url* "http://nytimes.com/")
 
 (def *story-selector*
-     (html/selector [[:div.story
-                      (html/but :.advertisement)
-                      (html/but :.autosStory)
-                      (html/but :.adCreative)]]))
+     [[:div.story
+       (html/but :.advertisement)
+       (html/but :.autosStory)
+       (html/but :.adCreative)]])
 
 (def *headline-selector*
-     (html/selector #{[html/root :> :h2 :a],
-                      [html/root :> :h3 :a]
-                      [html/root :> :h5 :a]}))
+     #{[html/root :> :h2 :a],
+       [html/root :> :h3 :a]
+       [html/root :> :h5 :a]})
 
-(def *byline-selector*
-     (html/selector [html/root :> :.byline]))
+(def *byline-selector* [html/root :> :.byline])
 
-(def *summary-selector*
-     (html/selector [html/root :> :.summary]))
+(def *summary-selector* [html/root :> :.summary])
 
 (defn fetch-url [url]
   (html/html-resource (java.net.URL. url)))

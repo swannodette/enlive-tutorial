@@ -4,6 +4,9 @@
 (defn render [t]
   (apply str t))
 
+(defn render-snippet [s]
+  (apply str (html/emit* s)))
+
 (defmulti parse-int type)
 (defmethod parse-int java.lang.Integer [n] n)
 (defmethod parse-int java.lang.String [s] (Integer/parseInt s))
