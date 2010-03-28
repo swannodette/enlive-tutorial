@@ -1,6 +1,6 @@
 (ns tutorial.template2
   (:use [net.cgrand.enlive-html
-         :only [selector deftemplate defsnippet content clone-for
+         :only [deftemplate defsnippet content clone-for
                 nth-of-type first-child do-> set-attr sniptest at emit*]])
   (:use tutorial.utils)
   (:use compojure))
@@ -40,7 +40,7 @@
 ;; =============================================================================
 
 ; we only want to select a model ink
-(def *link-sel* (selector [[:.content (nth-of-type 1)] :> first-child]))
+(def *link-sel* [[:.content (nth-of-type 1)] :> first-child])
 
 (defsnippet link-model "tutorial/template2.html" *link-sel*
   [{:keys [text href]}]
@@ -49,7 +49,7 @@
         (set-attr :href href)))
 
 ; we only want to select the model h2 ul range
-(def *section-sel* (selector {[:.title] [[:.content (nth-of-type 1)]]}))
+(def *section-sel* {[:.title] [[:.content (nth-of-type 1)]]})
 
 (defsnippet section-model "tutorial/template2.html" *section-sel*
   [{:keys [title data]} model]
