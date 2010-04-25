@@ -259,19 +259,19 @@ Now this isn't perfect for a variety of reasons but it works well enough for the
 
 <pre>
 (def *story-selector*
-     (html/selector [[:div.story
-                      (html/but :.advertisement)
-                      (html/but :.autosStory)
-                      (html/but :.adCreative)]]))
+     [[:div.story
+       (html/but :.advertisement)
+       (html/but :.autosStory)
+       (html/but :.adCreative)]])
 </pre>
 
 Here we are matching any div with the CSS class story that does not also have any of the other classes specified.
 
 <pre>
 (def *headline-selector*
-     (html/selector #{[html/root :> :h2 :a],
-                      [html/root :> :h3 :a]
-                      [html/root :> :h5 :a]}))
+     #{[html/root :> :h2 :a],
+       [html/root :> :h3 :a]
+       [html/root :> :h5 :a]}))
 </pre>
 
 Here we know from looking at the markup of the page that headlines might match any of these three selectors. The selectors will only match headline tags that are children of the root element. We do this because there are story divs on the New York Times webpage that actually have multiple headlines underneath. The byline and story summary selectors are pretty much the same.
@@ -421,7 +421,7 @@ How did we do that if we have no inline code to define the loop? Let's get into 
 
 <pre>
 (:use [net.cgrand.enlive-html
-         :only [selector deftemplate defsnippet content clone-for
+         :only [deftemplate defsnippet content clone-for
                 nth-of-type first-child do-> set-attr sniptest at emit*]])
 </pre>
 
@@ -480,7 +480,7 @@ First, we want to be able handle the inner loop. On one level, as you're about s
 So let's define our link component. We don't want the dummy content so we really only want to match the very first link that satisfies our need, the selector looks something like this:
 
 <pre>
-(def *link-sel* (selector [[:.content (nth-of-type 1)] :> first-child]))
+(def *link-sel* [[:.content (nth-of-type 1)] :> first-child])
 </pre>
 
 We only want to match the first ul element that we find that has the content class and only the very first child inside that. This is the selector that gets the job done. It's analogous to:
@@ -529,7 +529,7 @@ Note that unlike the previous example what we're looping over has no "container"
 Again our HTML has some dummy content again. We only care about the first range of *h2* and *ul* tags, we don't want to match any more than that. We can define a selector to do this like so:
 
 <pre>
-(def *section-sel* (selector {[:.title] [[:.content (nth-of-type 1)]]}))
+(def *section-sel* {[:.title] [[:.content (nth-of-type 1)]]})
 </pre>
 
 There is no CSS selector that can represent this. Again take care to note that since we want to select only the first *ul* that we find, we need an extra pair of brackets around <code>:.content</code>. This is a common mistake to leave these out.
