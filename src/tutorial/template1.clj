@@ -1,31 +1,24 @@
 (ns tutorial.template1
   (:require [net.cgrand.enlive-html :as html])
   (:use tutorial.utils)
-  (:use compojure))
+  (:use [ring.middleware.reload :only [wrap-reload]]
+        [ring.adapter.jetty :only [run-jetty]]
+        [net.cgrand.moustache :only [app delegate]]))
 
 (html/deftemplate index "tutorial/template1.html"
   [ctxt]
   [:p#message] (html/content (:message ctxt)))
 
-(defroutes example-routes
-  (GET "/"
-       (render (index {})))
-  (GET "/change"
-       (render (index {:message "We changed the message!"})))
-  (ANY "*"
-       [404 "Page Not Found"]))
-
 ;; ========================================
 ;; The App
 ;; ========================================
 
-(defonce *app* (atom nil))
+(def template1
+  (app
+   [""] index (render (index {}))
+   ["change"] (render (index {:message "We changed the message!"}))
+   [&]        [404 "Page Not Found"]))
 
-(defn start-app []
-  (if (not (nil? @*app*))
-    (stop @*app*))
-  (reset! *app* (run-server {:port 8080}
-                            "/*" (servlet example-routes))))
+(defonce *server* (run-jetty #'template1 {:port 8080 :join? false}))
 
-(defn stop-app []
-  (when @*app* (stop @*app*)))
+
