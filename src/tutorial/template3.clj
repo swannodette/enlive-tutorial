@@ -66,7 +66,6 @@
       ["c" ]         (render-request viewc)
       ["c" action]   (render-request viewc action)
 
-      ;; 404
       [&] {:status 404
            :body "Page Not Found"}))
 
