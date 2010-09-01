@@ -41,12 +41,14 @@
           :main (three-col {:left  navl
                             :right navr})})))
 
-(defn viewc [action]
-  (let [navs [(nav1) (nav2)]
-        [navl navr] (if (= action "reverse") (reverse navs) navs)]
-    (base {:title "View C"
-           :main (three-col {:left  navl
-                             :right navr})})))
+(defn viewc
+  ([] (viewc nil))
+  ([action]
+     (let [navs [(nav1) (nav2)]
+           [navl navr] (if (= action "reverse") (reverse navs) navs)]
+       (base {:title "View C"
+              :main (three-col {:left  navl
+                                :right navr})}))))
 
 (defn index
   ([] (base {}))
@@ -63,8 +65,10 @@
       ["b"]          (render-request viewb)
       ["c" ]         (render-request viewc)
       ["c" action]   (render-request viewc action)
-      ;; static files
-      [& "main.css"] (fn [req] (serve-file "main.css"))
+
+      [& parts] (fn [req] (when (= (last parts) "main.css")
+                            (serve-file "main.css")))
+
       ;; 404
       [&] {:status 404
            :body "Page Not Found"}))
