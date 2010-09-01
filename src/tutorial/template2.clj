@@ -1,9 +1,9 @@
 (ns tutorial.template2
   (:use [net.cgrand.enlive-html
          :only [deftemplate defsnippet content clone-for
-                nth-of-type first-child do-> set-attr sniptest at emit*]])
-  (:use tutorial.utils)
-  (:use compojure))
+                nth-of-type first-child do-> set-attr sniptest at emit*]]
+        [net.cgrand.moustache :only [app]]
+        [tutorial.utils :only [run-server render-to-response]]))
 
 ;; =============================================================================
 ;; Dummy Data
@@ -61,23 +61,14 @@
   [:#title] (content title)
   [:body]   (content (map #(section-model % link-model) sections)))
 
-(defroutes example-routes
-  (GET "/"
-       (render (index *dummy-context*)))
-  (ANY "*"
-       [404 "Page Not Found"]))
+(def routes
+     (app
+      [""]  (fn [req] (render-to-response (index *dummy-context*)))
+      [&]   {:status 404
+             :body "Page Not Found"}))
 
 ;; ========================================
 ;; The App
 ;; ========================================
 
-(defonce *app* (atom nil))
-
-(defn start-app []
-  (if (not (nil? @*app*))
-    (stop @*app*))
-  (reset! *app* (run-server {:port 8080}
-                            "/*" (servlet example-routes))))
-
-(defn stop-app []
-  (when @*app* (stop @*app*)))
+(defonce *server* (run-server routes))
