@@ -1,14 +1,9 @@
 (ns tutorial.template3
   (:require [net.cgrand.enlive-html :as html])
-  (:use tutorial.utils)
-  (:use [clojure.contrib.duck-streams :only [pwd]])
-  (:use compojure))
-
-;; =============================================================================
-;; Top Level Defs
-;; =============================================================================
-
-(def *webdir* (str (pwd) "/src/tutorial/"))
+  (:use [net.cgrand.moustache :only [app]]
+        [tutorial.utils
+         :only [run-server render-to-response serve-file render-request
+                maybe-content maybe-substitute]]))
 
 ;; =============================================================================
 ;; The Templates Ma!
@@ -35,20 +30,20 @@
 ;; Pages
 ;; =============================================================================
 
-(defn viewa [params session]
+(defn viewa []
   (base {:title "View A"
          :main (three-col {})}))
 
-(defn viewb [params session]
+(defn viewb []
   (let [navl (nav1)
         navr (nav2)]
    (base {:title "View B"
           :main (three-col {:left  navl
                             :right navr})})))
 
-(defn viewc [params session]
+(defn viewc [action]
   (let [navs [(nav1) (nav2)]
-        [navl navr] (if (= (:action params) "reverse") (reverse navs) navs)]
+        [navl navr] (if (= action "reverse") (reverse navs) navs)]
     (base {:title "View C"
            :main (three-col {:left  navl
                              :right navr})})))
@@ -61,43 +56,21 @@
 ;; Routes
 ;; =============================================================================
 
-(defroutes app-routes
-  ;; app routes
-  (GET "/"
-       (render (index)))
-  (GET "/a/"
-       (render (viewa params session)))
-  (GET "/b/"
-       (render (viewb params session)))
-  (GET "/c/"
-       (render (viewc params session)))
-  (GET "/c/:action"
-       (render (viewc params session)))
-
-  ;; static files
-  (GET "/base.html"
-       (serve-file *webdir* "base.html"))
-  (GET "/3col.html"
-       (serve-file *webdir* "3col.html"))
-  (GET "/navs.html"
-       (serve-file *webdir* "navs.html"))
-  (GET "*/main.css"
-       (serve-file *webdir* "main.css"))
-
-  (ANY "*"
-       [404 "Page Not Found"]))
+(def routes
+     (app
+      [""]           (render-request index)
+      ["a"]          (render-request viewa)
+      ["b"]          (render-request viewb)
+      ["c" ]         (render-request viewc)
+      ["c" action]   (render-request viewc action)
+      ;; static files
+      [& "main.css"] (fn [req] (serve-file "main.css"))
+      ;; 404
+      [&] {:status 404
+           :body "Page Not Found"}))
 
 ;; =============================================================================
 ;; The App
 ;; =============================================================================
 
-(defonce *app* (atom nil))
-
-(defn start-app []
-  (if (not (nil? @*app*))
-    (stop @*app*))
-  (reset! *app* (run-server {:port 8080}
-                            "/*" (servlet app-routes))))
-
-(defn stop-app []
-  (when @*app* (stop @*app*)))
+(defonce *server* (run-server routes))
