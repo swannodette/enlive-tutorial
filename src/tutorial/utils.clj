@@ -21,7 +21,7 @@
     (println "run-server*" nses)
     (run-jetty
      (-> app
-         #_(wrap-reload nses)
+         (wrap-reload nses)
          (wrap-stacktrace))
      {:port port :join? false})))
 
