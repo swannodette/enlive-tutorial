@@ -3,7 +3,7 @@
          :only [deftemplate defsnippet content clone-for
                 nth-of-type first-child do-> set-attr sniptest at emit*]]
         [net.cgrand.moustache :only [app]]
-        [tutorial.utils :only [run-server render-to-response]]))
+        [tutorial.utils :only [run-server render-to-response page-not-found]]))
 
 ;; =============================================================================
 ;; Dummy Data
@@ -64,8 +64,7 @@
 (def routes
      (app
       [""]  (fn [req] (render-to-response (index *dummy-context*)))
-      [&]   {:status 404
-             :body "Page Not Found"}))
+      [&]   page-not-found))
 
 ;; ========================================
 ;; The App

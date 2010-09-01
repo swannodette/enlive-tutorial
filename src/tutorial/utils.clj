@@ -18,6 +18,11 @@
 (def render-to-response
      (comp response render))
 
+(defn page-not-found [req]
+  {:status 404
+   :headers {"Content-type" "text/html"}
+   :body "Page Not Found"})
+
 (defn render-request [afn & args]
   (fn [req] (render-to-response (apply afn args))))
 

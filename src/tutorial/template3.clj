@@ -2,8 +2,8 @@
   (:require [net.cgrand.enlive-html :as html])
   (:use [net.cgrand.moustache :only [app]]
         [tutorial.utils
-         :only [run-server render-to-response serve-file render-request
-                maybe-content maybe-substitute]]))
+         :only [run-server render-to-response render-request
+                maybe-content maybe-substitute page-not-found]]))
 
 ;; =============================================================================
 ;; The Templates Ma!
@@ -60,14 +60,12 @@
 
 (def routes
      (app
-      [""]           (render-request index)
-      ["a"]          (render-request viewa)
-      ["b"]          (render-request viewb)
-      ["c" ]         (render-request viewc)
-      ["c" action]   (render-request viewc action)
-
-      [&] {:status 404
-           :body "Page Not Found"}))
+      [""]          (render-request index)
+      ["a"]         (render-request viewa)
+      ["b"]         (render-request viewb)
+      ["c" ]        (render-request viewc)
+      ["c" action]  (render-request viewc action)
+      [&]           page-not-found))
 
 ;; =============================================================================
 ;; The App
