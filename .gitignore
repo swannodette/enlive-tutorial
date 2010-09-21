@@ -1,1 +1,3 @@
 lib/*
+/.emacs.desktop
+/.emacs.desktop.lock
