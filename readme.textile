@@ -369,7 +369,7 @@ While Enlive does not have a great shortcut for expressing this pattern of "chan
 
 Pretty slick eh? ;) We get the terseness of the <code>get</code> as well as the plumbing for template inheritance. While macros are too advanced of a topic to delve into here, having them around when you're templating HTML is incredibly powerful.
 
-The remainder of *template1.clj* is specific to Ring and Moustache, a routing library. We're not going to get too deep into that because these tutorials are about Enlive, not Compojure.
+The remainder of *template1.clj* is specific to Ring and Moustache, a routing library. We're not going to get too deep into that because these tutorials are about Enlive, not Ring and Moustache.
 
 <pre>
 (def routes
@@ -404,7 +404,7 @@ h2. Your Second Template - Looping
 
 A common operation when generating web pages is looping over some piece of HTML because you need to present a list of items to the user. People just love lists. How can Enlive create lists of HTML when there's no code in the template?! We'll get into this in this tutorial.
 
-If you don't have a Clojure REPL running start a new one with *lein repl* at the commandline from the tutorial repo's directory. Enter the following (if you're continuing from the previous tutorial you should should stop the Compojure app for that tutorial first):
+If you don't have a Clojure REPL running start a new one with *lein repl* at the commandline from the tutorial repo's directory. Enter the following (if you're continuing from the previous tutorial you should should stop the Ring app for that tutorial first):
 
 <pre class="console">
 tutorial.template1=> (.stop *server*)
@@ -577,7 +577,7 @@ nil
 
 If you're not continuing from a previous tutorial you should ignore <code>(stop-app)</code> and you'll need to be more specific about your loading, use <code>(load "tutorial/template3")</code> instead.
 
-Point your favorite web browser to *http://localhost:8080/base.html*. You should see a fairly plain page. This is not a template. You can try opening up *base.html* as a file in your browser and see that it's identical to what is being served by Compojure. Now point your browser at *http://localhost:8080/3col.html*. You should see another page that has a 3 column layout. Now point your browser at *http://localhost:8080/a/*. The code required to do this follows:
+Point your favorite web browser to *http://localhost:8080/base.html*. You should see a fairly plain page. This is not a template. You can try opening up *base.html* as a file in your browser and see that it's identical to what is being served by Ring. Now point your browser at *http://localhost:8080/3col.html*. You should see another page that has a 3 column layout. Now point your browser at *http://localhost:8080/a/*. The code required to do this follows:
 
 <pre>
 (defn viewa []
