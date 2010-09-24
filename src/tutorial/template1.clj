@@ -6,6 +6,9 @@
 (html/deftemplate index "tutorial/template1.html"
   [ctxt]
   [:p#message] (html/content (:message ctxt)))
+  
+(defn hello-world []
+  (println "Hello world!"))
 
 ;; ========================================
 ;; The App
