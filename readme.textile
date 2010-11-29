@@ -103,7 +103,7 @@ The first line loads the file. Note that we need to specify that the *scrape1* f
 
 We then use <code>in-ns</code> to put ourselves into that tutorial's namespace. By switching into the tutorial namespace we can use functions defined in the tutorial without having to qualify them. It's much easier to type <code>*base-url*</code> then <code>tutorial.scrape1/*base-url*</code>.
 
-Let's see what's in that file. Open up *scrape1.clj* with your favorite text editor (you can find it in *your-tutorial-clone/src/tutorial/*). You'll see it's a fairly short program. 
+Let's see what's in that file. Open up "*scrape1.clj*":src/tutorial/scrape1.clj with your favorite text editor (you can find it in *your-tutorial-clone/src/tutorial/*). You'll see it's a fairly short program. 
 
 At the top of this file is the namespace declaration. This keeps your code from clashing with other people's code when they try to use your library. The namespace declaration also includes another library, Enlive, via <code>:require</code>. In this case we are generating an alias so we don't have to type the very long namespace for Enlive.
 
@@ -176,7 +176,7 @@ Not bad for 17 lines of code. One obvious problem here is that we make two separ
 
 h2. Your Second Scrape - Improvements
 
-Take a look at scrape2.clj. It's also about 17 lines of code and it looks pretty much the same except that we no longer have one function to grab headlines and another for article points.
+Take a look at "scrape2.clj":src/tutorial/scrape2.clj. It's also about 17 lines of code and it looks pretty much the same except that we no longer have one function to grab headlines and another for article points.
 
 <pre>
 (defn hn-headlines-and-points []
@@ -242,7 +242,7 @@ h2. Your Third Scrape - The New York Times
 
 Our third scrape tackles the New York Times whose front page structure is considerably more complicated than Hacker News. Now to be clear this not that useful since the New York Times provides a fairly comprehensive list of RSS feeds.
 
-Take a look at *scrape3.clj*. This is a bit longer. Before we dive in let's see how it works. Start up the Clojure REPL if it's not already up and running.
+Take a look at "*scrape3.clj*":src/tutorial/scrape3.clj. This is a bit longer. Before we dive in let's see how it works. Start up the Clojure REPL if it's not already up and running.
 
 <pre class="console">
 tutorial.scrape2=> (load "scrape3")
@@ -318,9 +318,9 @@ If you're not continuing from a previous tutorial you'll need to be more specifi
 
 You should see some output that lets you know that Ring is starting up a webserver on port 8080. Point your browser at *http://localhost:8080*. You should see a very boring page. Point your browser at *http://localhost:8080/change*. You should see something slightly different.
 
-First open *template1.html* and take a look at it. If you're used to other templating solutions the most shocking thing should be that there is absolutely no Clojure code in this file. And there never will be. Period.
+First open "*template1.html*":src/tutorial/template1.html and take a look at it. If you're used to other templating solutions the most shocking thing should be that there is absolutely no Clojure code in this file. And there never will be. Period.
 
-Now let's take a look at the code. By now the namespace part should be familiar so we'll skip over that. After the namespace declaration we'll see our first template definition:
+Now let's take a look at the code in "template1.clj":src/tutorial/template1.clj. By now the namespace part should be familiar so we'll skip over that. After the namespace declaration we'll see our first template definition:
 
 <pre>
 (html/deftemplate index "tutorial/template1.html"
@@ -369,7 +369,7 @@ While Enlive does not have a great shortcut for expressing this pattern of "chan
 
 Pretty slick eh? ;) We get the terseness of the <code>get</code> as well as the plumbing for template inheritance. While macros are too advanced of a topic to delve into here, having them around when you're templating HTML is incredibly powerful.
 
-The remainder of *template1.clj* is specific to Ring and Moustache, a routing library. We're not going to get too deep into that because these tutorials are about Enlive, not Ring and Moustache.
+The remainder of "*template1.clj*":src/tutorial/template1.clj is specific to Ring and Moustache, a routing library. We're not going to get too deep into that because these tutorials are about Enlive, not Ring and Moustache.
 
 <pre>
 (def routes
@@ -384,7 +384,7 @@ The remainder of *template1.clj* is specific to Ring and Moustache, a routing li
 (defonce *server* (run-server routes))
 </pre>
 
-This is the Moustache route defining syntax. A couple things to note <code>render-to-response</code> is not a function of Enlive, it's something I added via *utils.clj* in the repository. <code>render-to-response</code> isn't magic it's just a function that looks like this:
+This is the Moustache route defining syntax. A couple things to note <code>render-to-response</code> is not a function of Enlive, it's something I added via "*utils.clj*":src/tutorial/utils.clj in the repository. <code>render-to-response</code> isn't magic it's just a function that looks like this:
 
 <pre>
 (defn render [t]
@@ -396,7 +396,7 @@ This is the Moustache route defining syntax. A couple things to note <code>rende
 
 All this does is take a list of strings, concatenates them into a single string, and serve back a proper Ring response. This is because when an Enlive template function is called it returns a list of strings.
 
-Also note that our template function <code>index</code> must be called with at least one parameter. The last bit of *template1.clj* is just boilerplate for starting and stopping the server.
+Also note that our template function <code>index</code> must be called with at least one parameter. The last bit of "*template1.clj*":src/tutorial/template1.clj is just boilerplate for starting and stopping the server.
 
 Well that's about it! You've seen your first Enlive template. While it may not seem like much yet, <i>*there was absolutely no mixing of code and HTML*</i>. If you bear with me till the third template tutorial, I think you'll see just some how powerful this can be.
 
@@ -417,9 +417,9 @@ nil
 
 If you're not continuing from a previous tutorial you can ignore <code>(.stop *server*)</code> and you'll need to be more specific about your loading, use <code>(load "tutorial/template2")</code> instead.
 
-Open up the file *template2.html* in your text editor and give it a quick look over. Then open the file *template2.html* in your favorite web browser. It's just page with a list of links, not that special. Point your browser at *http://localhost:8080/*. You should see pretty much the same thing except that we've dynamically inserted links.
+Open up the file "*template2.html*":src/tutorial/template2.html in your text editor and give it a quick look over. Then open the file *template2.html* in your favorite web browser. It's just page with a list of links, not that special. Point your browser at *http://localhost:8080/*. You should see pretty much the same thing except that we've dynamically inserted links.
 
-How did we do that if we have no inline code to define the loop? Let's get into the code. Open up *template2.clj* in your favorite text editor. At the top of the file you should see the by now familiar namespace declaration. One thing we've changed is how we import Enlive functionality.
+How did we do that if we have no inline code to define the loop? Let's get into the code. Open up "*template2.clj*":src/tutorial/template2.clj in your favorite text editor. At the top of the file you should see the by now familiar namespace declaration. One thing we've changed is how we import Enlive functionality.
 
 <pre>
 (:use [net.cgrand.enlive-html
@@ -577,7 +577,7 @@ nil
 
 If you're not continuing from a previous tutorial you should ignore <code>(stop-app)</code> and you'll need to be more specific about your loading, use <code>(load "tutorial/template3")</code> instead.
 
-Point your favorite web browser to *http://localhost:8080/base.html*. You should see a fairly plain page. This is not a template. You can try opening up *base.html* as a file in your browser and see that it's identical to what is being served by Ring. Now point your browser at *http://localhost:8080/3col.html*. You should see another page that has a 3 column layout. Now point your browser at *http://localhost:8080/a/*. The code required to do this follows:
+Point your favorite web browser to *http://localhost:8080/base.html*. You should see a fairly plain page. This is not a template. You can try opening up "*base.html*":src/tutorial/base.html as a file in your browser and see that it's identical to what is being served by Ring. Now point your browser at *http://localhost:8080/3col.html*. You should see another page that has a 3 column layout. Now point your browser at *http://localhost:8080/a/*. The code required to do this follows:
 
 <pre>
 (defn viewa []
@@ -585,7 +585,7 @@ Point your favorite web browser to *http://localhost:8080/base.html*. You should
          :main (three-col {})}))
 </pre>
 
-If you look at the markup for *base.html* and *3col.html* you will see that there is not one line of code! So how did we magically put these two things together with so little code! Once you understand what's going, you'll see that template inheritance in Enlive is nothing more than combining some functions.
+If you look at the markup for "*base.html*":src/tutorial/base.html and "*3col.html*":src/tutorial/3col.html you will see that there is not one line of code! So how did we magically put these two things together with so little code! Once you understand what's going, you'll see that template inheritance in Enlive is nothing more than combining some functions.
 
 Take a look at *http://localhost:8080/navs.html*. You should see some truly ugly nav bars ;) Now point your browser at *http://locahost:8080/b/*. You can see it's easy to define a site wide layout, a 3 column middle main layout, and customize the contents of each column. Again there's absolute no code in the markup, only the following code is needed to construct this page:
 
@@ -617,7 +617,7 @@ We just flipped the two navs! How complicated is doing something like this?
 
 Nothing more complicated than reversing a vector ;)
 
-So how does this actually work? Open up *template3.clj* in your favorite text editor.
+So how does this actually work? Open up "*template3.clj*":src/tutorial/template3.clj in your favorite text editor.
 
 h3. The Templates and Snippets
 
@@ -634,11 +634,11 @@ The first thing to look at is the *base* template.
 
 Remember, <code>maybe-content</code> and <code>maybe-substitute</code> are not Enlive functions. They are two simple macros I've written for the purposes of this tutorial. <code>maybe-content</code> will only set the content of its node if its argument is not nil. <code>maybe-substitute</code> will only substitute its node if its argument is not nil.
 
-Why would we do this? This because want to be able to handle template inheritance. That is base represents the most basic template. We can then "inherit" from this template overriding only specific elements of this base template. Note that this template uses *base.html*. You should look at this file now.
+Why would we do this? This because want to be able to handle template inheritance. That is base represents the most basic template. We can then "inherit" from this template overriding only specific elements of this base template. Note that this template uses "*base.html*":src/tutorial/base.html. You should look at this file now.
 
-Next is the <code>three-col</code> snippet. It should be pretty obvious that this is a snippet for doing three column layout. Note that it uses *3col.html*, you should take a look at this file.
+Next is the <code>three-col</code> snippet. It should be pretty obvious that this is a snippet for doing three column layout. Note that it uses "*3col.html*":src/tutorial/3col.html, you should take a look at this file.
 
-The last bits are the various nav snippets and they are loaded from *navs.html*. Again you should go over this file.
+The last bits are the various nav snippets and they are loaded from "*navs.html*":src/tutorial/":src/tutorial/navs.html. Again you should go over this file.
 
 h3. The Pages
 
