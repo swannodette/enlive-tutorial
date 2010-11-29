@@ -176,7 +176,7 @@ Not bad for 17 lines of code. One obvious problem here is that we make two separ
 
 h2. Your Second Scrape - Improvements
 
-Take a look at "scrape2.clj":src/tutorial/scrape2.clj. It's also about 17 lines of code and it looks pretty much the same except that we no longer have one function to grab headlines and another for article points.
+Take a look at "*scrape2.clj*":src/tutorial/scrape2.clj. It's also about 17 lines of code and it looks pretty much the same except that we no longer have one function to grab headlines and another for article points.
 
 <pre>
 (defn hn-headlines-and-points []
@@ -320,7 +320,7 @@ You should see some output that lets you know that Ring is starting up a webserv
 
 First open "*template1.html*":src/tutorial/template1.html and take a look at it. If you're used to other templating solutions the most shocking thing should be that there is absolutely no Clojure code in this file. And there never will be. Period.
 
-Now let's take a look at the code in "template1.clj":src/tutorial/template1.clj. By now the namespace part should be familiar so we'll skip over that. After the namespace declaration we'll see our first template definition:
+Now let's take a look at the code in "*template1.clj*":src/tutorial/template1.clj. By now the namespace part should be familiar so we'll skip over that. After the namespace declaration we'll see our first template definition:
 
 <pre>
 (html/deftemplate index "tutorial/template1.html"
@@ -638,7 +638,7 @@ Why would we do this? This because want to be able to handle template inheritanc
 
 Next is the <code>three-col</code> snippet. It should be pretty obvious that this is a snippet for doing three column layout. Note that it uses "*3col.html*":src/tutorial/3col.html, you should take a look at this file.
 
-The last bits are the various nav snippets and they are loaded from "*navs.html*":src/tutorial/":src/tutorial/navs.html. Again you should go over this file.
+The last bits are the various nav snippets and they are loaded from "*navs.html*":src/tutorial/navs.html. Again you should go over this file.
 
 h3. The Pages
 
