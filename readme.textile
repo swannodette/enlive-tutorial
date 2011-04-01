@@ -146,7 +146,7 @@ tutorial.scrape1=> (print-headlines-and-points)
 ... output ...
 </pre>
 
-*print-hn-headlines-and-points* looks like a doozy doesn't it?
+*print-headlines-and-points* looks like a doozy doesn't it?
 
 <pre>
 (defn print-headlines-and-points []
