@@ -634,7 +634,7 @@ The first thing to look at is the *base* template.
 
 Remember, <code>maybe-content</code> and <code>maybe-substitute</code> are not Enlive functions. They are two simple macros I've written for the purposes of this tutorial. <code>maybe-content</code> will only set the content of its node if its argument is not nil. <code>maybe-substitute</code> will only substitute its node if its argument is not nil.
 
-Why would we do this? This because want to be able to handle template inheritance. That is base represents the most basic template. We can then "inherit" from this template overriding only specific elements of this base template. Note that this template uses "*base.html*":src/tutorial/base.html. You should look at this file now.
+We do this because we want the ability to handle template inheritance. Base represents the most basic template, and we can then "inherit" from it, overriding only specific elements. Note that this template uses "*base.html*":src/tutorial/base.html. You should look at this file now.
 
 Next is the <code>three-col</code> snippet. It should be pretty obvious that this is a snippet for doing three column layout. Note that it uses "*3col.html*":src/tutorial/3col.html, you should take a look at this file.
 
