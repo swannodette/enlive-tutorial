@@ -39,7 +39,7 @@
 ;; Templates
 ;; =============================================================================
 
-; we only want to select a model ink
+; we only want to select a model link
 (def *link-sel* [[:.content (nth-of-type 1)] :> first-child])
 
 (defsnippet link-model "tutorial/template2.html" *link-sel*
