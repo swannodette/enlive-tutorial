@@ -3,7 +3,8 @@
          :only [deftemplate defsnippet content clone-for
                 nth-of-type first-child do-> set-attr sniptest at emit*]]
         [net.cgrand.moustache :only [app]]
-        [tutorial.utils :only [run-server render-to-response page-not-found]]))
+        [tutorial.utils :only [run-server render render-to-response
+                               page-not-found]]))
 
 ;; =============================================================================
 ;; Dummy Data
@@ -39,7 +40,7 @@
 ;; Templates
 ;; =============================================================================
 
-; we only want to select a model ink
+; we only want to select a model link
 (def *link-sel* [[:.content (nth-of-type 1)] :> first-child])
 
 (defsnippet link-model "tutorial/template2.html" *link-sel*
