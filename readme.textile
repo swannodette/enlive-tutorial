@@ -101,7 +101,7 @@ tutorial.scrape1=> *base-url*
 
 The first line loads the file. Note that we need to specify that the *scrape1* file is to be found in the *tutorial* directory which is under the *src* directory of the repo. *src* is put onto the classpath by *lein* so we don't need to specify it. Also take care to note that we left off the *.clj* extension. Unlike many scripting languages, loading a file actually <i>compiles</i> it. Clojure is not interpreted.
 
-We then use <code>in-ns</code> to put ourselves into that tutorial's namespace. By switching into the tutorial namespace we can use functions defined in the tutorial without having to qualify them. It's much easier to type <code>*base-url*</code> then <code>tutorial.scrape1/*base-url*</code>.
+We then use <code>in-ns</code> to put ourselves into that tutorial's namespace. By switching into the tutorial namespace we can use functions defined in the tutorial without having to qualify them. It's much easier to type <code>*base-url*</code> than <code>tutorial.scrape1/*base-url*</code>.
 
 Let's see what's in that file. Open up "*scrape1.clj*":src/tutorial/scrape1.clj with your favorite text editor (you can find it in *your-tutorial-clone/src/tutorial/*). You'll see it's a fairly short program. 
 
