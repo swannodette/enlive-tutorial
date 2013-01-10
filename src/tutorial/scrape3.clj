@@ -2,22 +2,22 @@
   (:require [net.cgrand.enlive-html :as html]
             [clojure.string :as str]))
 
-(def *base-url* "http://nytimes.com/")
+(def ^:dynamic *base-url* "http://nytimes.com/")
 
-(def *story-selector*
+(def ^:dynamic *story-selector*
      [[:div.story
        (html/but :.advertisement)
        (html/but :.autosStory)
        (html/but :.adCreative)]])
 
-(def *headline-selector*
+(def ^:dynamic *headline-selector*
      #{[html/root :> :h2 :a],
        [html/root :> :h3 :a]
        [html/root :> :h5 :a]})
 
-(def *byline-selector* [html/root :> :.byline])
+(def ^:dynamic *byline-selector* [html/root :> :.byline])
 
-(def *summary-selector* [html/root :> :.summary])
+(def ^:dynamic *summary-selector* [html/root :> :.summary])
 
 (defn fetch-url [url]
   (html/html-resource (java.net.URL. url)))
