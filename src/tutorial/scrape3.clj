@@ -1,7 +1,6 @@
 (ns tutorial.scrape3
-  (:require [net.cgrand.enlive-html :as html])
-  (:use [clojure.contrib.seq-utils :only [indexed]]
-        [clojure.contrib.str-utils :only [re-sub re-gsub]]))
+  (:require [net.cgrand.enlive-html :as html]
+            [clojure.string :as str]))
 
 (def *base-url* "http://nytimes.com/")
 
@@ -31,7 +30,7 @@
         byline   (first (html/select [node] *byline-selector*))
         summary  (first (html/select [node] *summary-selector*))
         result   (map html/text [headline byline summary])]
-    (zipmap [:headline :byline :summary] (map #(re-gsub #"\n" "" %) result))))
+    (zipmap [:headline :byline :summary] (map #(str/replace % #"\n" "") result))))
 
 (defn empty-story? [node]
   (every? (fn [[k v]] (= v "")) node))
