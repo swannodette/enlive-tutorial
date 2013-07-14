@@ -1,7 +1,7 @@
 (ns tutorial.scrape2
   (:require [net.cgrand.enlive-html :as html]))
 
-(def *base-url* "http://news.ycombinator.com/")
+(def *base-url* "https://news.ycombinator.com/")
 
 (defn fetch-url [url]
   (html/html-resource (java.net.URL. url)))

@@ -96,7 +96,7 @@ nil
 user=> (in-ns 'tutorial.scrape1)
 nil
 tutorial.scrape1=> *base-url*
-"http://news.ycombinator.com/"
+"https://news.ycombinator.com/"
 </pre>
 
 The first line loads the file. Note that we need to specify that the *scrape1* file is to be found in the *tutorial* directory which is under the *src* directory of the repo. *src* is put onto the classpath by *lein* so we don't need to specify it. Also take care to note that we left off the *.clj* extension. Unlike many scripting languages, loading a file actually <i>compiles</i> it. Clojure is not interpreted.
