@@ -96,7 +96,7 @@ nil
 user=> (in-ns 'tutorial.scrape1)
 nil
 tutorial.scrape1=> *base-url*
-"http://news.ycombinator.com/"
+"https://news.ycombinator.com/"
 </pre>
 
 The first line loads the file. Note that we need to specify that the *scrape1* file is to be found in the *tutorial* directory which is under the *src* directory of the repo. *src* is put onto the classpath by *lein* so we don't need to specify it. Also take care to note that we left off the *.clj* extension. Unlike many scripting languages, loading a file actually <i>compiles</i> it. Clojure is not interpreted.
@@ -242,7 +242,7 @@ h2. Your Third Scrape - The New York Times
 
 Our third scrape tackles the New York Times whose front page structure is considerably more complicated than Hacker News. Now to be clear this not that useful since the New York Times provides a fairly comprehensive list of RSS feeds.
 
-Take a look at "*scrape3.clj*":blob/master/src/tutorial/scrape3.clj. This is a bit longer. Before we dive in let's see how it works. Start up the Clojure REPL if it's not already up and running.
+Take a look at "*scrape3.clj*":src/tutorial/scrape3.clj. This is a bit longer. Before we dive in let's see how it works. Start up the Clojure REPL if it's not already up and running.
 
 <pre class="console">
 tutorial.scrape2=> (load "scrape3")
