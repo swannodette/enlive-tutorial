@@ -587,7 +587,7 @@ Point your favorite web browser to *http://localhost:8080/base.html*. You should
 
 If you look at the markup for "*base.html*":src/tutorial/base.html and "*3col.html*":src/tutorial/3col.html you will see that there is not one line of code! So how did we magically put these two things together with so little code! Once you understand what's going, you'll see that template inheritance in Enlive is nothing more than combining some functions.
 
-Take a look at *http://localhost:8080/navs.html*. You should see some truly ugly nav bars ;) Now point your browser at *http://locahost:8080/b*. You can see it's easy to define a site wide layout, a 3 column middle main layout, and customize the contents of each column. Again there's absolute no code in the markup, only the following code is needed to construct this page:
+Take a look at *http://localhost:8080/navs.html*. You should see some truly ugly nav bars ;) Now point your browser at *http://localhost:8080/b*. You can see it's easy to define a site wide layout, a 3 column middle main layout, and customize the contents of each column. Again there's absolute no code in the markup, only the following code is needed to construct this page:
 
 <pre>
 (defn viewb []
