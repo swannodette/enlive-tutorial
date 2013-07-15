@@ -71,4 +71,4 @@
 ;; The App
 ;; =============================================================================
 
-(defonce *server* (run-server routes))
+(defonce ^:dynamic *server* (run-server routes))

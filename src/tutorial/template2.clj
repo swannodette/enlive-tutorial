@@ -10,7 +10,7 @@
 ;; Dummy Data
 ;; =============================================================================
 
-(def *dummy-context*
+(def ^:dynamic *dummy-context*
      {:title "Enlive Template2 Tutorial"
       :sections [{:title "Clojure"
                   :data [{:text "Macros"
@@ -41,7 +41,7 @@
 ;; =============================================================================
 
 ; we only want to select a model link
-(def *link-sel* [[:.content (nth-of-type 1)] :> first-child])
+(def ^:dynamic *link-sel* [[:.content (nth-of-type 1)] :> first-child])
 
 (defsnippet link-model "tutorial/template2.html" *link-sel*
   [{:keys [text href]}]
@@ -50,7 +50,7 @@
         (set-attr :href href)))
 
 ; we only want to select the model h2 ul range
-(def *section-sel* {[:.title] [[:.content (nth-of-type 1)]]})
+(def ^:dynamic *section-sel* {[:.title] [[:.content (nth-of-type 1)]]})
 
 (defsnippet section-model "tutorial/template2.html" *section-sel*
   [{:keys [title data]} model]
@@ -71,4 +71,4 @@
 ;; The App
 ;; ========================================
 
-(defonce *server* (run-server routes))
+(defonce ^:dynamic  *server* (run-server routes))

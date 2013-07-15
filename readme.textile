@@ -258,7 +258,7 @@ If you're not continuing from a previous tutorial you'll need to more specific a
 Now this isn't perfect for a variety of reasons but it works well enough for the purposes of demonstration. Let's look at the code. At the top of the file we see that we have a variety of selectors.
 
 <pre>
-(def *story-selector*
+(def ^:dynamic *story-selector*
      [[:div.story
        (html/but :.advertisement)
        (html/but :.autosStory)
@@ -268,7 +268,7 @@ Now this isn't perfect for a variety of reasons but it works well enough for the
 Here we are matching any div with the CSS class story that does not also have any of the other classes specified.
 
 <pre>
-(def *headline-selector*
+(def ^:dynamic *headline-selector*
      #{[html/root :> :h2 :a],
        [html/root :> :h3 :a]
        [html/root :> :h5 :a]}))
@@ -282,7 +282,7 @@ Here we know from looking at the markup of the page that headlines might match a
         byline   (first (html/select [node] *byline-selector*))
         summary  (first (html/select [node] *summary-selector*))
         result   (map html/text [headline byline summary])]
-    (zipmap [:headline :byline :summary] (map #(re-gsub #"\n" "" %) result))))
+    (zipmap [:headline :byline :summary] (map #(str/replace %  #"\n" "") result))))
 </pre>
 
 Here we take a node and extract the match. Note that we have to call first on the result of <code>html/select</code> because <code>html/select</code> always returns a sequence of nodes and not a single node. <code>zipmap</code> is a handy function, it allows us to take two sequences and zip them up into a hash-map. So here we take only the text nodes from the matches and remove any newline characters before we finally zip it up into a tidy hash-map.
@@ -381,7 +381,7 @@ The remainder of "*template1.clj*":src/tutorial/template1.clj is specific to Rin
    [&]        {:status 404
                :body "Page Not Found"}))
  
-(defonce *server* (run-server routes))
+(defonce ^:dynamic *server* (run-server routes))
 </pre>
 
 This is the Moustache route defining syntax. A couple things to note <code>render-to-response</code> is not a function of Enlive, it's something I added via "*utils.clj*":src/tutorial/utils.clj in the repository. <code>render-to-response</code> isn't magic it's just a function that looks like this:
@@ -434,7 +434,7 @@ In this tutorial we'd rather use the Enlive functions without having to qualify 
 After that we declare a variable for holding a dummy context which we're going to pass to our template.
 
 <pre>
-(def *dummy-context*
+(def ^:dynamic *dummy-context*
      {:title "Enlive Template2 Tutorial"
       :sections [{:title "Clojure"
                   :links [{:text "Macros"
@@ -484,7 +484,7 @@ First, we want to be able handle the inner loop. On one level, as you're about s
 So let's define our link component. We don't want the dummy content so we really only want to match the very first link that satisfies our need, the selector looks something like this:
 
 <pre>
-(def *link-sel* [[:.content (nth-of-type 1)] :> first-child])
+(def ^:dynamic *link-sel* [[:.content (nth-of-type 1)] :> first-child])
 </pre>
 
 We only want to match the first ul element that we find that has the content class and only the very first child inside that. This is the selector that gets the job done. It's analogous to:
@@ -533,7 +533,7 @@ Note that unlike the previous example what we're looping over has no "container"
 Again our HTML has some dummy content again. We only care about the first range of *h2* and *ul* tags, we don't want to match any more than that. We can define a selector to do this like so:
 
 <pre>
-(def *section-sel* {[:.title] [[:.content (nth-of-type 1)]]})
+(def ^:dynamic *section-sel* {[:.title] [[:.content (nth-of-type 1)]]})
 </pre>
 
 There is no CSS selector that can represent this. Again take care to note that since we want to select only the first *ul* that we find, we need an extra pair of brackets around <code>:.content</code>. This is a common mistake to leave these out.
@@ -587,7 +587,7 @@ Point your favorite web browser to *http://localhost:8080/base.html*. You should
 
 If you look at the markup for "*base.html*":src/tutorial/base.html and "*3col.html*":src/tutorial/3col.html you will see that there is not one line of code! So how did we magically put these two things together with so little code! Once you understand what's going, you'll see that template inheritance in Enlive is nothing more than combining some functions.
 
-Take a look at *http://localhost:8080/navs.html*. You should see some truly ugly nav bars ;) Now point your browser at *http://locahost:8080/b*. You can see it's easy to define a site wide layout, a 3 column middle main layout, and customize the contents of each column. Again there's absolute no code in the markup, only the following code is needed to construct this page:
+Take a look at *http://localhost:8080/navs.html*. You should see some truly ugly nav bars ;) Now point your browser at *http://localhost:8080/b*. You can see it's easy to define a site wide layout, a 3 column middle main layout, and customize the contents of each column. Again there's absolute no code in the markup, only the following code is needed to construct this page:
 
 <pre>
 (defn viewb []

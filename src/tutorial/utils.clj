@@ -1,13 +1,13 @@
 (ns tutorial.utils
-  (:require [net.cgrand.enlive-html :as html])
+  (:require [net.cgrand.enlive-html :as html]
+            [clojure.java.io :as io])
   (:use [ring.adapter.jetty :only [run-jetty]]
         [ring.util.response :only [response file-response]]
         [ring.middleware.reload :only [wrap-reload]]
         [ring.middleware.file :only [wrap-file]]
-        [ring.middleware.stacktrace :only [wrap-stacktrace]]
-        [clojure.contrib.duck-streams :only [pwd]]))
+        [ring.middleware.stacktrace :only [wrap-stacktrace]]))
 
-(def *webdir* (str (pwd) "/src/tutorial/"))
+(def ^:dynamic *webdir* (str (.getCanonicalFile (io/file ".")) "/src/tutorial/"))
 
 (defn render [t]
   (apply str t))
