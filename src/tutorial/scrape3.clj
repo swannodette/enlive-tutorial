@@ -5,7 +5,7 @@
 (def ^:dynamic *base-url* "http://nytimes.com/")
 
 (def ^:dynamic *story-selector*
-     [[:div.story
+     [[:article.story
        (html/but :.advertisement)
        (html/but :.autosStory)
        (html/but :.adCreative)]])
