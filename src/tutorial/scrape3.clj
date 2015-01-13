@@ -19,6 +19,14 @@
 
 (def ^:dynamic *summary-selector* [html/root :> :.summary])
 
+(defn split-on-space [word]
+  "Splits a string on words"
+  (clojure.string/split word #"\s+"))
+
+(defn squish [line]
+  (str/triml (str/join " "
+     (split-on-space (str/replace line #"\n" " ")))))
+
 (defn fetch-url [url]
   (html/html-resource (java.net.URL. url)))
 
@@ -30,7 +38,7 @@
         byline   (first (html/select [node] *byline-selector*))
         summary  (first (html/select [node] *summary-selector*))
         result   (map html/text [headline byline summary])]
-    (zipmap [:headline :byline :summary] (map #(str/replace % #"\n" "") result))))
+    (zipmap [:headline :byline :summary] (map squish result))))
 
 (defn empty-story? [node]
   (every? (fn [[k v]] (= v "")) node))
